@@ -3,11 +3,11 @@ from distutils.core import setup, Extension
 
 picoharp_module = Extension(
      "_picoharp", 
-     source_files=[os.path.join("_picoharp/_picoharp.i")])
+     [os.path.join("_picoharp", "picoharp.i")])
 
-picoharp_module = Extension(
+hydraharp_module = Extension(
      "_hydraharp", 
-     source_files=[os.path.join("_hydraharp/_hydraharp.i")])
+     [os.path.join("_hydraharp", "hydraharp.i")])
 
 setup(name="pypicoquant",
       version="0.0.1",
