@@ -3,17 +3,18 @@
 	HHLib programming library for HydraHarp 400
 	PicoQuant GmbH, 
 
-	Ver. 1.2.0.0      August 2009
+	Ver. 2.0.0.0      June 2012
 */
 
 
-#define LIB_VERSION "1.2"
+#define LIB_VERSION "2.0"	
 
 #define MAXDEVNUM	8		// max num of USB devices
  
-#define HHMAXCHAN   8		// max num of logical channels
+#define HHMAXINPCHAN   8		// max num of physicl input channels
+#define HHMAXLOGCHAN  64		// max num of logical data channels
 
-#define MAXBINSTEPS	12	    // get actual number via HH_GetBaseResolution() !
+#define MAXBINSTEPS	26	    // get actual number via HH_GetBaseResolution() !
 
 #define MAXHISTLEN  65536	// max number of histogram bins
 #define MAXLENCODE  6		// max length code histo mode
@@ -22,19 +23,21 @@
 #define MAXLENCODE_CONT	3		// max length code in continuous mode
 
 #define TTREADMAX   131072  // 128K event records can be read in one chunk
+#define TTREADMIN   128     // 128 records = minimum buffer size that must be provided
 
 #define MODE_HIST	0
 #define MODE_T2		2
 #define MODE_T3		3
 #define MODE_CONT	8
 
-#define MEASCTRL_SINGLESHOT_CTC 0 //default
-#define MEASCTRL_C1_GATE		1
-#define MEASCTRL_C1_START_CTC_STOP	2
-#define MEASCTRL_C1_START_C2_STOP	3
+#define MEASCTRL_SINGLESHOT_CTC			0 //default
+#define MEASCTRL_C1_GATED				1
+#define MEASCTRL_C1_START_CTC_STOP		2
+#define MEASCTRL_C1_START_C2_STOP		3
 //continuous mode only
-#define MEASCTRL_CONT_EXTTRIG	5
-#define MESACTRL_CONT_CTCTRIG	6
+#define MEASCTRL_CONT_C1_GATED			4
+#define MEASCTRL_CONT_C1_START_CTC_STOP	5
+#define MEASCTRL_CONT_CTC_RESTART		6
 
 
 #define EDGE_RISING   1
@@ -45,6 +48,7 @@
 #define FLAG_SYNC_LOST    0x0004  
 #define FLAG_REF_LOST     0x0008  
 #define FLAG_SYSERROR     0x0010  //hardware error, must contact support
+#define FLAG_ACTIVE       0x0020  //measurement is running
 
 #define SYNCDIVMIN		1
 #define SYNCDIVMAX		16

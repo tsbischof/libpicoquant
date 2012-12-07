@@ -1,2 +1,4 @@
 -write interface to file types
 -detect hardware versions appropriately.
+
+-for interfacing SWIG, we need a 32-bit version of Python. Perhaps it will be easier to get things working with ctypes, rather than playing with all of the issues of having 32-bit libraries floating around?

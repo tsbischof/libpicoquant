@@ -1,4 +1,4 @@
-// HHLib 1.2.0.0  August 2008
+/* HHLib Ver. 2.0     June 2012 */
 
 #define HH_ERROR_NONE						   0 
 									
@@ -33,6 +33,7 @@
 #define HH_ERROR_USB_HISPEED_FAIL			 -35 
 #define HH_ERROR_USB_VCMD_FAIL				 -36 
 #define HH_ERROR_USB_BULKRD_FAIL			 -37 
+#define HH_ERROR_USB_RESET_FAIL				 -38 
 
 #define HH_ERROR_LANEUP_TIMEOUT				 -40 
 #define HH_ERROR_DONEALL_TIMEOUT			 -41 
@@ -51,6 +52,9 @@
 #define HH_ERROR_MODPROPERTY_MISMATCH		 -54 	
 #define HH_ERROR_INVALID_MAGIC				 -55  
 #define HH_ERROR_INVALID_LENGTH				 -56  			
+#define HH_ERROR_RATE_FAIL					 -57  	
+#define HH_ERROR_MODFWVER_TOO_LOW			 -58
+#define HH_ERROR_MODFWVER_TOO_HIGH			 -59
 
 #define HH_ERROR_EEPROM_F01					 -64 
 #define HH_ERROR_EEPROM_F02					 -65 

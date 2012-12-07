@@ -1,6 +1,6 @@
 /* Functions exported by the HydraHarp programming library HHLib*/
 
-/* Ver. 1.2.0.0      August 2009 */
+/* Ver. 2.0.0.0      June 2012 */
 
 #ifndef _WIN32
 #define _stdcall
@@ -27,12 +27,10 @@ extern int _stdcall HH_GetModuleIndex(int devidx, int channel, int* modidx);
 extern int _stdcall HH_Calibrate(int devidx);
 
 extern int _stdcall HH_SetSyncDiv(int devidx, int div);
-extern int _stdcall HH_SetSyncCFDLevel(int devidx, int value);
-extern int _stdcall HH_SetSyncCFDZeroCross(int devidx, int value);
+extern int _stdcall HH_SetSyncCFD(int devidx, int level, int zc);
 extern int _stdcall HH_SetSyncChannelOffset(int devidx, int value);
 
-extern int _stdcall HH_SetInputCFDLevel(int devidx, int channel, int value);
-extern int _stdcall HH_SetInputCFDZeroCross(int devidx, int channel, int value);
+extern int _stdcall HH_SetInputCFD(int devidx, int channel, int level, int zc);
 extern int _stdcall HH_SetInputChannelOffset(int devidx, int channel, int value);
 extern int _stdcall HH_SetInputChannelEnable(int devidx, int channel, int enable);
 
@@ -54,15 +52,18 @@ extern int _stdcall HH_GetCountRate(int devidx, int channel, int* cntrate);
 extern int _stdcall HH_GetFlags(int devidx, int* flags);
 extern int _stdcall HH_GetElapsedMeasTime(int devidx, double* elapsed);
 
-extern int _stdcall HH_GetWarnings(int devidx, int* warnings); //new since v.1.2
-extern int _stdcall HH_GetWarningsText(int devidx, char* text, int warnings); //new since v.1.2
+extern int _stdcall HH_GetWarnings(int devidx, int* warnings);
+extern int _stdcall HH_GetWarningsText(int devidx, char* text, int warnings);
 
 
 //for TT modes
+extern int _stdcall HH_SetMarkerHoldoff(int devidx, int holdoff); 
 extern int _stdcall HH_SetMarkerEdges(int devidx, int me1, int me2, int me3, int me4);
 extern int _stdcall HH_SetMarkerEnable(int devidx, int en1, int en2, int en3, int en4);
 extern int _stdcall HH_ReadFiFo(int devidx, unsigned int* buffer, int count, int* nactual);
 
 //for Continuous mode
 extern int _stdcall HH_GetContModeBlock(int devidx, void* buffer, int* nbytesreceived);
+
+
 
