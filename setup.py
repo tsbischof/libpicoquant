@@ -9,6 +9,9 @@ ext_modules = list()
 picoharp_module = Extension(
      "_picoharp_comm", 
      [os.path.join("picoquant", "picoharp", "picoharp_comm.i")],
+     include_dirs=["/usr/local/lib/ph300"],
+     swig_opts=["-I /usr/local/lib/ph300",
+                "-I./picoquant"],
      libraries=["ph300"])
 if is_64bits:
     print("PicoHarp must be built with 32-bit Python.")
@@ -19,6 +22,9 @@ else:
 hydraharp_module = Extension(
      "_hydraharp_comm", 
      [os.path.join("picoquant", "hydraharp", "hydraharp_comm.i")],
+     include_dirs=["/usr/local/lib64/hh400"],
+     swig_opts=["-I/usr/local/lib/hh400",
+                "-I./picoquant"],
      libraries=["hh400"])
 ext_modules.append(hydraharp_module)
 
