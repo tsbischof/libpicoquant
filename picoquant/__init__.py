@@ -1,3 +1,3 @@
-__all__ = ["tcspc", "hydraharp"]
+__all__ = ["tcspc", "hydraharp", "picoharp", "timeharp"]
 
-from . import tcspc, hydraharp
+from .tcspc import TCSPC

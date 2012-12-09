@@ -1,0 +1,9 @@
+To build, first build and install libpicoquant. This can be accomplished by:
+> cd src
+> make install clean
+
+Next, build the Python modules:
+> cd ..
+> python setup.py install
+
+

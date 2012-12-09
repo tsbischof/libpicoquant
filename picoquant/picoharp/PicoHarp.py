@@ -1,6 +1,6 @@
 ## To do: work out how to make an unsigned int array for data transfer
 
-from picoquant.tcspc import TCSPC
+from picoquant import TCSPC
 from picoquant.picoharp import picoharp_comm as phlib
 
 class PicoHarp(TCSPC):
@@ -21,8 +21,7 @@ class PicoHarp(TCSPC):
                                   1] # external
 
         self._histogram = None
-        self._flags = None
-        self._fifo_buffer = None
+        self._tttr_buffer = None
         self._continuous_buffer = None
 
 # General library routines
@@ -30,7 +29,7 @@ class PicoHarp(TCSPC):
         """
         Return the error string associated with the error code.
         """
-        result, errstring = phlib.ph_GetErrorString("", errcode)
+        result, errstring = phlib.PH_GetErrorString("", errcode)
         if result == 0:
             return(errstring)
         else:
@@ -40,18 +39,18 @@ class PicoHarp(TCSPC):
         """
         Return the version number of the shared library.
         """
-        result, version = phlib.ph_GetLibraryVersion("")
+        result, version = phlib.PH_GetLibraryVersion("")
 
         if self.CHK(result):
             major, minor = version.split(".")
-            return(major, minor)
+            return(int(major), int(minor))
     
 # Device opening, closing
     def open(self):
         """
         Open the device, and record its serial number.
         """
-        result, serial =  phlib.ph_OpenDevice(self.device_index, "")
+        result, serial =  phlib.PH_OpenDevice(self.device_index, "")
         self.serial = serial
         
         return(self.CHK(result))
@@ -60,28 +59,30 @@ class PicoHarp(TCSPC):
         """
         Close the device and release it for further use.
         """
-        return(self.CHK(phlib.ph_CloseDevice(self.device_index)))
+        return(self.CHK(phlib.PH_CloseDevice(self.device_index)))
 
-    def initialize(self, mode, reference_source=0):
+    def initialize(self, mode):
         """
-        Prepare the device for a measurement in the specified mode,
-        using the specified reference source.
-        Reference source: 0 = internal, 1 = external
+        Prepare the device for a measurement in the specified mode.
         """
-        if not reference_source in self.reference_sources:
-            raise(ValueError("Unsupported reference source: "
-                                 "{0})".format(reference_source)))
-        else:
-            self.CHK(phlib.ph_Initialize(self.device_index,
-                                         self.mode_number(mode),
-                                         reference_source))
-                
+ 
+        result = phlib.PH_Initialize(self.device_index,
+                                     self.mode_number(mode))
+
+        return(self.CHK(result))
+            
 # Hardware information
+    def number_of_input_channels(self):
+        """
+        Determine the number of input channels in the current device.
+        """
+        return(2)
+    
     def hardware_info(self):
         """
         Determine the model and part number of the current device.
         """
-        result, model, part_number = phlib.ph_GetHardwareInfo(self.device_index,
+        result, model, part_number = phlib.PH_GetHardwareInfo(self.device_index,
                                                              "", "")
         if self.CHK(result):
             return(model, part_number)
@@ -90,126 +91,28 @@ class PicoHarp(TCSPC):
         """
         Determine the serial number of the current device.
         """
-        result, serial = phlib.ph_GetSerialNumber(self.device_index, "")
+        result, serial = phlib.PH_GetSerialNumber(self.device_index, "")
 
         if self.CHK(result):
             return(serial)       
     
     def base_resolution(self):
         """
-        Detrmine the base resolution and maximum allowed binning steps
-        for the current device.
+        Detrmine the base resolution for the current device.
         """
-        resolution = phlib.doublep()
-        binning_steps = phlib.intp()
-
-        result = phlib.ph_GetBaseResolution(self.device_index,
-                                            resolution,
-                                            binning_steps)
+        
+        result = phlib.PH_GetBaseResolution(self.device_index)
         
         if self.CHK(result):
-            return(resolution.value(), binning_steps.value())
-
-    def number_of_input_channels(self):
-        """
-        Determine the number of installed input channels in the current device.
-        """
-        input_channels = phlib.intp()
-
-        result = phlib.ph_GetNumOfInputChannels(self.device_index,
-                                                input_channels)
-
-        if self.CHK(result):
-            return(input_channels.value())
-
-    def number_of_modules(self):
-        """
-        Determine the number of installed modules in the current device.
-        """
-        modules = phlib.intp()
-
-        result = phlib.ph_GetNumOfModules(self.device_index,
-                                          modules)
-
-        if self.CHK(result):
-            return(modules.value())
-
-    def module_info(self, module):
-        """
-        Determine the model and version code for the specified module.
-        """
-        model_code = phlib.intp()
-        version_code = phlib.intp()
-
-        result = phlib.ph_GetModuleInfo(self.device_index,
-                                        module,
-                                        model_code,
-                                        version_code)
-
-        if self.CHK(result):
-            return(model_code.value(), version_code.value())
-
-    def module_index(self, channel):
-        """
-        Determine the index of the module where a given input channel resides.
-        """
-        module_index = phlib.intp()
-
-        result = phlib.ph_GetModuleIndex(self.device_index,
-                                         channel,
-                                         module_index)
-
-        if self.CHK(result):
-            return(module_index.value())
+            return(result)
 
     def calibrate(self):
         """
         Calibrate the current device.
         """
 
-        return(self.CHK(phlib.ph_Calibrate(self.device_index)))
+        return(self.CHK(phlib.PH_Calibrate(self.device_index)))
 
-    def set_sync_divider(self, divider):
-        """
-        Set the synx divider (valid values: 1, 2, 4, ... {0}
-        """.format(phlib.SYNCDIVMAX)
-
-        return(self.CHK(phlib.ph_SetSyncDiv(self.device_index,
-                                            divider)))
-
-    def set_sync_CFD(self, level, zero_cross):
-        """
-        Set the sync CFD discriminator and zero cross level, in mV.
-        
-        Valid discriminator range: {0} to {1}
-        Valid zero cross range: {2} to {3}
-        """.format(phlib.DISCRMIN, phlib.DISCRMAX,
-                   phlib.ZCMIN, phlib.ZCMAX)
-               
-        major, minor = self.library_version()
-        if major == 1:
-            # v1 has two separate calls
-            result = \
-                   self.CHK(phlib.ph_SetSyncCFDLevel(self.device_index, \
-                                                     level)) and \
-                   self.CHK(phlib.ph_SetSyncCFDZeroCross(self.device_index, \
-                                                         zero_cross))
-                                            
-        elif major >= 2:
-            result = self.CHK(phlib.ph_SetSyncCFD(self.device_index,
-                                                  level,
-                                                  zero_cross))
-
-        return(result)
-
-    def set_sync_channel_offset(self, offset):
-        """
-        Set the offset of the sync channel, in ps.
-        Valid range: {0} to {1}
-        """.format(phlib.CHANOFFSMIN, phlib.CHANOFFSMAX)
-        
-        return(self.CHK(phlib.ph_SetSyncChannelOffset(self.device_index,
-                                                      offset)))
 
     def set_input_cfd(self, channel, level, zero_cross):
         """
@@ -221,24 +124,20 @@ class PicoHarp(TCSPC):
         """.format(phlib.DISCRMIN, phlib.DISCRMAX,
                    phlib.ZCMIN, phlib.ZCMAX)
         
-        return(self.CHK(phlib.ph_SetInputCFDLevel(self.device_index,
+        return(self.CHK(phlib.PH_SetInputCFDLevel(self.device_index,
                                                   channel,
                                                   level)) and \
-               self.CHK(phlib.ph_SetInputCFDZeroCross(self.device_index,
+               self.CHK(phlib.PH_SetInputCFDZeroCross(self.device_index,
                                                       channel,
                                                       zero_cross)))
 
-    def set_input_channel_offset(self, channel, offset):
+    def set_sync_divider(self, divider):
         """
-        Set the channel timing offset, in ps.
-        
-        Valid range: {0} to {1}
-        """.format(phlib.CHANOFFSMIN, phlib.CHANOFFSMAX)
-        
-        result =  phlib.ph_SetInputChannelOffset(self.device_index,
-                                                 channel,
-                                                 offset)
-        return(self.CHK(result))
+        Set the synx divider (valid values: 1, 2, 4, ... {0}
+        """.format(phlib.SYNCDIVMAX)
+
+        return(self.CHK(phlib.PH_SetSyncDiv(self.device_index,
+                                            divider)))
 
     def set_stop_overflow(self, stop_on_overflow, stop_on_count):
         """
@@ -246,62 +145,49 @@ class PicoHarp(TCSPC):
         at which the device should stop.
 
         Valid count level range: {0} to {1}
-        """.format(phlib.STOPCNTMIN, phlib.STOPCNTMAX)
+        """.format(0, 65535)
         
         if stop_on_overflow:
             stop_on_overflow = 1
         else:
             stop_on_overflow = 0
         
-        result = phlib.ph_SetStopOverflow(self.device_index,
+        result = phlib.PH_SetStopOverflow(self.device_index,
                                           stop_on_overflow,
                                           stop_on_count)
         return(self.CHK(result))
 
-    def set_binning(self, binning):
+    def set_range(self, measurement_range):
         """
-        Set the measurement binning code.
+        Set the measurement range.
 
         Valid range: {0} to {1}
-        """.format(0, phlib.MAXBINSTEPS-1)
-        
-        result =  phlib.ph_SetBinnin(self.device_index,
-                                     binning)
+        """.format(0, phlib.RANGES)
+
+        result = phlib.PH_SetRange(self.device_index,
+                                   measurement_range)
+
         return(self.CHK(result))
 
     def set_offset(self, offset):
         """
-        Set the histogram time offset, in ps.
-
+        Set the input timing offset, in ps.
+        
         Valid range: {0} to {1}
         """.format(phlib.OFFSETMIN, phlib.OFFSETMAX)
         
-        result = phlib.ph_SetOffset(self.device_index,
-                                    offset)
-        return(self.CHK(result))
-
-    def set_histogram_length(self, length):
-        """
-        Set the histogram length, and return the actual length of the
-        histogram, in the number of time bins.
-
-        Valid range: {0} to {1}
-        """.format(0, phlib.MAXLENCODE)
-        
-        actual_length = phlib.intp()
-        result = phlib.ph_SetHistoLen(self.device_index,
-                                      length,
-                                      actual_length)
+        result =  phlib.PH_SetOffset(self.device_index,
+                                     offset)
         if self.CHK(result):
-            # Create the acquisition buffer.
-            return(1024*actual_length.value()**2)
-                                      
-    def clear_histogram(self):
+            # result is the new offset
+            return(result)
+
+    def clear_histogram(self, block=0):
         """
-        Clear the current histogram in memory.
+        Clear the specified block of the histogram.
         """
         
-        result = phlib.ph_ClearHistMem(self.device_index)
+        result = phlib.PH_ClearHistMem(self.device_index, block)
         return(self.CHK(result))
 
     def start_measurement(self, acquisition_time):
@@ -312,7 +198,7 @@ class PicoHarp(TCSPC):
         Valid range: {0} to {1}
         """.format(phlib.ACQTMIN, phlib.ACQTMAX)
         
-        result = phlib.ph_StartMeas(self.device_index,
+        result = phlib.PH_StartMeas(self.device_index,
                                     acquisition_time)
         return(self.CHK(result))
 
@@ -321,7 +207,7 @@ class PicoHarp(TCSPC):
         Stop the currently-running measurement.
         """
 
-        result = phlib.ph_StopMeas(self.device_index)
+        result = phlib.PH_StopMeas(self.device_index)
         return(self.CHK(result))
 
     def ctc_status(self):
@@ -330,34 +216,23 @@ class PicoHarp(TCSPC):
         experiment is complete, and False otherwise.
         """
 
-        status = phlib.intp()
-        result = phlib.ph_CTCStatus(self.device_index,
-                                    status)
+        result = phlib.PH_CTCStatus(self.device_index)
 
         if self.CHK(result):
-            # 0 is running, 1 is complete.
-            return(not status.value())
+            # 0 is running, >0 is finished.
+            return(result)
 
-    def get_histogram(self, channel, clear=False):
+    def get_block(self, block=0):
         """
-        Return the current histogram from the specified channe, and optionally
-        clear it from the acquisition buffer.
+        Get the specified block of the current histogram.
         """
 
-        # First, make sure we have space allocated.
         if not self._histogram:
-            raise(ValueError("No acquisition buffer found, did you call "
-                             "set_histogram_length()?"))
+            raise(ValueError("No histogram buffer found."))
 
-        if clear:
-            clear = 1
-        else:
-            clear = 0
-
-        result = phlib.ph_GetHistogram(self.device_index,
+        result = phlib.PH_GetHistogram(self.device_index,
                                        self._histogram,
-                                       channel,
-                                       clear)
+                                       block)
 
         if self.CHK(result):
             return(self._histogram)
@@ -366,98 +241,74 @@ class PicoHarp(TCSPC):
         """
         Determine the resolution at the current binning settings, in ps.
         """
-
-        resolution = phlib.doublep()
-        result = phlib.ph_GetResolution(self.device_index,
-                                        resolution)
+        
+        result = phlib.PH_GetResolution(self.device_index,)
 
         if self.CHK(result):
-            return(resolution.value())
-
-    def get_sync_rate(self):
-        """
-        Determine the current sync rate.
-        """
-
-        sync_rate = phlib.intp()
-        result = phlib.ph_GetSyncRate(self.device_index,
-                                      sync_rate)
-
-        if self.CHK(result):
-            return(sync_rate.value())
+            # result is an integer resolution, in ps
+            return(result)
 
     def get_count_rate(self, channel):
         """
         Determine the current count rate on the specified channel.
         """
-
-        count_rate = phlib.intp()
-        result = phlib.ph_GetCountRate(self.device_index,
-                                       channel,
-                                       count_rate)
+        
+        result = phlib.PH_GetCountRate(self.device_index,
+                                       channel)
 
         if self.CHK(result):
-            return(count_rate.value())
+            # result is counts per second
+            return(result)
 
     def get_flags(self):
         """
         Determine the current status flags.
         """
 
-        flags = phlib.intp()
-        result = phlib.ph_GetFlags(self.device_index,
-                                   flags)
+        flags = phlib.PH_GetFlags(self.device_index)
     
-        if self.CHK(result):
-            # Extract the status value from the flag
-            found = list()
+        # Extract the status value from the flag
+        found = list()
 
-            for name, value in self.flags():
-                if flags.value() & value:
-                    found.append(name)
+        for name, value in self.flags():
+            if flags & value:
+                found.append(name)
 
-            return(tuple(found))
+        return(tuple(found))
 
     def get_elapsed_measurement_time(self):
         """
         Determine the elapsed time in the current measurement, in ms.
         """
 
-        elapsed = phlib.doublep()
-        result = phlib.ph_GetElapsedMeasTime(self.device_index,
-                                             elapsed)
-
-        if self.CHK(result):
-            return(elapsed.value())
+        elapsed = phlib.PH_GetElapsedMeasTime(self.device_index)
+        return(elapsed)
 
     def get_warnings(self):
         """
         Determine the current warnings for the device.
         """
-
-        # Call ph_GetCountRate and ph_GetSyncRate for all channels first.
-        self.get_sync_rate()
         
         for channel in range(self.number_of_input_channels()):
             self.get_count_rate(chanel)
 
         # Now get and interpret the warnings
-        warnings = phlib.ph_GetWarnings(self.device_index)
+        warnings = phlib.PH_GetWarnings(self.device_index)
 
         if self.CHK(warnings):
-            return(warnings.value())
+            return(warnings)
 
     def warnings_text(self, warnings):
         """
         Determine the long-form warning text for the current warnings.
         """
 
-        result, text = phlib.ph_GetWarningsText(self.device_index,
-                                                "",
-                                                warnings)
+        result, text = phlib.PH_GetWarningsText(self.device_index,
+                                                warnings,
+                                                "")
 
         if self.CHK(result):
-            return(text.value())
+            return(text)
 
 # TTTR
     def read_tttr(self):
@@ -469,13 +320,12 @@ class PicoHarp(TCSPC):
             raise(ValueError("No fifo buffer."))
 
         actual_read = phlib.intp()
-        result = phlib.ph_ReadFiFo(self.device_index,
-                                   self._fifo_buffer,
-                                   len(self._fifo_buffer),
-                                   actual_read)
+        result = phlib.PH_TTReadData(self.device_index,
+                                     self._tttr_buffer,
+                                     len(self._tttr_buffer))
 
         if self.CHK(result):
-            return(self._fifo_buffer[:actual_read.value()])        
+            return(self._tttr_buffer[:result])        
 
     def set_marker_edges(self, edges):
         """
@@ -487,53 +337,84 @@ class PicoHarp(TCSPC):
             raise(ValueError("Must specify all four edges."))
         
         edges = tuple(edges)
-        result = phlib.ph_SetMarkerEdges(self.device_index,
-                                         *edges)
+        result = phlib.PH_TTSetMarkerEdges(self.device_index,
+                                           *edges)
 
         return(self.CHK(result))
 
-    def enable_markers(self, markers):
-        """
-        Enable or disable each marker signal (True=disable, False=enable).
-        Markers should be passed as a list or tuple of booleans, and must
-        specify all 4 marker states.
-        """
-
-        if len(markers) != 4:
-            raise(ValueError("Must specify all 4 marker channel states."))
-
-        my_markers = list()
-
-        for marker in markers:
-            if marker:
-                my_markers.append(1)
-            else:
-                my_markers.append(0)
-
-        markers = tuple(my_markers)
-        result = phlib.ph_SetMarkerEnable(self.device_index,
-                                          *markers)
-
-        return(self.CHK(result))
-
-# Continuous
-    def get_continuous_mode_block(self):
-        """
-        Get the current continuous mode data.
+# Routing
+    def get_routing_channels(self):
+        """7
+        Determine the number of available routing channels.
         """
 
-        if not self._continuous_buffer:
-            raise(ValueError("No continuous mode buffer found."))
-
-        bytes_received = phlib.intp()
-
-        result = phlib.ph_GetContModeBlock(self.device_index,
-                                           self._continuous_buffer,
-                                           bytes_received)
+        result = phlib.PH_GetRoutingChannels(self.device_index)
 
         if self.CHK(result):
-            return(self._continuous_buffer[0:bytes_received.value()])
+            return(result)
 
+    def enable_routing(self, state):
+        """
+        Enable or disable (True or False) routing. An error may indicate the
+        lack of a router.
+        """
+
+        if state:
+            state = 1
+        else:
+            state = 0
+            
+        result = phlib.PH_EnableRouting(self.device_index,
+                                        state)
+
+        return(self.CHK(result))
+
+    def get_router_version(self):
+        """
+        Determine the router model and version for the router attached
+        the to current device, as well as the number of routing channels
+        available.
+        """
+
+        result, model, version = phlib.PH_GetRouterVersion(self.device_index,
+                                                           "",
+                                                           "")
+
+        if self.CHK(result):
+            return(result, model, version)
+
+    def set_router_input(self, channel, level, edge):
+        """
+        Set the trigger voltage and edge for the specified channel of the
+        PHR800 router.
+
+        Valid level (mV): {0} to {1}
+        Edges: 0=falling, 1=rising
+        """.format(-1600, 2400)
+
+        result = phlib.PH_SetPHR800Input(self.device_index,
+                                         channel,
+                                         level,
+                                         edge)
+
+        if self.CHK(result):
+            # return value is the number of routing channels
+            return(result)
+
+    def set_router_cfd(self, channel, level, zero_cross):
+        """
+        Set the discriminator and zero cross levels for the specified
+        router channel.
+        """
+
+        result = phlib.PH_SetPHR800CFD(self.device_index,
+                                       channel,
+                                       level,
+                                       zero_cross)
+
+        if self.CHK(result):
+            return(result)
+        
 if __name__ == "__main__":
     ph = PicoHarp()
 ##    ph.open()

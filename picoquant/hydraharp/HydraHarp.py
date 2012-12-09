@@ -44,7 +44,7 @@ class HydraHarp(TCSPC):
 
         if self.CHK(result):
             major, minor = version.split(".")
-            return(major, minor)
+            return(int(major), int(minor))
     
 # Device opening, closing
     def open(self):
@@ -72,9 +72,11 @@ class HydraHarp(TCSPC):
             raise(ValueError("Unsupported reference source: "
                                  "{0})".format(reference_source)))
         else:
-            self.CHK(hhlib.HH_Initialize(self.device_index,
+            result = hhlib.HH_Initialize(self.device_index,
                                          self.mode_number(mode),
-                                         reference_source))
+                                         reference_source)
+
+            return(self.CHK(result))
                 
 # Hardware information
     def hardware_info(self):
@@ -457,7 +459,7 @@ class HydraHarp(TCSPC):
                                                 warnings)
 
         if self.CHK(result):
-            return(text.value())
+            return(text)
 
 # TTTR
     def read_tttr(self):
@@ -537,6 +539,6 @@ class HydraHarp(TCSPC):
 if __name__ == "__main__":
     hh = HydraHarp()
 ##    hh.open()
-    print(hh.valid_mode("t4"))
+    print(hh.valid_mode("t3"))
     print(hh.modes())
     print(hh.flags())

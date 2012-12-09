@@ -2,7 +2,7 @@ import os
 import sys
 from distutils.core import setup, Extension
 
-is_64bits = sys.maxsize > 2**32
+is_64bits = sys.maxsize > 2**31
 
 ext_modules = list()
 # PicoHarp only has 32-bit library, and must be built with 32-bit Python.
@@ -10,8 +10,9 @@ picoharp_module = Extension(
      "_picoharp_comm", 
      [os.path.join("picoquant", "picoharp", "picoharp_comm.i")],
      libraries=["ph300"])
-if not is_64bits:
+if is_64bits:
     print("PicoHarp must be built with 32-bit Python.")
+else:
     ext_modules.append(picoharp_module)
 
 # HydraHarp has 32-bit and 64-bit libraries.
@@ -23,7 +24,7 @@ ext_modules.append(hydraharp_module)
 
 
 setup(name="pypicoquant",
-      version="0.0.1",
+      version="0.1",
       author="Thomas Bischof",
       author_email="tbischof@mit.edu",
       description="An interface to Picoquant hardware libraries "
