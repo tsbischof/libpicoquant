@@ -418,6 +418,7 @@ class PicoHarp(TCSPC):
 if __name__ == "__main__":
     ph = PicoHarp()
 ##    ph.open()
-    print(ph.valid_mode("t4"))
+    print(ph.valid_mode("t2"), ph.valid_mode("t3"))
     print(ph.modes())
     print(ph.flags())
+    print(ph.set_router_input(0, 100, 1))

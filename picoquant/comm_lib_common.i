@@ -1,3 +1,7 @@
+%module comm_lib_common
+%{
+%}
+
 /* For dealing with mutable strings, we need to wrap the normal immutable 
  * string with a freshly-created one. Bounding the result helps prevent
  * buffer overflows.
