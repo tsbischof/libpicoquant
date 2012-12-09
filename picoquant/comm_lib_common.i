@@ -18,4 +18,4 @@
 
 /* Data arrays are important. */
 %include "carrays.i";
-%array_class(uint, uint_array);
+%array_class(unsigned int, uint_array);

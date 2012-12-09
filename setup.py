@@ -11,14 +11,24 @@ if is_64bits:
 ext_modules = list()
 # PicoHarp only has 32-bit library, and must be built with 32-bit Python.
 # This is where the PH control libraries are stored.
-picoharp_dir = os.path.join(lib_dir, "ph300")
+if sys.platform ==  "win32":
+    picoharp_dirs = [os.path.join("\Program Files (x86)",
+                                 "PicoQuant",
+                                 "PH300-PHLibv23")]
+    picoharp_libs = ["phlib"]
+else:
+    picoharp_dirs = [os.path.join(lib_dir, "ph300")]
+    picoharp_libs = ["ph300"]
+    
 picoharp_module = Extension(
      "_picoharp_comm", 
      [os.path.join("picoquant", "picoharp", "picoharp_comm.i"),
       os.path.join("picoquant", "comm_lib_common.i")],
-     include_dirs=[picoharp_dir],
-     swig_opts=["-I{0}".format(picoharp_dir)],
-     libraries=["ph300"])
+     library_dirs=picoharp_dirs,
+     include_dirs=picoharp_dirs,
+     swig_opts=["-I {0}".format(my_dir) for my_dir in picoharp_dirs],
+     libraries=picoharp_libs)
+
 if is_64bits:
     print("PicoHarp control module must be built with 32-bit Python.")
 else:
@@ -26,14 +36,23 @@ else:
 
 # HydraHarp has 32-bit and 64-bit libraries.
 # This is where the HH control libraries are stored.
-hydraharp_dir = os.path.join(lib_dir, "hh400")
+if sys.platform == "win32":
+    hydraharp_dirs = [os.path.join("\Program Files",
+                                   "PicoQuant",
+                                   "HydraHarp-HHLibv20")]
+    hydraharp_libs = ["hhlib"]
+else:
+    hydraharp_dirs = [os.path.join(lib_dir, "hh400")]
+    hydraharp_libs = ["hh400"]
+    
 hydraharp_module = Extension(
      "_hydraharp_comm", 
      [os.path.join("picoquant", "hydraharp", "hydraharp_comm.i"),
       os.path.join("picoquant", "comm_lib_common.i")],
-     include_dirs=[hydraharp_dir],
-     swig_opts=["-I{0}".format(hydraharp_dir)],
-     libraries=["hh400"])
+     library_dirs=hydraharp_dirs,
+     include_dirs=hydraharp_dirs,
+     swig_opts=["-I {0}".format(my_dir) for my_dir in hydraharp_dirs],
+     libraries=hydraharp_libs)
 # HydraHarp has 32-bit and 64-bit libraries
 ext_modules.append(hydraharp_module)
 

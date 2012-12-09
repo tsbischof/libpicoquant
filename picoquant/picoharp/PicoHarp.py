@@ -20,8 +20,10 @@ class PicoHarp(TCSPC):
         self.reference_sources = [0, # internal
                                   1] # external
 
-        self._histogram = phlib.uint_array(phlib.HISTCHAN)
-        self._tttr_buffer = phlib.uint_array(phlib.TTREADMAX)
+        self._histogram_len = phlib.HISTCHAN
+        self._histogram = phlib.uint_array(self._histogram_len)
+        self._tttr_buffer_len = phlib.TTREADMAX
+        self._tttr_buffer = phlib.uint_array(self._tttr_buffer_len)
 
 # General library routines
     def error_string(self, errcode):
@@ -315,13 +317,13 @@ class PicoHarp(TCSPC):
         Read TTTR records from the current measurement.
         """
 
-        if not self._fifo_buffer:
-            raise(ValueError("No fifo buffer."))
+        if not self._tttr_buffer:
+            raise(ValueError("No tttr buffer allocated."))
 
         actual_read = phlib.intp()
         result = phlib.PH_TTReadData(self.device_index,
                                      self._tttr_buffer,
-                                     len(self._tttr_buffer))
+                                     self._tttr_buffer_len)
 
         if self.CHK(result):
             return(self._tttr_buffer[:result])        

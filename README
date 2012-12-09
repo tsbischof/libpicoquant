@@ -6,4 +6,9 @@ Next, build the Python modules:
 > cd ..
 > python setup.py install
 
+On Windows, compile with mingw. To do this, make sure to:
+1. Create \Lib\distutils\distutils.cfg, add
+[build]
+compiler=mingw32
 
+2. Remove all references to -mno-cygwin from Lib\distutils\cygwincompiler.py
