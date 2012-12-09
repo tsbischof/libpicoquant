@@ -22,8 +22,8 @@ class HydraHarp(TCSPC):
 
         self._histogram = None
         self._flags = None
-        self._fifo_buffer = None
-        self._continuous_buffer = None
+        self._fifo_buffer = hhlib.uint_array(2**12)
+        self._continuous_buffer = hhlib.uint_array(2**12)
 
 # General library routines
     def error_string(self, errcode):
@@ -296,7 +296,10 @@ class HydraHarp(TCSPC):
                                       actual_length)
         if self.CHK(result):
             # Create the acquisition buffer.
-            return(1024*actual_length.value()**2)
+            length = 1024*actual_length.value()**2
+            self._histogram = hhlib.uint_array(length)
+
+            return(length)
                                       
     def clear_histogram(self):
         """

@@ -20,9 +20,8 @@ class PicoHarp(TCSPC):
         self.reference_sources = [0, # internal
                                   1] # external
 
-        self._histogram = None
-        self._tttr_buffer = None
-        self._continuous_buffer = None
+        self._histogram = phlib.uint_array(phlib.HISTCHAN)
+        self._tttr_buffer = phlib.uint_array(phlib.TTREADMAX)
 
 # General library routines
     def error_string(self, errcode):
