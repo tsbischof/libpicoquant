@@ -1,6 +1,6 @@
 ## To do: work out how to make an unsigned int array for data transfer
 
-from picoquant.tcspc import TCSPC
+from picoquant import TCSPC
 from picoquant.hydraharp import hydraharp_comm as hhlib
 
 class HydraHarp(TCSPC):

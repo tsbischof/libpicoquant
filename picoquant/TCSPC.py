@@ -14,7 +14,7 @@ class TCSPC(object):
         self._warnings_dict = dict()
 
     def CHK(self, result):
-        if result:
+        if result < 0:
             raise(
                 Exception("Error code {0}: {1}".format(
                     result,
