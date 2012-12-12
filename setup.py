@@ -40,7 +40,7 @@ if sys.platform == "win32":
     hydraharp_dirs = [os.path.join("\Program Files",
                                    "PicoQuant",
                                    "HydraHarp-HHLibv20")]
-    hydraharp_libs = ["hhlib"]
+    hydraharp_libs = ["hhlib64"]
 else:
     hydraharp_dirs = [os.path.join(unix_lib_dir, "hh400")]
     hydraharp_libs = ["hh400"]

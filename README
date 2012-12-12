@@ -12,3 +12,8 @@ On Windows, compile with mingw. To do this, make sure to:
 compiler=mingw32
 
 2. Remove all references to -mno-cygwin from Lib\distutils\cygwincompiler.py
+
+To build 64-bit on Windows, just use the x64 cross tools command prompt and set
+set DISTUTILS_USE_SDK=1
+set MSSdk=1
+
