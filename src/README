@@ -1,0 +1,7 @@
+This library provides the utilities needed to read and write Picoquant
+file types in a generic, user-friendly fashion. The ultimate goal is 
+to provide an interface where the user inputs a file and receives the
+decoded data, without having to have any knowledge of the file structure
+or the hardware which generated it.
+
+
