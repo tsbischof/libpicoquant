@@ -22,8 +22,12 @@ class HydraHarp(TCSPC):
 
         self._histogram = None
         self._flags = None
-        self._fifo_buffer = hhlib.uint_array(2**12)
-        self._continuous_buffer = hhlib.uint_array(2**12)
+##        self._fifo_buffer = hhlib.uint_array(2**12)
+##        self._continuous_buffer = hhlib.uint_array(2**12)
+
+        self._error_buff = bytearray(40)
+        self._serial_buff = bytearray(8)
+        self._warnings_buff = bytearray(16384)
 
 # General library routines
     def error_string(self, errcode):
@@ -83,8 +87,9 @@ class HydraHarp(TCSPC):
         """
         Determine the model and part number of the current device.
         """
-        result, model, part_number = hhlib.HH_GetHardwareInfo(self.device_index,
-                                                             "", "")
+        result, model, part_number = hhlib.HH_GetHardwareInfo(
+            self.device_index,
+            "", "")
         if self.CHK(result):
             return(model, part_number)
 

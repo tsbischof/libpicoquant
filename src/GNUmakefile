@@ -41,7 +41,7 @@ INCLUDES = ${patsubst %.o, %.h, ${LIBPQ_OBJ}}
 LIBPQ_FLAGS = ${LDFLAGS} -shared
 
 TARGETS = picoquant 
-LIB_TARGETS = libpicoquant
+LIB_TARGETS = libpicoquant.so
 
 all: ${TARGETS} ${LIB_TARGETS}
 
@@ -59,7 +59,7 @@ uninstall:
 picoquant: ${PICOQUANT_OBJ}
 	${LD} ${LDFLAGS} -o $@ $^ 
 
-libpicoquant: ${LIBPQ_OBJ}
+libpicoquant.so: ${LIBPQ_OBJ}
 	${LD} ${LIBPQ_FLAGS} -o $@ $^
 
 %.o: %.c
