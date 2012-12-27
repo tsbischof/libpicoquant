@@ -45,7 +45,7 @@ int hh_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
 				 * signal channel index.
 				 */
 				t2->channel = tttr->sync_channel;
-				t2->time = tttr->origin + record.time/2;
+				t2->time = tttr->origin + record.time;
 				return(PQ_RECORD_T2);
 			} else {
 				/* External marker. */
@@ -60,7 +60,7 @@ int hh_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
 			 * result.
 			 */
 			t2->channel = record.channel;
-			t2->time = tttr->origin + record.time/2;
+			t2->time = tttr->origin + record.time;
 			return(PQ_RECORD_T2);
 		}
 	}
