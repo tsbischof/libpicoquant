@@ -64,7 +64,7 @@ uninstall:
 picoquant: ${PICOQUANT_OBJ}
 	${LD} ${LDFLAGS} -o $@ $^ 
 
-libpicoquant: ${LIBPQ_OBJ}
+libpicoquant.so: ${LIBPQ_OBJ}
 	${LD} ${LIBPQ_FLAGS} -o $@ $^
 
 %.o: %.c
