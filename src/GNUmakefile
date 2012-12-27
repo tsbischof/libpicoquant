@@ -34,8 +34,15 @@ PICOQUANT_OBJ = picoquant_main.o picoquant.o \
 		hydraharp/hh_v10_interactive.o hydraharp/hh_v10_continuous.o \
 		hydraharp/hh_v20.o hydraharp/hh_v20_tttr.o \
 		hydraharp/hh_v20_interactive.o hydraharp/hh_v20_continuous.o \
-#		timeharp.o timeharp/th_v20.o timeharp/th_v30.o \
-#				timeharp/th_v50.o timeharp/th_v60.o 
+		timeharp.o \
+		timeharp/th_v20.o timeharp/th_v20_tttr.o \
+		timeharp/th_v20_interactive.o timeharp/th_v20_continuous.o \
+		timeharp/th_v30.o timeharp/th_v30_tttr.o \
+		timeharp/th_v30_interactive.o timeharp/th_v30_continuous.o \
+		timeharp/th_v50.o timeharp/th_v50_tttr.o \
+		timeharp/th_v50_interactive.o timeharp/th_v50_continuous.o \
+		timeharp/th_v60.o timeharp/th_v60_tttr.o \
+		timeharp/th_v60_interactive.o timeharp/th_v60_continuous.o 
 TARGETS = picoquant
 
 

@@ -1,17 +1,10 @@
 #ifndef TH_V20_H_
 #define TH_V20_H_
 
-/* For defintions, see the manuals for the PicoHarp. Naming convention follows
- * that defined there for the structure elements, but the names of the 
- * structures are adapted to my own naming convention.
- */
-
-/* Base resolution of the timing hardware. Interactive mode has its own 
- * specification of the resolution.
- */  
-
 #include <stdio.h>
+
 #include "../picoquant.h"
+#include "../tttr.h"
 
 #pragma pack(2)
 typedef struct {
@@ -115,38 +108,52 @@ typedef struct {
 	uint32_t Reserved: 1;
 } th_v20_tttr_record_t;
 
-int th_v20_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header,
+int th_v20_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header,
 		options_t *options);
 
-int th_v20_header_read(FILE *in_stream, th_v20_header_t *th_header,
-		options_t *options);
-void th_v20_header_free(th_v20_header_t *th_header);
-void th_v20_header_print(FILE *out_stream, th_v20_header_t *th_header);
+th_v20_header_t *th_v20_header_alloc(int boards, int router_channels);
+int th_v20_header_read(FILE *stream_in, th_v20_header_t **th_header);
+void th_v20_header_free(th_v20_header_t **th_header);
+void th_v20_header_printf(FILE *stream_out, th_v20_header_t *th_header);
+void th_v20_header_fwrite(FILE *stream_out, th_v20_header_t *th_header);
 
-int th_v20_interactive_read(FILE *in_stream, th_v20_header_t *th_header,
-		th_v20_interactive_t **interactive, options_t *options);
-void th_v20_interactive_free(th_v20_interactive_t **interactive,
-		th_v20_header_t *th_header);
-void th_v20_interactive_header_print(FILE *out_stream, 
-		th_v20_header_t *th_header, th_v20_interactive_t **interactive);
-void th_v20_interactive_data_print(FILE *out_stream, th_v20_header_t *th_header,
-		th_v20_interactive_t **interactive, options_t *options);
-int th_v20_interactive_stream(FILE *in_stream, FILE *out_stream,
+int th_v20_interactive_stream(FILE *stream_in, FILE *stream_out,
 		pq_header_t *pq_header, th_v20_header_t *th_header, 
 		options_t *options);
 
-int th_v20_tttr_header_read(FILE *in_stream, th_v20_header_t *th_header,
-		th_v20_tttr_header_t *tttr_header, options_t *options);
-void th_v20_tttr_header_print(FILE *out_stream, 
-		th_v20_tttr_header_t *tttr_header);
+int th_v20_interactive_read(FILE *stream_in, 
+		th_v20_header_t *th_header,
+		th_v20_interactive_t **interactive);
+void th_v20_interactive_free(th_v20_header_t *th_header,
+		th_v20_interactive_t **interactive);
+/* Since the interactive data is folded in with the header, it does not make
+ * sense to have the two available for separate binary writes.
+ */
+void th_v20_interactive_header_printf(FILE *stream_out, 
+		th_v20_header_t *th_header,
+		th_v20_interactive_t **interactive);
+void th_v20_interactive_data_print(FILE *stream_out,
+		th_v20_header_t *th_header,
+		th_v20_interactive_t **interactive,
+		options_t *options);
 
-int th_v20_tttr_record_stream(FILE *in_stream, FILE *out_stream,
+void th_v20_t3_init(th_v20_header_t *th_header,
+		th_v20_tttr_header_t *tttr_header,
+		tttr_t *tttr);
+int th_v20_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3);
+int th_v20_tttr_stream(FILE *stream_in, FILE *stream_out, 
+		pq_header_t *pq_header, th_v20_header_t *th_header, 
+		options_t *options);
+int th_v20_t3_stream(FILE *stream_in, FILE *stream_out, 
 		th_v20_header_t *th_header, th_v20_tttr_header_t *tttr_header,
 		options_t *options);
 
-int th_v20_tttr_stream(FILE *in_stream, FILE *out_stream, 
-		pq_header_t *pq_header, th_v20_header_t *th_header, 
-		options_t *options);
-
+int th_v20_tttr_header_read(FILE *stream_in, 
+		th_v20_tttr_header_t **tttr_header);
+void th_v20_tttr_header_free(th_v20_tttr_header_t **tttr_header);
+void th_v20_tttr_header_printf(FILE *stream_out, 
+		th_v20_tttr_header_t *tttr_header);
+void th_v20_tttr_header_fwrite(FILE *stream_out,
+		th_v20_tttr_header_t *tttr_header);
 
 #endif

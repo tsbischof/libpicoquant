@@ -13,22 +13,21 @@ int ph_v20_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header,
 	result = ph_v20_header_read(stream_in, &ph_header);
 	if ( ph_header == NULL ) {
 		error("Could not read PicoHarp header.\n");
-		return(result);
-	}
-
-	if ( ph_header->MeasurementMode == PH_MODE_INTERACTIVE ) {
-		result = ph_v20_interactive_stream(stream_in, stream_out, pq_header, 
-				ph_header, options);
-	} else if ( ph_header->MeasurementMode == PH_MODE_T2  || 
-				ph_header->MeasurementMode == PH_MODE_T3 ) {
-		result = ph_v20_tttr_stream(stream_in, stream_out, pq_header,
-				ph_header, options);
 	} else {
-		error("Picoharp measurement mode not recognized: %"PRId32".\n", 
-				ph_header->MeasurementMode);
-		result = PQ_ERROR_MODE;
-	} 
-
+		if ( ph_header->MeasurementMode == PH_MODE_INTERACTIVE ) {
+			result = ph_v20_interactive_stream(stream_in, stream_out, pq_header,
+					ph_header, options);
+		} else if ( ph_header->MeasurementMode == PH_MODE_T2  || 
+					ph_header->MeasurementMode == PH_MODE_T3 ) {
+			result = ph_v20_tttr_stream(stream_in, stream_out, pq_header,
+					ph_header, options);
+		} else {
+			error("Picoharp measurement mode not recognized: %"PRId32".\n", 
+					ph_header->MeasurementMode);
+			result = PQ_ERROR_MODE;
+		} 
+	}
+	
 	debug("Freeing Picoharp header.\n");
 	ph_v20_header_free(&ph_header);
 	return(result);

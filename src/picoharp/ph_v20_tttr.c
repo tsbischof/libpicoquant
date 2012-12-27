@@ -122,7 +122,6 @@ int ph_v20_tttr_stream(FILE *stream_in, FILE *stream_out,
 	result = ph_v20_tttr_header_read(stream_in, &tttr_header);
 	if ( result != PQ_SUCCESS ) {
 		error("Failed while reading tttr header.\n");
-		return(result);
 	} else {
 		if ( options->print_header ) {
 			debug("Printing file header.\n");
@@ -177,13 +176,8 @@ int ph_v20_t3_stream(FILE *stream_in, FILE *stream_out,
 
 	ph_v20_t3_init(ph_header, tttr_header, &tttr);
 
-	if ( options->to_t2 ) {
-		error("T3->T2 not yet implemented.\n");
-		return(PQ_ERROR_MODE);
-	} else {
-		return(pq_t3_stream(stream_in, stream_out,
-				ph_v20_t3_decode, &tttr, options));
-	}
+	return(pq_t3_stream(stream_in, stream_out,
+			ph_v20_t3_decode, &tttr, options));
 }
 
 /*

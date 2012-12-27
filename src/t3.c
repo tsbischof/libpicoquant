@@ -11,12 +11,16 @@ int pq_t3_stream(FILE *stream_in, FILE *stream_out, pq_t3_decode_t decode,
 	int64_t record_count = 0;
 	int result;
 	t3_t t3;
-	pq_t3_print_t print;
+	t2_t t2;
+	pq_t3_print_t print_t3;
+	pq_t2_print_t print_t2;
 
 	if ( options->binary_out ) {
-		print = pq_t3_fwrite;
+		print_t3 = pq_t3_fwrite;
+		print_t2 = pq_t2_fwrite;
 	} else {
-		print = pq_t3_printf;
+		print_t3 = pq_t3_printf;
+		print_t2 = pq_t2_printf;
 	}
 
 	/* To do: add some logic to read a large amount of records (e.g. 1024) and
@@ -33,9 +37,14 @@ int pq_t3_stream(FILE *stream_in, FILE *stream_out, pq_t3_decode_t decode,
 			if ( result == PQ_RECORD_T3 ) {
 				record_count++;
 				pq_record_status_print("picoquant", record_count, options);
-				print(stream_out, &t3);
+				if ( options->to_t2 ) {
+					pq_t3_to_t2(&t3, &t2, tttr);
+					print_t2(stream_out, &t2);
+				} else {
+					print_t3(stream_out, &t3);
+				}
 			} else if ( result == PQ_RECORD_MARKER ) {
-				tttr_marker_print(stream_out, t3.time);
+				tttr_marker_print(stream_out, t3.pulse);
 			} else if ( result == PQ_RECORD_OVERFLOW ) {
 				/* overflows must be performed in the decoder. */
 			} else { 

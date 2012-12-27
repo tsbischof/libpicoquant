@@ -187,13 +187,8 @@ int hh_v20_t3_stream(FILE *stream_in, FILE *stream_out,
 
 	hh_v20_t3_init(hh_header, tttr_header, &tttr);
 
-	if ( options->to_t2 ) {
-		error("T3->T2 not yet implemented.\n");
-		return(PQ_ERROR_MODE);
-	} else {
-		return(pq_t3_stream(stream_in, stream_out,
-				hh_v20_t3_decode, &tttr, options));
-	}
+	return(pq_t3_stream(stream_in, stream_out,
+			hh_v20_t3_decode, &tttr, options));
 }
 
 /*

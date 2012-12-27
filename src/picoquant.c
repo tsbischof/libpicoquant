@@ -9,7 +9,7 @@
 
 #include "picoharp.h"
 #include "hydraharp.h"
-//#include "timeharp.h"
+#include "timeharp.h"
 
 #include "interactive.h"
 #include "continuous.h"
@@ -43,9 +43,9 @@ int pq_dispatch(FILE *stream_in, FILE *stream_out, options_t *options) {
 pq_dispatch_t pq_dispatch_get(options_t *options, pq_header_t *pq_header) {
 	if ( ! strcmp(pq_header->Ident, "PicoHarp 300") ) {
 		return(ph_dispatch);
-	} /*else if ( ! strcmp(pq_header->Ident, "TimeHarp 200") ) {
+	} else if ( ! strcmp(pq_header->Ident, "TimeHarp 200") ) {
 		return(th_dispatch);
-	} */else if ( ! strcmp(pq_header->Ident, "HydraHarp") ) {
+	} else if ( ! strcmp(pq_header->Ident, "HydraHarp") ) {
 		return(hh_dispatch);
 	} else { 
 		return(NULL);
