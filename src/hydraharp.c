@@ -17,7 +17,7 @@ int hh_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header,
 	} else {
 		error("HydraHarp version not supported: %s\n",
 				pq_header->FormatVersion);
-		result = PQ_VERSION_ERROR;
+		result = PQ_ERROR_VERSION;
 	}
 
 	return(result);

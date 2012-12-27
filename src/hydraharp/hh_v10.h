@@ -94,10 +94,10 @@ typedef struct {
 	int32_t StopOnOvfl;
 	int32_t Restart;
 	int32_t DisplayLinLog;
-	int32_t DisplayTimeAxisFrom;
-	int32_t DisplayTimeAxisTo;
-	int32_t DisplayCountAxisFrom;
-	int32_t DisplayCountAxisTo;
+	uint32_t DisplayTimeAxisFrom;
+	uint32_t DisplayTimeAxisTo;
+	uint32_t DisplayCountAxisFrom;
+	uint32_t DisplayCountAxisTo;
 	hh_v10_display_curve_t DisplayCurve[8];
 	hh_v10_param_t Param[3];
 	int32_t RepeatMode;
@@ -155,49 +155,64 @@ typedef struct {
 /* After defining the structures, there a few well-characterized things we want
  * to do to them, such as reading and freeing.
  */
-int hh_v10_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header,
+int hh_v10_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header,
 		options_t *options);
 
-int hh_v10_header_read(FILE *in_stream, hh_v10_header_t *hh_header,
-		options_t *options);
-void hh_v10_header_free(hh_v10_header_t *hh_header);
-void hh_v10_header_print(FILE *out_stream,
-	       hh_v10_header_t *hh_header);
+hh_v10_header_t *hh_v10_header_alloc(int input_channels);
+int hh_v10_header_read(FILE *stream_in, hh_v10_header_t **hh_header);
+void hh_v10_header_free(hh_v10_header_t **hh_header);
+void hh_v10_header_printf(FILE *stream_out, hh_v10_header_t *hh_header);
+void hh_v10_header_fwrite(FILE *stream_out, hh_v10_header_t *hh_header);
 
-int hh_v10_interactive_header_read(FILE *in_stream, 
+int hh_v10_interactive_stream(FILE *stream_in, FILE *stream_out,
+		pq_header_t *pq_header, hh_v10_header_t *hh_header, 
+		options_t *options);
+
+int hh_v10_interactive_header_read(FILE *stream_in, 
 		hh_v10_header_t *hh_header,
-		hh_v10_interactive_t *interactive, options_t *options);
-int hh_v10_interactive_data_read(FILE *in_stream,
+		hh_v10_interactive_t **interactive);
+void hh_v10_interactive_header_free(hh_v10_interactive_t **interactive);
+void hh_v10_interactive_header_printf(FILE *stream_out, 
 		hh_v10_header_t *hh_header,
-		hh_v10_interactive_t *interactive, options_t *options);
-void hh_v10_interactive_header_free(hh_v10_interactive_t *interactive);
+		hh_v10_interactive_t *interactive);
+void hh_v10_interactive_header_fwrite(FILE *stream_out,
+		hh_v10_header_t *hh_header,
+		hh_v10_interactive_t *interactive);
+
+int hh_v10_interactive_data_read(FILE *stream_in,
+		hh_v10_header_t *hh_header,
+		hh_v10_interactive_t *interactive);
 void hh_v10_interactive_data_free(hh_v10_header_t *hh_header,
 		hh_v10_interactive_t *interactive);
-void hh_v10_interactive_header_print(FILE *out_stream, 
-		hh_v10_header_t *hh_header,
-		hh_v10_interactive_t *interactive);
-void hh_v10_interactive_data_print(FILE *out_stream,
+void hh_v10_interactive_data_print(FILE *stream_out,
 		hh_v10_header_t *hh_header,
 		hh_v10_interactive_t *interactive,
 		options_t *options);
-int hh_v10_interactive_stream(FILE *in_stream, FILE *out_stream,
+
+void hh_v10_t2_init(hh_v10_header_t *hh_header, 
+		hh_v10_tttr_header_t *tttr_header,
+		tttr_t *tttr);
+int hh_v10_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2);
+void hh_v10_t3_init(hh_v10_header_t *hh_header, 
+		hh_v10_tttr_header_t *tttr_header,
+		tttr_t *tttr);
+int hh_v10_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3);
+int hh_v10_tttr_stream(FILE *stream_in, FILE *stream_out, 
 		pq_header_t *pq_header, hh_v10_header_t *hh_header, 
 		options_t *options);
-
-int hh_v10_tttr_header_read(FILE *in_stream, hh_v10_tttr_header_t *tttr_header,
+int hh_v10_t2_stream(FILE *stream_in, FILE *stream_out, 
+		hh_v10_header_t *hh_header,
+		hh_v10_tttr_header_t *tttr_header, options_t *options);
+int hh_v10_t3_stream(FILE *stream_in, FILE *stream_out,
+		hh_v10_header_t *hh_header, hh_v10_tttr_header_t *tttr_header, 
 		options_t *options);
-void hh_v10_tttr_header_print(FILE *out_stream, 
+
+int hh_v10_tttr_header_read(FILE *stream_in, 
+		hh_v10_tttr_header_t **tttr_header);
+void hh_v10_tttr_header_free(hh_v10_tttr_header_t **tttr_header);
+void hh_v10_tttr_header_printf(FILE *stream_out, 
 		hh_v10_tttr_header_t *tttr_header);
-void hh_v10_tttr_header_free(hh_v10_tttr_header_t *tttr_header);
-
-int hh_v10_t2_record_stream(FILE *in_stream, FILE *out_stream, 
-		hh_v10_header_t *hh_header,
-		hh_v10_tttr_header_t *tttr_header, options_t *options);
-int hh_v10_t3_record_stream(FILE *in_stream, FILE *out_stream,
-		hh_v10_header_t *hh_header,
-		hh_v10_tttr_header_t *tttr_header, options_t *options);
-int hh_v10_tttr_stream(FILE *in_stream, FILE *out_stream, 
-		pq_header_t *pq_header, hh_v10_header_t *hh_header, 
-		options_t *options);
+void hh_v10_tttr_header_fwrite(FILE *stream_out, 
+		hh_v10_tttr_header_t *tttr_header);
 
 #endif

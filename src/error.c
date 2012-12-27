@@ -7,9 +7,10 @@
 int verbose = 0;
 
 void debug(char *message, ...) {
-	/* If in debug mode, we want to print a message. Otherwise, we want
-	 * to ignore it.
-	 */
+/* 
+ * If in debug mode, we want to print a message. Otherwise, we want
+ * to ignore it.
+ */
 	va_list args;
 	va_start(args, message);
 	if ( verbose ) {
@@ -21,9 +22,10 @@ void debug(char *message, ...) {
 }
 
 void error(char *message, ...) {
-	/* Handle error messages. This is here in case we ever want to do 
-	 * something more than just print them.
-	 */
+/* 
+ * Handle error messages. This is here in case we ever want to do 
+ * something more than just print them.
+ */
 	va_list args;
 	va_start(args, message);
 	fprintf(stderr, "ERROR: ");
@@ -33,7 +35,9 @@ void error(char *message, ...) {
 }
 
 void warn(char *message, ...) {
-	/* Warnings about untested features, etc. */
+/* 
+ * Warnings about untested features, etc. 
+ */
 	va_list args;
 	va_start(args, message);
 	fprintf(stderr, "WARNING: ");
@@ -42,7 +46,15 @@ void warn(char *message, ...) {
 	fflush(stderr);
 }
 
-void print_status(char *name, long long count, options_t *options) {
+int pq_check(int status) {
+	if ( status >= PQ_SUCCESS ) {
+		return(PQ_SUCCESS);
+	} else {
+		return(status);
+	}
+}
+
+void pq_record_status_print(char *name, uint64_t count, options_t *options) {
 	time_t rawtime;
 	struct tm *timeinfo;
 	char fmttime[80];
@@ -56,10 +68,3 @@ void print_status(char *name, long long count, options_t *options) {
 	}
 }
 
-int parse_result(int result) {
-	if ( ! result || result == USAGE ) {
-		return(0);
-	} else {
-		return(result);
-	}
-}

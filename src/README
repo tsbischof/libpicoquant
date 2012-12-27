@@ -2,6 +2,47 @@ This library provides the utilities needed to read and write Picoquant
 file types in a generic, user-friendly fashion. The ultimate goal is 
 to provide an interface where the user inputs a file and receives the
 decoded data, without having to have any knowledge of the file structure
-or the hardware which generated it.
+or the hardware which generated it. It has been written to be as general 
+as possible, relying on fixed-width structures to ensure cross-platform 
+compatibility. It should compile and run cleanly with a compiler conforming
+to the C99 standard. Notably, 32-bit gcc will not work on all platforms due to
+imcomplete implementation of int64_t, but clang does work. 
 
+The problem of decoding the data is broken down into a few steps:
+1. Determine what hardware produced this data. This is determined by checking
+   the contents of an identity string in the file header (offset 0, char[16]).
+   Use this to find an appropriate board handler.
+2. The board handler is used to find a version handler, based on a version
+   string in the general header (offset 16, char[6])
+3. The version handler is used to determine the measurement mode from a mode
+   number in the device- and version-specific header. 
+4. The mode handler either decodes the data in the stream (default), or returns
+   information about the resolution of the measurement (--resolution-only)
+   or the file header (--header-only). 
 
+Because the measurment modes across the boards are very similar, the output is
+broken down into four modes:
+1. Interactive: a histogramming mode where a series of bin counts are reported
+2. Continuous: a histogramming mode where the bin counts are reported at fixed
+   intervals. This mode is not currently supported in libpicoquant, due to a 
+   lack of test data.
+3. T2: a TTTR (time-tagged time-resolved) mode in which the arrival time and
+   channel of every photon is reported.
+4. T3: a TTTR mode in which the arrival time and channel each photon, relative
+   to a sync source, is reported.
+
+For each version and mode, a handler is produced which is able to iterate over
+a data stream to produce new values. This iteration is handled by general 
+routines such as pq_t2_next(), which accept a data stream and handler and
+output the next decoded value. 
+
+If you are using the library in your own program, the most effective option is
+to call the routine pq_dispatch(), which performs all version and mode 
+recognition automatically, turning an input binary stream into a stream of 
+records (photons, histograms, etc.). If more fine-tuned control is necessary, 
+it is best to call the various dispatch-finding routines (hardware, version, 
+mode) in order as needed to determine the correct decoding environment, then 
+use pq_next_*() to iterate over the data. There is little sanity-checking 
+built into the decoders, so trying to use an improper decoder may lead to 
+strange errors or requests for allocation of odd amounts of memory, but
+overall version mismatch should just result in a error.
