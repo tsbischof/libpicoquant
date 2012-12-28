@@ -81,7 +81,6 @@ int th_v30_tttr_stream(FILE *stream_in, FILE *stream_out,
 	int result;
 
 	result = th_v30_tttr_header_read(stream_in, &tttr_header);
-	th_v30_tttr_header_printf(stderr, tttr_header);
 	if ( result != PQ_SUCCESS ) {
 		error("Failed while reading the tttr header.\n");
 	} else {
@@ -134,7 +133,7 @@ int th_v30_tttr_header_read(FILE *stream_in,
 }
 			
 void th_v30_tttr_header_free(th_v30_tttr_header_t **tttr_header) { 
-	free(tttr_header);
+	free(*tttr_header);
 }
 
 void th_v30_tttr_header_printf(FILE *stream_out, 

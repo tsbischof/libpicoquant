@@ -12,6 +12,7 @@ typedef struct {
 	int print_header; 
 	int print_resolution; 
 	int to_t2; 
+	int print_mode;
 } options_t;
 
 

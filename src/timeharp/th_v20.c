@@ -8,26 +8,38 @@
 
 int th_v20_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header,
 		options_t *options) {
-	int result;
+	int result = PQ_SUCCESS;
 	th_v20_header_t *th_header;
 
 	result = th_v20_header_read(stream_in, &th_header);
 	if ( result != PQ_SUCCESS ) {
 		error("Could not read Timeharp header.\n");
 	} else {
-		if ( th_header->MeasurementMode == TH_MODE_INTERACTIVE ) {
-			result = th_v20_interactive_stream(stream_in, stream_out,
-					pq_header, th_header, options);
-		} else if ( th_header->MeasurementMode == TH_MODE_CONTINUOUS ) {
-			error("Continuous mode for version 2.0 not yet supported.\n");
-			result = PQ_ERROR_MODE;
-		} else if ( th_header->MeasurementMode == TH_MODE_TTTR ) {
-			result = th_v20_tttr_stream(stream_in, stream_out,
-					pq_header, th_header, options);
-		result = PQ_ERROR_MODE;
+		if ( options->print_mode ) {
+			if ( th_header->MeasurementMode == TH_MODE_INTERACTIVE ) {
+				fprintf(stream_out, "interactive\n");
+			} else if ( th_header->MeasurementMode == TH_MODE_TTTR ) {
+				fprintf(stream_out, "t3\n");
+			} else if ( th_header->MeasurementMode == TH_MODE_CONTINUOUS ) {
+				fprintf(stream_out, "continuous\n");
+			} else {
+				error("Mode not recognized: %d\n", th_header->MeasurementMode);
+				result = PQ_ERROR_MODE;
+			} 
 		} else {
-			error("Mode not recognized: %d.\n", th_header->MeasurementMode);
-			result = PQ_ERROR_MODE;
+			if ( th_header->MeasurementMode == TH_MODE_INTERACTIVE ) {
+				result = th_v20_interactive_stream(stream_in, stream_out,
+						pq_header, th_header, options);
+			} else if ( th_header->MeasurementMode == TH_MODE_CONTINUOUS ) {
+				error("Continuous mode for version 2.0 not yet supported.\n");
+				result = PQ_ERROR_MODE;
+			} else if ( th_header->MeasurementMode == TH_MODE_TTTR ) {
+				result = th_v20_tttr_stream(stream_in, stream_out,
+						pq_header, th_header, options);
+			} else {
+				error("Mode not recognized: %d.\n", th_header->MeasurementMode);
+				result = PQ_ERROR_MODE;
+			}
 		}
 	}
 	
@@ -107,8 +119,11 @@ void th_v20_header_printf(FILE *stream_out,
 
 	fprintf(stream_out, "HardwareVersion = %s\n", 
 			th_header->HardwareVersion);
+	/* The file time often does not have a null termination, so add one. */
+	th_header->CRLF[0] = '\0';
 	fprintf(stream_out, "FileTime = %s\n",
 			th_header->FileTime);
+	th_header->CRLF[0] = '\r';
 	fprintf(stream_out, "Comment = %s\n",
 			th_header->Comment);
 	fprintf(stream_out, "NumberOfChannels = %"PRId32"\n", 

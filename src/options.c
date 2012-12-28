@@ -64,6 +64,7 @@ void usage() {
 "   -z, --resolution-only: Print the resolution of the measurement, as a\n"
 "                          double-precision float in ps.\n"
 "       -r, --header-only: Print the file header in text format.\n"
+"         -m, --mode-only: Print the mode of the data.\n"
 "             -t, --to-t2: For t3 data, use the sync rate todetermine the\n"
 "                          time represented by the sync count and output the\n"
 "                          data in t2 mode. Note that this will only be\n"
@@ -76,7 +77,7 @@ int options_parse(int argc, char *argv[], options_t *options) {
 	int result = PQ_SUCCESS;
 	int c, option_index;
 
-	char *options_string = "hVvi:o:bp:zrtn:";
+	char *options_string = "hVvi:o:bp:zrmtn:";
 
 	static struct option long_options[] = {
 		{"help", no_argument, 0, 'h'},
@@ -91,6 +92,7 @@ int options_parse(int argc, char *argv[], options_t *options) {
 
 		{"resolution-only", no_argument, 0, 'z'},
 		{"header-only", no_argument, 0, 'r'},
+		{"mode-only", no_argument, 0, 'm'},
 		{"to-t2", no_argument, 0, 't'},
 		{"number", required_argument, 0, 'n'},
 		{0, 0, 0, 0}};
@@ -127,6 +129,9 @@ int options_parse(int argc, char *argv[], options_t *options) {
 			case 'r':
 				options->print_header = 1;
 				break;
+			case 'm':
+				options->print_mode = 1;
+				break;
 			case 't':
 				options->to_t2 = 1;
 				break;
@@ -153,6 +158,7 @@ void options_init(options_t *options) {
 	options->number = INT64_MAX;
 	options->print_header = 0;
 	options->print_resolution = 0;
+	options->print_mode = 0;
 	options->to_t2 = 0;
 }
 

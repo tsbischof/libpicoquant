@@ -7,27 +7,40 @@
 
 int hh_v10_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header, 
 		options_t *options) {
-	int result;
+	int result = PQ_SUCCESS;
 	hh_v10_header_t *hh_header;
 
 	result = hh_v10_header_read(stream_in, &hh_header);
 	if ( hh_header == NULL ) {
 		error("Could not read HydraHarp header.\n");
-		return(result);
-	}
-
-	if ( hh_header->MeasurementMode == HH_MODE_INTERACTIVE ) {
-		result = hh_v10_interactive_stream(stream_in, stream_out, pq_header, 
-				hh_header, options);
-	} else if ( hh_header->MeasurementMode == HH_MODE_T2  || 
-				hh_header->MeasurementMode == HH_MODE_T3 ) {
-		result = hh_v10_tttr_stream(stream_in, stream_out, pq_header,
-				hh_header, options);
 	} else {
-		error("Hydraharp measurement mode not recognized: %"PRId32".\n", 
-				hh_header->MeasurementMode);
-		result = PQ_ERROR_MODE;
-	} 
+		if ( options->print_mode ) {
+			if ( hh_header->MeasurementMode == HH_MODE_INTERACTIVE ) {
+				fprintf(stream_out, "interactive\n");
+			} else if ( hh_header->MeasurementMode == HH_MODE_T2 ) {
+				fprintf(stream_out, "t2\n");
+			} else if ( hh_header->MeasurementMode == HH_MODE_T3 ) {
+				fprintf(stream_out, "t3\n");
+			} else {
+				error("Hydraharp mode not recognized: %"PRId32".\n",
+						hh_header->MeasurementMode);
+				result = PQ_ERROR_MODE;
+			}
+		} else {
+			if ( hh_header->MeasurementMode == HH_MODE_INTERACTIVE ) {
+				result = hh_v10_interactive_stream(stream_in, stream_out, 
+						pq_header, hh_header, options);
+			} else if ( hh_header->MeasurementMode == HH_MODE_T2  || 
+							hh_header->MeasurementMode == HH_MODE_T3 ) {
+				result = hh_v10_tttr_stream(stream_in, stream_out, pq_header,
+						hh_header, options);
+			} else {
+				error("Hydraharp measurement mode not recognized: %"PRId32".\n",
+						hh_header->MeasurementMode);
+				result = PQ_ERROR_MODE;
+			} 
+		}
+	}
 
 	debug("Freeing Hydraharp header.\n");
 	hh_v10_header_free(&hh_header);

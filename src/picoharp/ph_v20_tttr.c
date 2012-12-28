@@ -136,10 +136,6 @@ int ph_v20_tttr_stream(FILE *stream_in, FILE *stream_out,
 			}
 			
 			result = PQ_SUCCESS;
-		} else if ( options->print_resolution ) {
-			pq_resolution_print(stream_out, -1, 
-					(ph_header->Brd[0].Resolution*1e3), options);
-			result = PQ_SUCCESS;
 		} else {
 			if ( ph_header->MeasurementMode == PH_MODE_T2 ) {
 				result = ph_v20_t2_stream(stream_in, stream_out, 
@@ -165,8 +161,15 @@ int ph_v20_t2_stream(FILE *stream_in, FILE *stream_out,
 	tttr_t tttr;
 
 	ph_v20_t2_init(ph_header, tttr_header, &tttr);
-	return(pq_t2_stream(stream_in, stream_out, 
-			ph_v20_t2_decode, &tttr, options));
+
+	if ( options->print_resolution ) {
+		pq_resolution_print(stream_out, -1, 
+				tttr.resolution_float*1e12, options);
+		return(PQ_SUCCESS);
+	} else {
+		return(pq_t2_stream(stream_in, stream_out, 
+				ph_v20_t2_decode, &tttr, options));
+	}
 }
 
 int ph_v20_t3_stream(FILE *stream_in, FILE *stream_out, 
@@ -176,8 +179,14 @@ int ph_v20_t3_stream(FILE *stream_in, FILE *stream_out,
 
 	ph_v20_t3_init(ph_header, tttr_header, &tttr);
 
-	return(pq_t3_stream(stream_in, stream_out,
-			ph_v20_t3_decode, &tttr, options));
+	if ( options->print_resolution ) {
+		pq_resolution_print(stream_out, -1, 
+				tttr.resolution_float*1e12, options);
+		return(PQ_SUCCESS);
+	} else {
+		return(pq_t3_stream(stream_in, stream_out,
+				ph_v20_t3_decode, &tttr, options));
+	}
 }
 
 /*

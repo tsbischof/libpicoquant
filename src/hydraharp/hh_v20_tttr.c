@@ -146,9 +146,6 @@ int hh_v20_tttr_stream(FILE *stream_in, FILE *stream_out,
 			}
 
 			result = PQ_SUCCESS;
-		} else if ( options->print_resolution ) {
-			pq_resolution_print(stream_out, -1,
-					hh_header->Resolution, options);
 		} else {
 			if ( hh_header->MeasurementMode == HH_MODE_T2 ) {
 				debug("Found mode ht2.\n");
@@ -176,8 +173,15 @@ int hh_v20_t2_stream(FILE *stream_in, FILE *stream_out,
 	tttr_t tttr;
 	
 	hh_v20_t2_init(hh_header, tttr_header, &tttr);
-	return(pq_t2_stream(stream_in, stream_out,
-			hh_v20_t2_decode, &tttr, options));
+
+	if ( options->print_resolution ){
+		pq_resolution_print(stream_out, -1,
+				tttr.resolution_float*1e12, options);
+		return(PQ_SUCCESS);
+	} else {
+		return(pq_t2_stream(stream_in, stream_out,
+				hh_v20_t2_decode, &tttr, options));
+	} 
 }
 
 int hh_v20_t3_stream(FILE *stream_in, FILE *stream_out,
@@ -187,8 +191,14 @@ int hh_v20_t3_stream(FILE *stream_in, FILE *stream_out,
 
 	hh_v20_t3_init(hh_header, tttr_header, &tttr);
 
-	return(pq_t3_stream(stream_in, stream_out,
-			hh_v20_t3_decode, &tttr, options));
+	if ( options->print_resolution ){
+		pq_resolution_print(stream_out, -1,
+				tttr.resolution_float*1e12, options);
+		return(PQ_SUCCESS);
+	} else {
+		return(pq_t3_stream(stream_in, stream_out,
+				hh_v20_t3_decode, &tttr, options));
+	}
 }
 
 /*
