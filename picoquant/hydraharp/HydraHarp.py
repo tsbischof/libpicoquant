@@ -272,7 +272,7 @@ class HydraHarp(TCSPC):
         Valid range: {0} to {1}
         """.format(0, hhlib.MAXBINSTEPS-1)
         
-        result =  hhlib.HH_SetBinnin(self.device_index,
+        result =  hhlib.HH_SetBinning(self.device_index,
                                      binning)
         return(self.CHK(result))
 

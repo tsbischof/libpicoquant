@@ -21,7 +21,7 @@ files_module = Extension(
     include_dirs=["src"],
     swig_opts=["-Isrc"])
 
-ext_modules.append(files_module)
+#ext_modules.append(files_module)
 
 # Locate the control libraries, and build all that can be found.
 is_64bits = sys.maxsize > 2**31
@@ -79,8 +79,31 @@ hydraharp_module = Extension(
 # HydraHarp has 32-bit and 64-bit libraries
 ext_modules.append(hydraharp_module)
 
-# Currently, I do not have access to the TimeHarp control libraries. As such,
-# they are omitted.
+
+# timeharp
+if sys.platform == "win32":
+    timeharp_dirs = [os.path.join("\Program Files (x86)",
+                                  "PicoQuant",
+                                  "TH200Libv50")]
+    timeharp_libs = ["Thlib"]
+else:
+    hydraharp_dirs = [os.path.join(unix_lib_dir, "th200")]
+    hydraharp_libs = ["th200"]
+    
+timeharp_module = Extension(
+     "_timeharp_comm", 
+     [os.path.join("picoquant", "timeharp", "timeharp_comm.i"),
+      os.path.join("picoquant", "comm_lib_common.i")],
+     library_dirs=timeharp_dirs,
+     include_dirs=timeharp_dirs,
+     swig_opts=["-I{0}".format(my_dir) for my_dir in timeharp_dirs],
+     libraries=timeharp_libs)
+
+if is_64bits:
+    print("Timeharp requires 32-bit system")
+else:
+    ext_modules.append(timeharp_module)
+
 
 setup(name="pypicoquant",
       version="0.1",
