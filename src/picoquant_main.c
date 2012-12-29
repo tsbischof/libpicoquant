@@ -22,10 +22,6 @@ int main(int argc, char *argv[]) {
 	options_init(&options);
 	result = options_parse(argc, argv, &options);
 
-/* to do: find a scheme which permits identification of success while 
- *        recognizing that work can stop after receiving a header-only or
- *        similar call.
- */
 	if ( result == PQ_SUCCESS ) {
 		result = streams_open(&stream_in, options.filename_in, 
 				&stream_out, options.filename_out);

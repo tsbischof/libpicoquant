@@ -9,7 +9,7 @@ CCFLAGS := -Wall
 CCFLAGS += -D _FILE_OFFSET_BITS=64 
 CCFLAGS += -D VERSION="0.1"
 CCFLAGS += -O3
-CCFLAGS += -fPIC
+CCFLAGS += -fpic
 
 LDFLAGS = -Wall -lm
 
@@ -53,7 +53,7 @@ INCLUDES = ${patsubst %.o, %.h, ${LIBPQ_OBJ}}
 LIBPQ_FLAGS = ${LDFLAGS} -shared
 
 TARGETS = picoquant 
-LIB_TARGETS = #libpicoquant
+LIB_TARGETS = libpicoquant.so
 
 all: ${TARGETS} ${LIB_TARGETS}
 
