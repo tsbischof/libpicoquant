@@ -68,7 +68,7 @@ int hh_v10_interactive_header_read(FILE *stream_in,
 	 * do some simpler debugging. These can be merged in the future for
 	 * speed, but for now speed is not an issue. 
 	 */
-	int result;
+	size_t n_read;
 	
 	*interactive = (hh_v10_interactive_t *)malloc(sizeof(hh_v10_interactive_t));
 	
@@ -88,12 +88,12 @@ int hh_v10_interactive_header_read(FILE *stream_in,
 	}
 
 	debug("Reading curve header data.\n");
-	result = fread((*interactive)->Curve, 
+	n_read = fread((*interactive)->Curve, 
 			sizeof(hh_v10_curve_t),
 			hh_header->NumberOfCurves, 
 			stream_in);
 
-	if ( result != hh_header->NumberOfCurves ) {
+	if ( n_read != hh_header->NumberOfCurves ) {
 		error("Could not read curve headers.\n");
 		hh_v10_interactive_header_free(interactive);
 		return(PQ_ERROR_IO);
@@ -222,7 +222,7 @@ int hh_v10_interactive_data_read(FILE *stream_in,
 	/* Now the curve data. Allocate this as a 2d array and populate it 
 	 * as such.
 	 */
-	int result;
+	size_t n_read;
 	int i;
 
 	interactive->Counts = (uint32_t **)malloc(
@@ -243,9 +243,9 @@ int hh_v10_interactive_data_read(FILE *stream_in,
 			return(PQ_ERROR_MEM);
 		}
 
-		result = fread(interactive->Counts[i], sizeof(uint32_t),
+		n_read = fread(interactive->Counts[i], sizeof(uint32_t),
 				interactive->Curve[i].HistogramBins, stream_in);
-		if ( result != interactive->Curve[i].HistogramBins ) {
+		if ( n_read != interactive->Curve[i].HistogramBins ) {
 			error("Could not read data for curve %d.\n", i);
 			return(PQ_ERROR_IO);
 		}

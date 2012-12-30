@@ -9,7 +9,7 @@ int pq_t3_stream(FILE *stream_in, FILE *stream_out, pq_t3_decode_t decode,
 	 * Use the specified decoder to process the incoming stream of t3 records.
 	 */
 	int64_t record_count = 0;
-	int result;
+	int result = PQ_SUCCESS;
 	t3_t t3;
 	t2_t t2;
 	pq_t3_print_t print_t3;

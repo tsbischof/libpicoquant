@@ -100,7 +100,7 @@ void ph_v20_header_free(ph_v20_header_t **ph_header) {
 
 int ph_v20_header_read(FILE *stream_in, ph_v20_header_t **ph_header) {
 	int i;
-	int result;
+	size_t n_read;
 
 	*ph_header = (ph_v20_header_t *)malloc(sizeof(ph_v20_header_t));
 
@@ -113,12 +113,12 @@ int ph_v20_header_read(FILE *stream_in, ph_v20_header_t **ph_header) {
 	 * up for the board definitions, which we will pull after we know how
 	 * many there are (ph_header->NumberOfBoards)
 	 */
-	result = fread(*ph_header, 
+	n_read = fread(*ph_header, 
 			sizeof(ph_v20_header_t) - sizeof(ph_v20_board_t *), 
 			1, 
 			stream_in);
 
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		error("Could not read Picoharp header.\n");
 		ph_v20_header_free(ph_header);
 		return(PQ_ERROR_IO);
@@ -147,12 +147,12 @@ int ph_v20_header_read(FILE *stream_in, ph_v20_header_t **ph_header) {
 	/* Each board also has many router channels. */
 	for ( i = 0; i < (*ph_header)->NumberOfBoards; i++ ) {
 		debug("Reading static data for board %d.\n", i);
-		result = fread(&(*ph_header)->Brd[i], 
+		n_read = fread(&(*ph_header)->Brd[i], 
 			sizeof(ph_v20_board_t) - sizeof(ph_v20_router_channel_t *), 
 			1, 
 			stream_in);
 
-		if ( result != 1 ) {
+		if ( n_read != 1 ) {
 			ph_v20_header_free(ph_header);
 			return(PQ_ERROR_IO);
 		}
@@ -167,10 +167,10 @@ int ph_v20_header_read(FILE *stream_in, ph_v20_header_t **ph_header) {
 		}
 
 		debug( "Reading router channel data for board %d.\n", i);
-		result = fread((*ph_header)->Brd[i].RtCh, 
+		n_read = fread((*ph_header)->Brd[i].RtCh, 
 				sizeof(ph_v20_router_channel_t), 
 				(*ph_header)->RoutingChannels, stream_in);
-		if ( result != (*ph_header)->RoutingChannels ) {
+		if ( n_read != (*ph_header)->RoutingChannels ) {
 			ph_v20_header_free(ph_header);
 			return(PQ_ERROR_IO);
 		}

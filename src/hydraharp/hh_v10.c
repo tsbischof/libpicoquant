@@ -78,7 +78,7 @@ void hh_v10_header_free(hh_v10_header_t **hh_header) {
 
 int hh_v10_header_read(FILE *stream_in, hh_v10_header_t **hh_header) {
 	int i;
-	int result;
+	size_t n_read;
 
 	*hh_header = (hh_v10_header_t *)malloc(sizeof(hh_v10_header_t));
 
@@ -92,13 +92,13 @@ int hh_v10_header_read(FILE *stream_in, hh_v10_header_t **hh_header) {
 	 * many there are (hh_header->NumberOfBoards)
 	 */
 	debug("Reading static part of common header.\n");
-	result = fread(*hh_header, 
+	n_read = fread(*hh_header, 
 			sizeof(hh_v10_header_t)
 			- sizeof(hh_v10_input_channel_t *) - sizeof(int32_t *),
 			 1, 
 			stream_in);
 
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		error("Could not read Hydraharp header.\n");
 		hh_v10_header_free(hh_header);
 		return(PQ_ERROR_IO);
@@ -116,11 +116,11 @@ int hh_v10_header_read(FILE *stream_in, hh_v10_header_t **hh_header) {
 	}
 	
 	debug("Reading input channel data for common header.\n");
-	result = fread((*hh_header)->InpChan, 
+	n_read = fread((*hh_header)->InpChan, 
 			sizeof(hh_v10_input_channel_t),
 			(*hh_header)->InputChannelsPresent, 
 			stream_in);
-	if ( result != (*hh_header)->InputChannelsPresent ) {
+	if ( n_read != (*hh_header)->InputChannelsPresent ) {
 		error("Could not read input channel headers.\n");
 		hh_v10_header_free(hh_header);
 		return(PQ_ERROR_IO);
@@ -147,9 +147,9 @@ int hh_v10_header_read(FILE *stream_in, hh_v10_header_t **hh_header) {
 		}
 	} else {
  		debug("Reading input rates.\n");
-		result = fread((*hh_header)->InputRate, sizeof(int32_t),
+		n_read = fread((*hh_header)->InputRate, sizeof(int32_t),
 				(*hh_header)->InputChannelsPresent, stream_in);
-		if ( result != (*hh_header)->InputChannelsPresent ) {
+		if ( n_read != (*hh_header)->InputChannelsPresent ) {
 			error("Could not read channel input rates.\n");
 			hh_v10_header_free(hh_header);
 			return(PQ_ERROR_IO);

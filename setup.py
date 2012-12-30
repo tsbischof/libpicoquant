@@ -14,14 +14,24 @@ from distutils.core import setup, Extension
 ext_modules = list()
 
 # Prepare the file encoders.
-files_module = Extension(
-    "_files",
-    [os.path.join("picoquant", "files.i")],
-    library_dirs=[],
-    include_dirs=["src"],
-    swig_opts=["-Isrc"])
-
-#ext_modules.append(files_module)
+##libpicoquant_files = [os.path.join("picoquant", "files.i")]
+##
+##for root, dirs, files in os.walk("src"):
+##    for filename in files:
+##        if filename.endswith(".c") and "main" not in filename:
+##            libpicoquant_files.append(os.path.join(root, filename))
+##
+##files_module = Extension(
+##    "_files",
+##    libpicoquant_files,
+##    define_macros=[("VERSION", "0.1"),
+##                   ("_FILE_OFFSET_BITS", "64")],
+##    library_dirs=[],
+##    include_dirs=["src"],
+##    swig_opts=["-Isrc"],
+##    libraries=[])
+##
+##ext_modules.append(files_module)
 
 # Locate the control libraries, and build all that can be found.
 is_64bits = sys.maxsize > 2**31
@@ -87,8 +97,8 @@ if sys.platform == "win32":
                                   "TH200Libv50")]
     timeharp_libs = ["Thlib"]
 else:
-    hydraharp_dirs = [os.path.join(unix_lib_dir, "th200")]
-    hydraharp_libs = ["th200"]
+    timeharp_dirs = [os.path.join(unix_lib_dir, "th200")]
+    timeharp_libs = ["th200"]
     
 timeharp_module = Extension(
      "_timeharp_comm", 
@@ -111,7 +121,7 @@ setup(name="pypicoquant",
       author_email="tbischof@mit.edu",
       description="An interface to Picoquant hardware libraries "
                   "and data types.",
-      description_long=open("README").read(),
+      long_description=open("README").read(),
       ext_modules=ext_modules,
       packages=["picoquant", 
                 "picoquant.picoharp", 

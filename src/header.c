@@ -3,9 +3,10 @@
 #include "error.h"
 
 int pq_header_read(FILE *stream_in, pq_header_t *pq_header) {
-	int result;
-	result = fread(pq_header, sizeof(pq_header_t), 1, stream_in);
-	if ( result == 1 ) {
+	size_t n_read;
+
+	n_read = fread(pq_header, sizeof(pq_header_t), 1, stream_in);
+	if ( n_read == 1 ) {
 		return(PQ_SUCCESS);
 	} else {
 		return(PQ_ERROR_IO);

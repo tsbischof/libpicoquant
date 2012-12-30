@@ -5,12 +5,15 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#ifdef __i386__
+#ifdef __i386__ 
+// 32-bit
 typedef time_t time32_t;
-#endif
-#ifdef __x86_64__
+#else
+// 64-bit
 typedef int32_t time32_t;
-#endif
+#endif 
+
+char* ctime32(time32_t *mytime);
 
 typedef float float32_t;
 typedef double float64_t;
@@ -19,8 +22,6 @@ typedef double float64_t;
 #define SCNf32 "f"
 #define PRIf64 "lf"
 #define SCNf64 "lf"
-
-char* ctime32(time32_t *mytime);
 
 #define strtoi32 strtol
 #define strtoi64 strtoll

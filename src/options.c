@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
 #include <string.h>
+#include <getopt.h>
 
 #include "options.h"
 #include "error.h"

@@ -8,7 +8,7 @@ int pq_t2_stream(FILE *stream_in, FILE *stream_out,
 	 * Use the specified decoder to process the incoming stream of t2 records.
 	 */
 	int64_t record_count = 0;
-	int result;
+	int result = PQ_SUCCESS;
 	t2_t t2;
 	pq_t2_print_t print;
 

@@ -11,7 +11,7 @@ CCFLAGS += -D VERSION="0.1"
 CCFLAGS += -O3
 CCFLAGS += -fpic
 
-LDFLAGS = -Wall -lm
+LDFLAGS = -lm
 
 MKDIR = mkdir -p
 RM = rm -f

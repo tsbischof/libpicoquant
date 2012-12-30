@@ -22,12 +22,12 @@ void ph_v20_t2_init(ph_v20_header_t *ph_header,
 }
 
 int ph_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
-	int result;
+	size_t n_read;
 	ph_v20_t2_record_t record;
 
-	result = fread(&record, sizeof(record), 1, stream_in);
+	n_read = fread(&record, sizeof(record), 1, stream_in);
 
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		if ( ! feof(stream_in) ) {
 			error("Could not read Picoharp t2 record.\n");	
 			return(PQ_ERROR_IO);
@@ -76,11 +76,11 @@ void ph_v20_t3_init(ph_v20_header_t *ph_header,
 }
 
 int ph_v20_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3) {
-	int result;
+	size_t n_read;
 	ph_v20_t3_record_t record;
 
-	result = fread(&record, sizeof(record), 1, stream_in);
-	if ( result != 1 ) {
+	n_read = fread(&record, sizeof(record), 1, stream_in);
+	if ( n_read != 1 ) {
 		if ( !feof(stream_in) ) {
 			error("Could not read t3 record.\n");
 			return(PQ_ERROR_IO);
@@ -196,7 +196,7 @@ int ph_v20_t3_stream(FILE *stream_in, FILE *stream_out,
  */
 int ph_v20_tttr_header_read(FILE *stream_in, 
 		ph_v20_tttr_header_t **tttr_header) {
-	int result;
+	size_t n_read;
 
 	*tttr_header = (ph_v20_tttr_header_t *)malloc(sizeof(ph_v20_tttr_header_t));
 
@@ -205,11 +205,11 @@ int ph_v20_tttr_header_read(FILE *stream_in,
 		return(PQ_ERROR_MEM);
 	}
 
-	result = fread(*tttr_header, 
+	n_read = fread(*tttr_header, 
 			sizeof(ph_v20_tttr_header_t)-sizeof(uint32_t *), 
 			1, 
 			stream_in);
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		error("Could not read Picoharp tttr header.\n");
 		ph_v20_tttr_header_free(tttr_header);
 		return(PQ_ERROR_IO);
@@ -223,11 +223,11 @@ int ph_v20_tttr_header_read(FILE *stream_in,
 		return(PQ_ERROR_MEM);
 	}
 
-	result = fread((*tttr_header)->ImgHdr, 
+	n_read = fread((*tttr_header)->ImgHdr, 
 			sizeof(uint32_t),
 			(*tttr_header)->ImgHdrSize, 
 			stream_in);
-	if ( result != (*tttr_header)->ImgHdrSize ) {
+	if ( n_read != (*tttr_header)->ImgHdrSize ) {
 		error("Could not read Picoharp tttr image header.\n");
 		ph_v20_tttr_header_free(tttr_header);
 		return(PQ_ERROR_IO);

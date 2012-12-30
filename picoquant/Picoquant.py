@@ -1,11 +1,14 @@
 try:
     import configparser
+    import io
 except:
+    import StringIO as io
     import ConfigParser as configparser
 
 import subprocess
-import StringIO
 import csv
+
+##from picoquant import files
 
 class FakeIniSection(object):
     """
@@ -50,7 +53,7 @@ class Picoquant(object):
                 stdout=subprocess.PIPE).communicate()[0]
 
             self._header = configparser.ConfigParser()
-            self._header.readfp(FakeIniSection(StringIO.StringIO(header_raw)))
+            self._header.readfp(FakeIniSection(io.StringIO(header_raw)))
 
         return(self._header)
 
@@ -66,7 +69,7 @@ class Picoquant(object):
                 # curves
                 self._resolution = list()
                 for curve, resolution in csv.reader(\
-                    StringIO.StringIO(resolution_raw)):
+                    io.StringIO(resolution_raw)):
                     self._resolution.append((int(curve),
                                              float(resolution)))
                 self._resolution = tuple(self._resolution)

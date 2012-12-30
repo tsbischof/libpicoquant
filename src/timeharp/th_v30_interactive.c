@@ -51,7 +51,7 @@ int th_v30_interactive_read(FILE *stream_in,
 		th_v30_header_t *th_header,
 		th_v30_interactive_t **interactive) {
 	int i;
-	int result;
+	size_t n_read;
 
 	*interactive = (th_v30_interactive_t *)malloc(sizeof(th_v30_interactive_t)*
 				th_header->NumberOfCurves);
@@ -61,10 +61,10 @@ int th_v30_interactive_read(FILE *stream_in,
 	}
 	
 	for ( i = 0; i < th_header->NumberOfCurves; i++ ) {
-		result = fread(&(*interactive)[i],
+		n_read = fread(&(*interactive)[i],
 				sizeof(th_v30_interactive_t) - sizeof(uint32_t *), 1, 
 				stream_in);
-		if ( result != 1 ) {
+		if ( n_read != 1 ) {
 			error("Could not allocate memory for curve %"PRId32".\n", i);
 			return(PQ_ERROR_IO);
 		}
@@ -77,10 +77,10 @@ int th_v30_interactive_read(FILE *stream_in,
 			return(PQ_ERROR_MEM);
 		}
 
-		result = fread((*interactive)[i].Counts,
+		n_read = fread((*interactive)[i].Counts,
 				sizeof(uint32_t), th_header->NumberOfChannels, 
 				stream_in);
-		if ( result != th_header->NumberOfChannels ) {
+		if ( n_read != th_header->NumberOfChannels ) {
 			error("Could not read counts for curve %"PRId32".\n", i);
 			return(PQ_ERROR_IO);
 		}

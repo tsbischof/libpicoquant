@@ -23,12 +23,12 @@ void th_v60_t3_init(th_v60_header_t *th_header,
 }
 
 int th_v60_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3) {
-	int result;
+	size_t n_read;
 	th_v60_tttr_record_t record;
 
-	result = fread(&record, sizeof(record), 1, stream_in);
+	n_read = fread(&record, sizeof(record), 1, stream_in);
 
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		if ( ! feof(stream_in) ) {
 			error("Could not read t3 record.\n");
 			return(PQ_ERROR_IO);
@@ -113,7 +113,7 @@ int th_v60_tttr_stream(FILE *stream_in, FILE *stream_out,
 
 int th_v60_tttr_header_read(FILE *stream_in, 
 		th_v60_tttr_header_t **tttr_header) {
-	int result;
+	size_t n_read;
 
 	*tttr_header = (th_v60_tttr_header_t *)malloc(sizeof(th_v60_tttr_header_t));
 
@@ -122,11 +122,11 @@ int th_v60_tttr_header_read(FILE *stream_in,
 		return(PQ_ERROR_MEM);
 	}
 
-	result = fread(*tttr_header, 
+	n_read = fread(*tttr_header, 
 			sizeof(th_v60_tttr_header_t) - sizeof(int32_t *),
 			1, 
 			stream_in);
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		error("Could not read tttr header.\n");
 		th_v60_tttr_header_free(tttr_header);
 		return(PQ_ERROR_IO);

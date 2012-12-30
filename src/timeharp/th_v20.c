@@ -54,7 +54,7 @@ int th_v20_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header,
  *
  */
 int th_v20_header_read(FILE *stream_in, th_v20_header_t **th_header ) {
-	int result;
+	size_t n_read;
 	
 	*th_header = (th_v20_header_t *)malloc(sizeof(th_v20_header_t));
 
@@ -68,10 +68,10 @@ int th_v20_header_read(FILE *stream_in, th_v20_header_t **th_header ) {
 	 * many there are (th_header->NumberOfBoards)
 	 */
 	debug("Reading static part of common header.\n");
-	result = fread(*th_header, 
+	n_read = fread(*th_header, 
 			sizeof(th_v20_header_t) - sizeof(th_v20_board_t *), 
 			1, stream_in);
-	if ( result != 1 ) {
+	if ( n_read != 1 ) {
 		error("Could not read Timeharp header.\n");
 		th_v20_header_free(th_header);
 		return(PQ_ERROR_IO);
@@ -87,11 +87,11 @@ int th_v20_header_read(FILE *stream_in, th_v20_header_t **th_header ) {
 		return(PQ_ERROR_MEM);
 	}
 
-	result = fread((*th_header)->Brd,
+	n_read = fread((*th_header)->Brd,
 			sizeof(th_v20_board_t), 
 			(*th_header)->NumberOfBoards, 
 			stream_in);
-	if ( result != (*th_header)->NumberOfBoards ) {
+	if ( n_read != (*th_header)->NumberOfBoards ) {
 		error("Could not read board data.\n");
 		th_v20_header_free(th_header);
 		return(PQ_ERROR_IO);
