@@ -14,24 +14,24 @@ from distutils.core import setup, Extension
 ext_modules = list()
 
 # Prepare the file encoders.
-##libpicoquant_files = [os.path.join("picoquant", "files.i")]
-##
-##for root, dirs, files in os.walk("src"):
-##    for filename in files:
-##        if filename.endswith(".c") and "main" not in filename:
-##            libpicoquant_files.append(os.path.join(root, filename))
-##
-##files_module = Extension(
-##    "_files",
-##    libpicoquant_files,
-##    define_macros=[("VERSION", "0.1"),
-##                   ("_FILE_OFFSET_BITS", "64")],
-##    library_dirs=[],
-##    include_dirs=["src"],
-##    swig_opts=["-Isrc"],
-##    libraries=[])
-##
-##ext_modules.append(files_module)
+libpicoquant_files = [os.path.join("picoquant", "files.i")]
+
+for root, dirs, files in os.walk("src"):
+    for filename in files:
+        if filename.endswith(".c") and "main" not in filename:
+            libpicoquant_files.append(os.path.join(root, filename))
+
+files_module = Extension(
+    "_files",
+    libpicoquant_files,
+    define_macros=[("VERSION", "0.1"),
+                   ("_FILE_OFFSET_BITS", "64")],
+    library_dirs=[],
+    include_dirs=["src"],
+    swig_opts=["-Isrc"],
+    libraries=[])
+
+ext_modules.append(files_module)
 
 # Locate the control libraries, and build all that can be found.
 is_64bits = sys.maxsize > 2**31

@@ -15,6 +15,6 @@ typedef struct {
 	int resolution_int;
 } tttr_t;
 
-void tttr_marker_print(FILE *stream_out, int64_t marker);
+void tttr_marker_print(FILE *stream_out, uint64_t marker);
 
 #endif

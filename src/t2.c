@@ -62,7 +62,7 @@ void pq_t2_printf(FILE *out_stream, t2_t *record) {
 /* 
  * Print the t2 record in csv format.
  */
-	fprintf(out_stream, "%"PRId32",%"PRId64"\n", 
+	fprintf(out_stream, "%"PRIu32",%"PRIu64"\n", 
 			record->channel,
 			record->time);
 }

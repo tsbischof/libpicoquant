@@ -9,9 +9,9 @@
 #include "options.h"
 
 typedef struct {
-	int32_t channel;
-	int64_t pulse;
-	int32_t time;
+	uint32_t channel;
+	uint64_t pulse;
+	uint32_t time;
 } t3_t;
 
 typedef int (*pq_t3_decode_t)(FILE *, tttr_t *, t3_t *);

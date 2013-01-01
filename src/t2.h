@@ -8,8 +8,8 @@
 #include "options.h"
 
 typedef struct {
-	int32_t channel;
-	int64_t time;
+	uint32_t channel;
+	uint64_t time;
 } t2_t;
 
 typedef int (*pq_t2_decode_t)(FILE *, tttr_t *, t2_t *);

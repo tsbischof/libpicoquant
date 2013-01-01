@@ -66,7 +66,7 @@ int pq_t3_next(FILE *stream_in, pq_t3_decode_t decode,
 }
 
 void pq_t3_printf(FILE *stream_out, t3_t *record) {
-	fprintf(stream_out, "%"PRId32",%"PRId64",%"PRId32"\n",
+	fprintf(stream_out, "%"PRIu32",%"PRIu64",%"PRIu32"\n",
 			record->channel,
 			record->pulse,
 			record->time);
