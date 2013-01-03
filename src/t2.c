@@ -21,7 +21,6 @@ int pq_t2_stream(FILE *stream_in, FILE *stream_out,
 	/* To do: add some logic to read a large amount of records (e.g. 1024) and
 	 * then process them. This should reduce the number of disk i/o calls.
 	 */
-
 	while ( ! pq_check(result) && 
 			! feof(stream_in) &&
 			record_count < options->number ) {
