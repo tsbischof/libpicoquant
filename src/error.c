@@ -64,7 +64,7 @@ void pq_record_status_print(char *name, uint64_t count, options_t *options) {
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		strftime(fmttime, 80, "%Y.%m.%d %H.%M.%S", timeinfo);
-		fprintf(stderr, "%s: (%s) Record %20lld\n", fmttime, name, count);
+		fprintf(stderr, "%s: (%s) Record %20"PRIu64"\n", fmttime, name, count);
 	}
 }
 
