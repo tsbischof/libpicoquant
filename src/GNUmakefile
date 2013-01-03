@@ -9,7 +9,8 @@ CCFLAGS := -Wall
 CCFLAGS += -D _FILE_OFFSET_BITS=64 
 CCFLAGS += -D VERSION="0.1"
 CCFLAGS += -O3
-CCFLAGS += -fpic
+
+CCFLAGS_SHARE := ${CCFLAGS} -fpic
 
 LDFLAGS = -lm
 
@@ -48,7 +49,7 @@ TARGETS = picoquant
 
 # Now the heavy lifting: build the objects and include files for inclusion
 # in the library.
-LIBPQ_OBJ = ${filter-out %main.o, ${PICOQUANT_OBJ}}
+LIBPQ_OBJ = ${patsubst %.o, %.os, ${filter-out %main.o, ${PICOQUANT_OBJ}}}
 INCLUDES = ${patsubst %.o, %.h, ${LIBPQ_OBJ}}
 LIBPQ_FLAGS = ${LDFLAGS} -shared
 
@@ -77,5 +78,8 @@ libpicoquant.so: ${LIBPQ_OBJ}
 %.o: %.c
 	${CC} ${CCFLAGS} -c -o $@ $< 
 
+%.os: %.c
+	${CC} ${CCFLAGS_SHARE} -c -o $@ $<
+
 clean:
-	${RM} ${TARGETS} ${LIB_TARGETS} ${PICOQUANT_OBJ} 
+	${RM} ${TARGETS} ${LIB_TARGETS} ${PICOQUANT_OBJ} ${LIBPQ_OBJ}
