@@ -287,7 +287,7 @@ void ph_v20_interactive_data_print(FILE *stream_out,
 		ph_v20_header_t *ph_header, 
 		ph_v20_interactive_t *interactive,
 		options_t *options) {
-	int i;
+	unsigned int i;
 	int j;
 	float64_t origin;	
 	float64_t time_step;
