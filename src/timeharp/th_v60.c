@@ -117,14 +117,14 @@ void th_v60_header_printf(FILE *stream_out,
 		th_v60_header_t *th_header) {
 	int i;
 
-	fprintf(stream_out, "CreatorName = %s\n", 
-			th_header->CreatorName);
-	fprintf(stream_out, "CreatorVersion = %s\n", 
-			th_header->CreatorVersion);
-	fprintf(stream_out, "FileTime = %s\n",
-			th_header->FileTime);
-	fprintf(stream_out, "Comment = %s\n",
-			th_header->Comment);
+	fprintf(stream_out, "CreatorName = %.*s\n", 
+			(int)sizeof(th_header->CreatorName), th_header->CreatorName);
+	fprintf(stream_out, "CreatorVersion = %.*s\n", 
+			(int)sizeof(th_header->CreatorVersion), th_header->CreatorVersion);
+	fprintf(stream_out, "FileTime = %.*s\n",
+			(int)sizeof(th_header->FileTime), th_header->FileTime);
+	fprintf(stream_out, "Comment = %.*s\n",
+			(int)sizeof(th_header->Comment), th_header->Comment);
 	fprintf(stream_out, "NumberOfChannels = %"PRId32"\n", 
 			th_header->NumberOfChannels);
 	fprintf(stream_out, "NumberOfCurves = %"PRId32"\n",

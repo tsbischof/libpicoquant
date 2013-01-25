@@ -216,11 +216,12 @@ void hh_v10_header_printf(FILE *stream_out,
 	fprintf(stream_out, "RepeatTime = %"PRId32"\n", hh_header->RepeatTime);
 	fprintf(stream_out, "RepeatWaitTime = %"PRId32"\n", 
 			hh_header->RepeatWaitTime);
-	fprintf(stream_out, "ScriptName = %s\n", hh_header->ScriptName);
-	fprintf(stream_out, "HardwareIdent = %s\n", 
-			hh_header->HardwareIdent);
-	fprintf(stream_out, "HardwarePartNo = %s\n", 
-			hh_header->HardwarePartNo);
+	fprintf(stream_out, "ScriptName = %.*s\n", 
+			(int)sizeof(hh_header->ScriptName), hh_header->ScriptName);
+	fprintf(stream_out, "HardwareIdent = %.*s\n", 
+			(int)sizeof(hh_header->HardwareIdent), hh_header->HardwareIdent);
+	fprintf(stream_out, "HardwarePartNo = %.*s\n", 
+			(int)sizeof(hh_header->HardwarePartNo), hh_header->HardwarePartNo);
 	fprintf(stream_out, "HardwareSerial = %"PRId32"\n", 
 			hh_header->HardwareSerial);
 	fprintf(stream_out, "NumerOfModules = %"PRId32"\n", 

@@ -162,7 +162,7 @@ void th_v20_interactive_data_print(FILE *stream_out,
 		th_v20_header_t *th_header, 
 		th_v20_interactive_t **interactive,
 		options_t *options) {
-	int i;
+	unsigned int i;
 	int j;
 	pq_interactive_bin_t bin;
 	float64_t origin;

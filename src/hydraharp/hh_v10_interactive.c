@@ -120,10 +120,14 @@ void hh_v10_interactive_header_printf(FILE *stream_out,
 			i, interactive->Curve[i].CurveIndex);
 		fprintf(stream_out, "Curve[%d].TimeOfRecording = %s",
 			i, ctime32(&interactive->Curve[i].TimeOfRecording));
-		fprintf(stream_out, "Curve[%d].HardwareIdent = %s\n",
-			i, interactive->Curve[i].HardwareIdent);
-		fprintf(stream_out, "Curve[%d].HardwareVersion = %s\n",
-			i, interactive->Curve[i].HardwareVersion);
+		fprintf(stream_out, "Curve[%d].HardwareIdent = %.*s\n",
+			i, 
+			(int)sizeof(interactive->Curve[i].HardwareIdent),
+			interactive->Curve[i].HardwareIdent);
+		fprintf(stream_out, "Curve[%d].HardwareVersion = %.*s\n",
+			i, 
+			(int)sizeof(interactive->Curve[i].HardwareVersion),
+			interactive->Curve[i].HardwareVersion);
 		fprintf(stream_out, "Curve[%d].HardwareSerial = %"PRId32"\n",
 			i, interactive->Curve[i].HardwareSerial);
 		fprintf(stream_out, "Curve[%d].NoOfModules = %"PRId32"\n",
@@ -270,7 +274,7 @@ void hh_v10_interactive_data_print(FILE *stream_out,
 		hh_v10_header_t *hh_header, 
 		hh_v10_interactive_t *interactive,
 		options_t *options) {
-	int i;
+	unsigned int i;
 	int j;
 	float64_t origin;
 	float64_t time_step;

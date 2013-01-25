@@ -183,14 +183,14 @@ void ph_v20_header_printf(FILE *stream_out, ph_v20_header_t *ph_header) {
 	int i;
 	int j;
 
-	fprintf(stream_out, "CreatorName = %s\n",
-			ph_header->CreatorName);
-	fprintf(stream_out, "CreatorVersion = %s\n",
-			ph_header->CreatorVersion);
-	fprintf(stream_out, "FileTime = %s\n",
-			ph_header->FileTime);
-	fprintf(stream_out, "Comment = %s\n",
-			ph_header->Comment);
+	fprintf(stream_out, "CreatorName = %.*s\n",
+			(int)sizeof(ph_header->CreatorName), ph_header->CreatorName);
+	fprintf(stream_out, "CreatorVersion = %.*s\n",
+			(int)sizeof(ph_header->CreatorVersion), ph_header->CreatorVersion);
+	fprintf(stream_out, "FileTime = %.*s\n",
+			(int)sizeof(ph_header->FileTime), ph_header->FileTime);
+	fprintf(stream_out, "Comment = %.*s\n",
+			(int)sizeof(ph_header->Comment), ph_header->Comment);
 	fprintf(stream_out, "NumberOfCurves = %"PRId32"\n", 
 			ph_header->NumberOfCurves);
 	fprintf(stream_out, "BitsPerRecord = %"PRId32"\n", 

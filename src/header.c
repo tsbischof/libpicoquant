@@ -14,8 +14,10 @@ int pq_header_read(FILE *stream_in, pq_header_t *pq_header) {
 }
 
 void pq_header_printf(FILE *stream_out, pq_header_t *pq_header) {
-	fprintf(stream_out, "Ident = %s\n", pq_header->Ident);
-	fprintf(stream_out, "FormatVersion = %s\n", pq_header->FormatVersion);
+	fprintf(stream_out, "Ident = %.*s\n", 
+			(int)sizeof(pq_header->Ident), pq_header->Ident);
+	fprintf(stream_out, "FormatVersion = %.*s\n", 
+			(int)sizeof(pq_header->Ident), pq_header->FormatVersion);
 }
 
 void pq_header_fwrite(FILE *stream_out, pq_header_t *pq_header) {

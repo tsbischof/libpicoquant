@@ -117,12 +117,13 @@ void th_v50_header_printf(FILE *stream_out,
 		th_v50_header_t *th_header) {
 	int i;
 
-	fprintf(stream_out, "HardwareVersion = %s\n", 
+	fprintf(stream_out, "HardwareVersion = %.*s\n", 
+			(int)sizeof(th_header->HardwareVersion),
 			th_header->HardwareVersion);
-	fprintf(stream_out, "FileTime = %s\n",
-			th_header->FileTime);
-	fprintf(stream_out, "Comment = %s\n",
-			th_header->Comment);
+	fprintf(stream_out, "FileTime = %.*s\n",
+			(int)sizeof(th_header->FileTime), th_header->FileTime);
+	fprintf(stream_out, "Comment = %.*s\n",
+			(int)sizeof(th_header->Comment), th_header->Comment);
 	fprintf(stream_out, "NumberOfChannels = %"PRId32"\n", 
 			th_header->NumberOfChannels);
 	fprintf(stream_out, "NumberOfCurves = %"PRId32"\n",

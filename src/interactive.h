@@ -6,10 +6,10 @@
 #include "types.h"
 
 typedef struct {
-	int32_t curve;
+	uint32_t curve;
 	float64_t bin_left;
 	float64_t bin_right;
-	int32_t counts;
+	uint32_t counts;
 } pq_interactive_bin_t;
 
 typedef void (*pq_interactive_bin_print_t)(FILE *, pq_interactive_bin_t *);
