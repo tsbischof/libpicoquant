@@ -26,6 +26,9 @@ int pq_t2_stream(FILE *stream_in, FILE *stream_out,
 			record_count < options->number ) {
 		result = pq_t2_next(stream_in, decode, tttr, &t2);
 
+		debug("Origin: %lld\nOverflows: %d\n", tttr->origin, tttr->overflows);
+		debug("Overflow increment: %d\n", tttr->overflow_increment);
+
 		if ( ! pq_check(result) ) {
 			/* Found a record, process it. */
 			if ( result == PQ_RECORD_T2 ) {

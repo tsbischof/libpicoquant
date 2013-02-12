@@ -15,7 +15,7 @@ void hh_v20_t2_init(hh_v20_header_t *hh_header,
 	tttr->overflow_increment = HH_T2_OVERFLOW;
 	tttr->sync_rate = tttr_header->SyncRate;
 	tttr->resolution_float = HH_BASE_RESOLUTION;
-	tttr->resolution_int = (int32_t)(tttr->resolution_float*1e12);
+	tttr->resolution_int = (int)(tttr->resolution_float*1e12);
 }
 
 int hh_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
@@ -36,7 +36,8 @@ int hh_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
 			if ( record.channel == 63 ) {
 				/* Overflow */
 				tttr->overflows += record.time;
-				tttr->origin += record.time*tttr->overflow_increment;
+				tttr->origin += (int64_t)record.time*
+						(int64_t)tttr->overflow_increment;
 				return(PQ_RECORD_OVERFLOW);
 			} else if ( record.channel == 0 ) {
 				/* 
