@@ -44,8 +44,6 @@ PICOQUANT_OBJ = picoquant_main.o picoquant.o \
 		timeharp/th_v50_interactive.o timeharp/th_v50_continuous.o \
 		timeharp/th_v60.o timeharp/th_v60_tttr.o \
 		timeharp/th_v60_interactive.o timeharp/th_v60_continuous.o 
-TARGETS = picoquant
-
 
 # Now the heavy lifting: build the objects and include files for inclusion
 # in the library.
@@ -54,7 +52,7 @@ INCLUDES = ${patsubst %.o, %.h, ${LIBPQ_OBJ}}
 LIBPQ_FLAGS = ${LDFLAGS} -shared
 
 TARGETS = picoquant 
-LIB_TARGETS = libpicoquant.so
+LIB_TARGETS = #libpicoquant.so
 
 all: ${TARGETS} ${LIB_TARGETS}
 

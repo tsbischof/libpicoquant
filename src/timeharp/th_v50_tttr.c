@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 
 #include "th_v50.h"
@@ -19,7 +20,7 @@ void th_v50_t3_init(th_v50_header_t *th_header,
 	tttr->overflow_increment = TH_TTTR_OVERFLOW;
 	tttr->sync_rate = tttr_header->SyncRate;
 	tttr->resolution_float = th_header->Brd[0].Resolution*1e-9;
-	tttr->resolution_int = (int)(tttr->resolution_float*1e12);
+	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
 int th_v50_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3) {

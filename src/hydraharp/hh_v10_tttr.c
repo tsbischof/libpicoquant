@@ -1,4 +1,4 @@
-
+#include <math.h>
 #include <stdlib.h>
 
 #include "../hydraharp.h"
@@ -15,7 +15,7 @@ void hh_v10_t2_init(hh_v10_header_t *hh_header,
 	tttr->overflow_increment = HH_T2_OVERFLOW / 2;
 	tttr->sync_rate = tttr_header->SyncRate;
 	tttr->resolution_float = HH_BASE_RESOLUTION;
-	tttr->resolution_int = (int32_t)(tttr->resolution_float*1e12);
+	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
 int hh_v10_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
@@ -80,7 +80,7 @@ void hh_v10_t3_init(hh_v10_header_t *hh_header,
 	tttr->overflow_increment = HH_T3_OVERFLOW;
 	tttr->sync_rate = tttr_header->SyncRate;
 	tttr->resolution_float = hh_header->Resolution*1e-12;
-	tttr->resolution_int = (int32_t)(tttr->resolution_float*1e12);
+	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
 int hh_v10_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3) {

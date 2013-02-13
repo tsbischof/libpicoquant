@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #include "ph_v20.h"
 
@@ -18,7 +19,7 @@ void ph_v20_t2_init(ph_v20_header_t *ph_header,
 	tttr->overflow_increment = PH_T2_OVERFLOW;
 	tttr->sync_rate = tttr_header->InpRate0;
 	tttr->resolution_float = PH_V20_BASE_RESOLUTION;
-	tttr->resolution_int = (int)(tttr->resolution_float * 1e12);
+	tttr->resolution_int = floor(fabs(tttr->resolution_float * 1e12));
 }
 
 int ph_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
@@ -72,7 +73,7 @@ void ph_v20_t3_init(ph_v20_header_t *ph_header,
 	tttr->overflow_increment = PH_T3_OVERFLOW;
 	tttr->sync_rate = tttr_header->InpRate0;
 	tttr->resolution_float = ph_header->Brd[0].Resolution*1e-9;
-	tttr->resolution_int = (int)(tttr->resolution_float*1e12);
+	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
 int ph_v20_t3_decode(FILE *stream_in, tttr_t *tttr, t3_t *t3) {
