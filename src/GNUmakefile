@@ -20,7 +20,7 @@ TEST = test
 CP = cp -p
 
 # Define the targets and their properties.
-PREFIX = /usr/local
+PREFIX = ${HOME}
 INSTALL_DIR = ${PREFIX}/bin
 LIB_DIR = ${PREFIX}/lib
 INCLUDE_DIR = ${PREFIX}/include/photon_correlation
@@ -52,7 +52,7 @@ INCLUDES = ${patsubst %.o, %.h, ${LIBPQ_OBJ}}
 LIBPQ_FLAGS = ${LDFLAGS} -shared
 
 TARGETS = picoquant 
-LIB_TARGETS = #libpicoquant.so
+LIB_TARGETS = libpicoquant.so
 
 all: ${TARGETS} ${LIB_TARGETS}
 
