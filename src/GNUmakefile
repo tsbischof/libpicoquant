@@ -1,5 +1,5 @@
-CC = clang
-LD = clang
+#CC = clang
+#LD = clang
 
 CCFLAGS := -Wall 
 # On 32-bit systems wtih large files, the file offset is 64 bits. This causes
