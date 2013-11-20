@@ -20,7 +20,7 @@ TEST = test
 CP = cp -p
 
 # Define the targets and their properties.
-PREFIX = ${HOME}
+PREFIX = ~
 INSTALL_DIR = ${PREFIX}/bin
 LIB_DIR = ${PREFIX}/lib
 INCLUDE_DIR = ${PREFIX}/include/photon_correlation

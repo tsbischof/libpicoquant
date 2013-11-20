@@ -168,6 +168,8 @@ void hh_v10_header_printf(FILE *stream_out,
 		hh_v10_header_t *hh_header) {
 	int i;
 
+	fprintf(stream_out, "NumberOfCurves = %"PRId32"\n",
+			hh_header->NumberOfCurves);
 	fprintf(stream_out, "BitsPerRecord = %"PRId32"\n", 
 			hh_header->BitsPerRecord);
 	fprintf(stream_out, "ActiveCurve = %"PRId32"\n",
