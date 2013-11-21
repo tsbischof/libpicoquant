@@ -226,7 +226,7 @@ void hh_v10_header_printf(FILE *stream_out,
 			(int)sizeof(hh_header->HardwarePartNo), hh_header->HardwarePartNo);
 	fprintf(stream_out, "HardwareSerial = %"PRId32"\n", 
 			hh_header->HardwareSerial);
-	fprintf(stream_out, "NumerOfModules = %"PRId32"\n", 
+	fprintf(stream_out, "NumberOfModules = %"PRId32"\n", 
 			hh_header->NumberOfModules);
 
 	for ( i = 0; i < hh_header->NumberOfModules; i++ ) {
