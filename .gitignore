@@ -2,10 +2,6 @@ build
 dist
 
 MANIFEST
-picoquant/comm_lib_common.py
-picoquant/picoharp/picoharp_comm.py
-picoquant/hydraharp/hydraharp_comm.py
-picoquant/timeharp/timeharp_comm.py
 *_wrap.c
 __pycache__
 *.pyc
@@ -14,3 +10,6 @@ __pycache__
 *.so
 *.dll
 *.pyd
+
+sample_data
+
