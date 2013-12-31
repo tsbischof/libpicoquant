@@ -1,0 +1,14 @@
+0.2 (30 December 2013)
+
+Started making some minor changes to the code structure and naming, to bring it in line with the photon correlation code. No major functionality has been added, everything in this version is a cosmetic change in the code.
+
+--------------------------------------------------------------------------------
+0.1
+
+This is the main body of code, as pulled from the photon correlation code ca. December 2012. This was done to separate the PicoQuant format decoding code from that of the generic photon correlation code, to help eliminate concerns about expsoing their data format. 
+
+Current hardware supported:
+TimeHarp: v2.0 (thd), v3.0 (thd, t3r), v5.0 (thd), v6.0 (thd, t3r)
+PicoHarp: v2.0 (phd, pt2, pt3)
+HydraHarp: v1.0 (hhd, ht2, ht3), v2.0 (hhd, ht2, ht3) 
+
