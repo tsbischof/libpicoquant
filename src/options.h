@@ -39,20 +39,20 @@ typedef struct {
 	char *filename_out;
 	int print_every; 
 	int binary_out; 
-	int64_t number; 
+	long long number; 
 	int print_header; 
 	int print_resolution; 
 	int to_t2; 
 	int print_mode;
-} options_t;
+} pq_options_t;
 
 
 void usage();
 void description();
 void version();
 
-void options_init(options_t *options);
-int options_parse(int argc, char *argv[], options_t *options);
-void options_free(options_t *options);
+void options_init(pq_options_t *options);
+int options_parse(int argc, char *argv[], pq_options_t *options);
+void options_free(pq_options_t *options);
 
 #endif
