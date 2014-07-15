@@ -1,3 +1,9 @@
+0.3 (2014-07-14)
+
+Changed from a home-written Makefile to autotools.
+
+--------------------------------------------------------------------------------
+
 0.2 (30 December 2013)
 
 Started making some minor changes to the code structure and naming, to bring it in line with the photon correlation code. No major functionality has been added, everything in this version is a cosmetic change in the code.
