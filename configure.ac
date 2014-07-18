@@ -1,7 +1,7 @@
 AC_PREREQ([2.69])
 AC_INIT(libpicoquant, 0.3, tbischof@mit.edu)
-AM_INIT_AUTOMAKE(libpicoquant, 0.3)
 AC_CONFIG_SRCDIR([src])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CC
