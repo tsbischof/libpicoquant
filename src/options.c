@@ -37,14 +37,8 @@
 #include "options.h"
 #include "error.h"
 
-/* See http://www.daniweb.com/software-development/c/threads/
- *     348802/passing-string-as-d-compiler-option
- */
-#define XSTR(x) #x
-#define STR(x) XSTR(x)
-
 void version() {
-	fprintf(stderr, "picoquant v%s\n", STR(VERSION));
+	fprintf(stderr, "picoquant v%s\n", VERSION);
 }
 
 void description() {
@@ -67,6 +61,7 @@ void description() {
 "          v6.0 (thd, t3r)\n"
 "Picoharp: v2.0 (phd, pt2, pt3)\n"
 "Hydraharp: v1.0 (hhd, ht2, ht3)\n"
+"           v2.0 (hhd, ht2, ht3)\n"
 "\n"
 "Data formats (csv):\n"
 "(times are integers in picoseconds, bin edges are floats in nanoseconds)\n"
@@ -133,6 +128,7 @@ int options_parse(int argc, char *argv[], options_t *options) {
 		switch (c) {
 			case 'h':
 				usage();
+				description();
 				result = PQ_USAGE;
 				break;
 			case 'v':
@@ -172,6 +168,7 @@ int options_parse(int argc, char *argv[], options_t *options) {
 			case '?':
 			default:
 				usage();
+				description();
 				result = PQ_ERROR_OPTIONS;
 		}
 	}

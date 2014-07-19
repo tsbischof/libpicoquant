@@ -1,0 +1,70 @@
+.TH PICOQUANT 1 "2014-07-15" "0.3"
+.SH NAME
+picoquant \- decode PicoQuant binary formats into ascii
+.SH SYNOPSIS
+.B picoquant
+[\fB\-\-file-in \fIFILENAME\fR]
+[\fB\-\-file-out \fIFILENAME\fR]
+.SH DESCRIPTION
+.B picoquant
+Decodes PicoQuant binary formats into ascii for use with photon correlation
+code. The following formats are supported:
+
+.B TimeHarp
+.TS
+tab (@);
+l l.
+v2.0@thd
+v3.0@thd, t3r
+v5.0@thd
+v6.0@thd, t3r
+.TE
+
+.B PicoHarp
+.TS
+tab (@);
+l l.
+v2.0@phd, pt2, pt3
+.TE
+
+.B HydraHarp
+.TS
+tab (@);
+l l.
+v1.0@hhd, ht2, ht3
+v2.0@hhd, ht2, ht3
+.TE
+
+There are three major output formats: histogram, t2, and t3. 
+
+\fIHistogram\fR mode refers to interactive (*hd) or continuous acquisition
+(*hc), and consists of the association of an integer number of events with a
+particular time bin. Data of this form are output as: 
+
+	curve number, time bin (left edge), time bin (right edge), counts
+
+\fIT2\fR mode refers to TTTR data where events are associated with a time
+relative to the start of the experiment. These are output as:
+
+	channel number, arrival time
+
+\fIT3\fR mode refers to TTTR data where events are associated with a sync
+pulse number relative to the start of the experiment, and an arrival time
+relative to the sync pulse. These are output as:
+
+	channel number, arrival pulse, relative arrival time
+
+.SH EXAMPLES
+
+.SH OVERVIEW
+
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Display a usage message.
+
+
+.SH ERRORS
+
+.SH AUTHOR
+Thomas Bischof <tbischof@mit.edu>

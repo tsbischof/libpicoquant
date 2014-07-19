@@ -25,5 +25,5 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([floor memmove memset strdup strstr strtol])
 
-AC_CONFIG_FILES([GNUmakefile src/GNUmakefile])
+AC_CONFIG_FILES([GNUmakefile man/GNUmakefile src/GNUmakefile])
 AC_OUTPUT

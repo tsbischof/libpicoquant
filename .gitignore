@@ -13,3 +13,13 @@ __pycache__
 
 sample_data
 
+aclocal.m4
+autom4te.cache
+autoscan.log
+configure
+depcomp
+install-sh
+missing
+
+GNUmakefile.in
+
