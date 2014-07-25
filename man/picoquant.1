@@ -1,16 +1,43 @@
-.TH PICOQUANT 1 "2014-07-15" "0.3"
+.TH PICOQUANT 1 "2014-07-20" "0.3"
 .SH NAME
 picoquant \- decode PicoQuant binary formats into ascii
 .SH SYNOPSIS
 .B picoquant
-[\fB\-\-file-in \fIFILENAME\fR]
-[\fB\-\-file-out \fIFILENAME\fR]
+[
+.BI \-\-help
+] [
+.BI \-\-version
+] [ 
+.BI \-\-file\-in " FILENAME"
+] [ 
+.BI \-\-file\-out " FILENAME"
+] [ 
+.BI \-\-binary\-out
+] [
+.BI \-\-hardware " HARDWARE " \-\-format\-version " VERSION"
+] [ 
+.BI \-\-print\-every " NUMBER"
+] [ 
+.BI \-\-resolution\-only
+] [
+.BI \-\-header\-only
+] [ 
+.BI \-\-mode\-only
+] [ 
+.BI \-\-to\-t2
+] [ 
+.BI \-\-number " NUMBER"
+]
+
 .SH DESCRIPTION
 .B picoquant
 Decodes PicoQuant binary formats into ascii for use with photon correlation
-code. The following formats are supported:
+code. 
 
-.B TimeHarp
+.SS Input formats
+The following input file formats are supported:
+
+\fITimeHarp\fR
 .TS
 tab (@);
 l l.
@@ -20,14 +47,14 @@ v5.0@thd
 v6.0@thd, t3r
 .TE
 
-.B PicoHarp
+\fIPicoHarp\fR
 .TS
 tab (@);
 l l.
 v2.0@phd, pt2, pt3
 .TE
 
-.B HydraHarp
+\fIHydraHarp\fR
 .TS
 tab (@);
 l l.
@@ -35,6 +62,7 @@ v1.0@hhd, ht2, ht3
 v2.0@hhd, ht2, ht3
 .TE
 
+.SS Output formats
 There are three major output formats: histogram, t2, and t3. 
 
 \fIHistogram\fR mode refers to interactive (*hd) or continuous acquisition
@@ -56,13 +84,85 @@ relative to the sync pulse. These are output as:
 
 .SH EXAMPLES
 
+
 .SH OVERVIEW
 
 .SH OPTIONS
+
+.SS General options
 .TP
 .BR \-h ", " \-\-help
 Display a usage message.
 
+.TP
+.BR \-V ", " \-\-version
+Display the version of the program.
+
+.TP 
+.BR \-v ", " \-\-verbose
+Display debug messages during exectution, sent to stderr. 
+
+.SS Files and formats
+.TP
+.BR \-i ", " \-\-file-in " FILENAME"
+Specifies the name of the binary-format file to read. By default this is stdin.
+The file is expected to be either a file output by PicoQuant software or raw
+data from the hardware. In the former, the header will be used to process the
+contents of the file automatically, but for the latter it is necessary to
+specify the hardware name (--hardware) and version (--format-version).
+
+.TP
+\fb-o, --file-out\fR \fIFILENAME\fR
+Specifies the name of the file to write to. By default this is stdout.
+The exact output format will depend on the mode of the measurement, but all
+are some form of ascii comma-delineated lines representing individual records.
+
+.TP
+.BR \-b ", " \-\-binary-out
+The default behavior is to output ascii data. With this flag, the program
+will instead output the binary form of that data.
+
+.TP
+.BR \- ", " \-\-hardware " " [HARDWARE]
+This must be specified with --format-version.
+The program normally uses the header of the file to determine the hardware 
+type and data format version, but for raw data coming off the hardware there 
+is no header. Use these two options to bypass the automatic detection code 
+and instead directly access the desired decoder.
+
+.TP
+.BR \- ", " \-\-format-version " " [VERSION]
+See --hardware.
+
+.SS Debug and auxilliary
+.TP
+.BR \-p ", " \-\-print-every " " [NUMBER]
+Prints a status message to stderr after processing every NUMBERth record 
+in TTTR mode. This includes a time and record number, and is intended to 
+provide an external means for tracking process.
+
+.TP
+.BR \-z ", " \-\-resolution-only
+Print the resolution of the measurement. This is a single float for 
+continuous, t2, and t3 mode, and is a float per curve in interactive mode, on 
+separate lines. 
+
+.TP
+.BR \-r ", " \-\-header-only
+Print the file header information, in an ini format.
+
+.TP
+.BR \-m ", " \-\-mode-only
+Print the mode of the measurement (interactive, continuous, t2, t3).
+
+.TP
+.BR \-t ", " \-\-to-t2
+For t3-mode data, use the input rate at the sync channel to convert the data
+to its t2 representation. 
+
+.TP
+.BR \-n ", " \-\-number " " [NUMBER]
+Process only the first NUMBERth records (TTTR mode).
 
 .SH ERRORS
 

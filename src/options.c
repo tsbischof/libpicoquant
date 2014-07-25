@@ -82,7 +82,7 @@ void usage() {
 "           -V, --version: Print version information.\n"
 "           -v, --verbose: Print debug-level information.\n"
 "           -i, --file-in: Specify the input file. By default, this is stdin.\n"
-"           o, --file-out: Specify the output file. By default, \n"
+"          -o, --file-out: Specify the output file. By default, \n"
 "                          this is stdout.\n"
 "        -b, --binary-out: Output mode-specific binary structures instead of \n"
 "                          ascii csv.\n"
@@ -188,9 +188,14 @@ void options_init(options_t *options) {
 	options->print_resolution = 0;
 	options->print_mode = 0;
 	options->to_t2 = 0;
+
+	options->hardware_name = NULL;
+	options->hardware_version  = NULL;
 }
 
 void options_free(options_t *options) {
 	free(options->filename_in);
 	free(options->filename_out);
+	free(options->hardware_name);
+	free(options->format_version);
 }

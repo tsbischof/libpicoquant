@@ -44,6 +44,8 @@ typedef struct {
 	int print_resolution; 
 	int to_t2; 
 	int print_mode;
+	char *hardware_name;
+	char *hardware_version;
 } options_t;
 
 
