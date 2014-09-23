@@ -189,13 +189,13 @@ void options_init(options_t *options) {
 	options->print_mode = 0;
 	options->to_t2 = 0;
 
-	options->hardware_name = NULL;
-	options->hardware_version  = NULL;
+//	options->hardware_name = NULL;
+//	options->hardware_version  = NULL;
 }
 
 void options_free(options_t *options) {
 	free(options->filename_in);
 	free(options->filename_out);
-	free(options->hardware_name);
-	free(options->format_version);
+//	free(options->hardware_name);
+//	free(options->format_version);
 }

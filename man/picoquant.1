@@ -1,4 +1,4 @@
-.TH PICOQUANT 1 "2014-07-20" "0.3"
+.TH PICOQUANT 1 "2014-09-22" "0.3"
 .SH NAME
 picoquant \- decode PicoQuant binary formats into ascii
 .SH SYNOPSIS
@@ -14,8 +14,6 @@ picoquant \- decode PicoQuant binary formats into ascii
 ] [ 
 .BI \-\-binary\-out
 ] [
-.BI \-\-hardware " HARDWARE " \-\-format\-version " VERSION"
-] [ 
 .BI \-\-print\-every " NUMBER"
 ] [ 
 .BI \-\-resolution\-only
@@ -106,13 +104,12 @@ Display debug messages during exectution, sent to stderr.
 .TP
 .BR \-i ", " \-\-file-in " FILENAME"
 Specifies the name of the binary-format file to read. By default this is stdin.
-The file is expected to be either a file output by PicoQuant software or raw
-data from the hardware. In the former, the header will be used to process the
-contents of the file automatically, but for the latter it is necessary to
-specify the hardware name (--hardware) and version (--format-version).
+The file is expected to be a file output by PicoQuant software, and the header
+contained in the file will be used to determine the hardware identity and 
+format version.
 
 .TP
-\fb-o, --file-out\fR \fIFILENAME\fR
+.BR \-o ", " \-\-file-out " FILENAME"
 Specifies the name of the file to write to. By default this is stdout.
 The exact output format will depend on the mode of the measurement, but all
 are some form of ascii comma-delineated lines representing individual records.
@@ -122,25 +119,24 @@ are some form of ascii comma-delineated lines representing individual records.
 The default behavior is to output ascii data. With this flag, the program
 will instead output the binary form of that data.
 
-.TP
-.BR \- ", " \-\-hardware " " [HARDWARE]
-This must be specified with --format-version.
-The program normally uses the header of the file to determine the hardware 
-type and data format version, but for raw data coming off the hardware there 
-is no header. Use these two options to bypass the automatic detection code 
-and instead directly access the desired decoder.
-
-.TP
-.BR \- ", " \-\-format-version " " [VERSION]
-See --hardware.
-
+\# Add these back in when I get around to implementing the on-demand versions.
+\# .TP
+\# .BR \- ", " \-\-hardware " " [HARDWARE]
+\# This must be specified with --format-version.
+\# The program normally uses the header of the file to determine the hardware 
+\# type and data format version, but for raw data coming off the hardware there 
+\# is no header. Use these two options to bypass the automatic detection code 
+\# and instead directly access the desired decoder.
+\# 
+\# .TP
+\# .BR \- ", " \-\-format-version " " [VERSION]
+\# See --hardware.
 .SS Debug and auxilliary
 .TP
 .BR \-p ", " \-\-print-every " " [NUMBER]
 Prints a status message to stderr after processing every NUMBERth record 
 in TTTR mode. This includes a time and record number, and is intended to 
 provide an external means for tracking process.
-
 .TP
 .BR \-z ", " \-\-resolution-only
 Print the resolution of the measurement. This is a single float for 
@@ -165,6 +161,8 @@ to its t2 representation.
 Process only the first NUMBERth records (TTTR mode).
 
 .SH ERRORS
+
+There are no known bugs. Please email the author if you find any.
 
 .SH AUTHOR
 Thomas Bischof <tbischof@mit.edu>
