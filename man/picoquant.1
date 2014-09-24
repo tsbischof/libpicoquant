@@ -252,7 +252,7 @@ will instead output the binary form of that data.
 
 \# Add these back in when I get around to implementing the on-demand versions.
 \# .TP
-\# .BR \- ", " \-\-hardware " " [HARDWARE]
+\# .BR \- ", " \-\-hardware " HARDWARE"
 \# This must be specified with --format-version.
 \# The program normally uses the header of the file to determine the hardware 
 \# type and data format version, but for raw data coming off the hardware there 
@@ -260,12 +260,12 @@ will instead output the binary form of that data.
 \# and instead directly access the desired decoder.
 \# 
 \# .TP
-\# .BR \- ", " \-\-format-version " " [VERSION]
+\# .BR \- ", " \-\-format-version " VERSION"
 \# See --hardware.
 
 .SS Debug and auxilliary
 .TP
-.BR \-p ", " \-\-print-every " " [NUMBER]
+.BR \-p ", " \-\-print-every " NUMBER" 
 Prints a status message to stderr after processing every NUMBERth record 
 in TTTR mode. This includes a time and record number, and is intended to 
 provide an external means for tracking process.
