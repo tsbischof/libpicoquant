@@ -1,13 +1,9 @@
-.TH PICOQUANT 1 "2014-09-22" "0.3"
+.TH PICOQUANT 1 "2014-09-23" "0.3"
 .SH NAME
 picoquant \- decode PicoQuant binary formats into ascii
 .SH SYNOPSIS
 .B picoquant
 [
-.BI \-\-help
-] [
-.BI \-\-version
-] [ 
 .BI \-\-file\-in " FILENAME"
 ] [ 
 .BI \-\-file\-out " FILENAME"
@@ -15,17 +11,29 @@ picoquant \- decode PicoQuant binary formats into ascii
 .BI \-\-binary\-out
 ] [
 .BI \-\-print\-every " NUMBER"
-] [ 
-.BI \-\-resolution\-only
 ] [
-.BI \-\-header\-only
-] [ 
-.BI \-\-mode\-only
-] [ 
 .BI \-\-to\-t2
 ] [ 
 .BI \-\-number " NUMBER"
 ]
+.br
+.B picoquant
+[
+.BI \-\-file\-in " FILENAME"
+] [
+.BI \-\-file\-out " FILENAME"
+] [
+.BI \-\-resolution\-only
+] [
+.BI \-\-header\-only
+] [
+.BI \-\-mode\-only
+] [
+.BI \-\-help
+] [
+.BI \-\-version
+]
+
 
 .SH DESCRIPTION
 .B picoquant
@@ -60,6 +68,9 @@ v1.0@hhd, ht2, ht3
 v2.0@hhd, ht2, ht3
 .TE
 
+Note that marker records are not current implemented. If a marker is found,
+an error will be reported.
+
 .SS Output formats
 There are three major output formats: histogram, t2, and t3. 
 
@@ -70,23 +81,143 @@ particular time bin. Data of this form are output as:
 	curve number, time bin (left edge), time bin (right edge), counts
 
 \fIT2\fR mode refers to TTTR data where events are associated with a time
-relative to the start of the experiment. These are output as:
+relative to the start of the experiment. The raw data includes overflows;
+these are not reported, but are used to determine the absolute arrival time
+of the photon. Photon events are output as:
 
 	channel number, arrival time
 
 \fIT3\fR mode refers to TTTR data where events are associated with a sync
 pulse number relative to the start of the experiment, and an arrival time
-relative to the sync pulse. These are output as:
+relative to the sync pulse. As with t2 data, the raw data includes pulse
+counter overflows. These records are not reported, but are used to determine
+the absolute pulse index for the experiment. Photon events are output as:
 
 	channel number, arrival pulse, relative arrival time
 
 .SH EXAMPLES
+.SS General
+Viewing the header (measurement settings and metadata):
 
+	$ picoquant --file-in data.hhd --header-only
+.br
+	Ident = HydraHarp
+.br
+	FormatVersion = 2.0
+.br
+	NumberOfCurves = 4
+.br
+	...
+
+Determining the measurement mode:
+
+	$ picoquant --file-in unknown_data --mode-only
+.br
+	interactive
+
+.SS Histogram
+Reading the data for each curve:
+
+	$ picoquant --file-in data.hhd
+.br
+	0,0.00,8.00,3
+.br
+	0,8.00,16.00,0
+.br 
+	0,16.00,24.00,2
+.br
+	...
+	
+
+Determining the resolution of each curve of a measurement:
+
+	$ picoquant --file-in data.hhd --resolution-only
+.br 
+	0,8.00
+.br
+	1,8.00
+.br
+	2,8.00
+.br
+	3,8.00
+
+.SS T2
+Reading photon records from the file:
+
+	$ picoquant --file-in data.ht2 
+.br
+	1,1740488293
+.br 
+	1,2126735592
+.br
+	2,3339029500	
+.br
+	...
+
+Reading the first few records from a file:
+
+	$ picoquant --file-in data.ht2 --number 3
+.br
+	1,1740488293
+.br 
+	1,2126735592
+.br
+	2,3339029500	
+
+Determining the resolution of the measurement:
+
+	$ picoquant --file-in data.ht2 --resolution-only
+.br
+	1.00
+
+.SS T3
+Reading photon records from the file:
+
+	$ picoquant --file-in data.ht3
+.br
+	2,389,3504
+.br
+	3,658,4192
+.br
+	1,697,2656
+.br
+	...
+
+Reading the first few records from a file:
+
+	$ picoquant --file-in data.ht3 --number 3
+.br
+	2,389,3504
+.br
+	3,658,4192
+.br
+	1,697,2656
+
+Determining the resolution of the measurement:
+
+	$ picoquant --file--in data.ht3 --resolution-only
+.br
+	16.00
 
 .SH OVERVIEW
+The general procedure for decoding a a PicoQuant file involves four major 
+decisions. First, the first bytes of the header, common to all file formats,
+are read in. This data indicates which hardware name and version are present.
+Second, if the hardware is supported the rest of the hardware-specific header
+is loaded, to determine the measurement mode. If the measurement mode is 
+supported, then the mode-specific header is loaded to finish loading the 
+header.
+
+Once the header is loaded, the command-line options are processed. This 
+includes the ability to report the resolution, mode, or header for the data,
+and passing any of these options performs the specified activity, without
+any further action. If no such option is passed, the data contained in the
+remainder of the file will be processed and translated for output.
+
+Most of the time, specifying the input file (--file-in) is sufficient, as
+this will output the data in a plain text format. 
 
 .SH OPTIONS
-
 .SS General options
 .TP
 .BR \-h ", " \-\-help
@@ -131,6 +262,7 @@ will instead output the binary form of that data.
 \# .TP
 \# .BR \- ", " \-\-format-version " " [VERSION]
 \# See --hardware.
+
 .SS Debug and auxilliary
 .TP
 .BR \-p ", " \-\-print-every " " [NUMBER]
@@ -145,7 +277,7 @@ separate lines.
 
 .TP
 .BR \-r ", " \-\-header-only
-Print the file header information, in an ini format.
+Print the file header information, in an ini-style format. 
 
 .TP
 .BR \-m ", " \-\-mode-only
@@ -161,7 +293,21 @@ to its t2 representation.
 Process only the first NUMBERth records (TTTR mode).
 
 .SH ERRORS
+Errors and other debug information is output to stderr.
 
+Unsupported hardware:
+
+	$ picoquant --file-in some_file.py
+.br
+	ERROR: Could not identify board #!/usr/bin/env python	
+
+Unsupported measurement mode:
+
+	$ picoquant --file-in some_file.thc
+.br
+	ERROR: Mode not recognized: 1
+
+.SH BUGS
 There are no known bugs. Please email the author if you find any.
 
 .SH AUTHOR
