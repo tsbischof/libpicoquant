@@ -4,24 +4,24 @@ picoquant \- decode PicoQuant binary formats into ascii
 .SH SYNOPSIS
 .B picoquant
 [
-.BI \-\-file\-in " FILENAME"
+.BI \-\-file\-in= file
 ] [ 
-.BI \-\-file\-out " FILENAME"
+.BI \-\-file\-out= file
 ] [ 
 .BI \-\-binary\-out
 ] [
-.BI \-\-print\-every " NUMBER"
+.BI \-\-print\-every= number
 ] [
 .BI \-\-to\-t2
 ] [ 
-.BI \-\-number " NUMBER"
+.BI \-\-number= number
 ]
 .br
 .B picoquant
 [
-.BI \-\-file\-in " FILENAME"
+.BI \-\-file\-in= file
 ] [
-.BI \-\-file\-out " FILENAME"
+.BI \-\-file\-out= file
 ] [
 .BI \-\-resolution\-only
 ] [
@@ -33,13 +33,10 @@ picoquant \- decode PicoQuant binary formats into ascii
 ] [
 .BI \-\-version
 ]
-
-
 .SH DESCRIPTION
 .B picoquant
-Decodes PicoQuant binary formats into ascii for use with photon correlation
+decodes PicoQuant binary formats into ascii for use with photon correlation
 code. 
-
 .SS Input formats
 The following input file formats are supported:
 
@@ -70,7 +67,6 @@ v2.0@hhd, ht2, ht3
 
 Note that marker records are not current implemented. If a marker is found,
 an error will be reported.
-
 .SS Output formats
 There are three major output formats: histogram, t2, and t3. 
 
@@ -94,7 +90,6 @@ counter overflows. These records are not reported, but are used to determine
 the absolute pulse index for the experiment. Photon events are output as:
 
 	channel number, arrival pulse, relative arrival time
-
 .SH EXAMPLES
 .SS General
 Viewing the header (measurement settings and metadata):
@@ -127,7 +122,6 @@ Reading the data for each curve:
 	0,16.00,24.00,2
 .br
 	...
-	
 
 Determining the resolution of each curve of a measurement:
 
@@ -140,7 +134,6 @@ Determining the resolution of each curve of a measurement:
 	2,8.00
 .br
 	3,8.00
-
 .SS T2
 Reading photon records from the file:
 
@@ -169,7 +162,6 @@ Determining the resolution of the measurement:
 	$ picoquant --file-in data.ht2 --resolution-only
 .br
 	1.00
-
 .SS T3
 Reading photon records from the file:
 
@@ -198,7 +190,6 @@ Determining the resolution of the measurement:
 	$ picoquant --file--in data.ht3 --resolution-only
 .br
 	16.00
-
 .SH OVERVIEW
 The general procedure for decoding a a PicoQuant file involves four major 
 decisions. First, the first bytes of the header, common to all file formats,
@@ -216,7 +207,6 @@ remainder of the file will be processed and translated for output.
 
 Most of the time, specifying the input file (--file-in) is sufficient, as
 this will output the data in a plain text format. 
-
 .SH OPTIONS
 .SS General options
 .TP
@@ -230,17 +220,16 @@ Display the version of the program.
 .TP 
 .BR \-v ", " \-\-verbose
 Display debug messages during exectution, sent to stderr. 
-
 .SS Files and formats
 .TP
-.BR \-i ", " \-\-file-in " FILENAME"
+.BI \-i\  file \fR,\ \fB\-\-file-in= file
 Specifies the name of the binary-format file to read. By default this is stdin.
 The file is expected to be a file output by PicoQuant software, and the header
 contained in the file will be used to determine the hardware identity and 
 format version.
 
 .TP
-.BR \-o ", " \-\-file-out " FILENAME"
+.BI \-o\  file \fR,\ \fB\-\-file-out= file
 Specifies the name of the file to write to. By default this is stdout.
 The exact output format will depend on the mode of the measurement, but all
 are some form of ascii comma-delineated lines representing individual records.
@@ -249,7 +238,6 @@ are some form of ascii comma-delineated lines representing individual records.
 .BR \-b ", " \-\-binary-out
 The default behavior is to output ascii data. With this flag, the program
 will instead output the binary form of that data.
-
 \# Add these back in when I get around to implementing the on-demand versions.
 \# .TP
 \# .BR \- ", " \-\-hardware " HARDWARE"
@@ -262,10 +250,9 @@ will instead output the binary form of that data.
 \# .TP
 \# .BR \- ", " \-\-format-version " VERSION"
 \# See --hardware.
-
 .SS Debug and auxilliary
 .TP
-.BR \-p ", " \-\-print-every " NUMBER" 
+.BI \-p\  number \fR,\ \fB\-\-print-every= number
 Prints a status message to stderr after processing every NUMBERth record 
 in TTTR mode. This includes a time and record number, and is intended to 
 provide an external means for tracking process.
@@ -289,9 +276,8 @@ For t3-mode data, use the input rate at the sync channel to convert the data
 to its t2 representation. 
 
 .TP
-.BR \-n ", " \-\-number " " [NUMBER]
+.BI \-n\  number \fR,\ \fB\-\-number= number
 Process only the first NUMBERth records (TTTR mode).
-
 .SH ERRORS
 Errors and other debug information is output to stderr.
 
@@ -306,9 +292,7 @@ Unsupported measurement mode:
 	$ picoquant --file-in some_file.thc
 .br
 	ERROR: Mode not recognized: 1
-
 .SH BUGS
 There are no known bugs. Please email the author if you find any.
-
 .SH AUTHOR
 Thomas Bischof <tbischof@mit.edu>
