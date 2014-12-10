@@ -35,10 +35,10 @@ void pq_interactive_bin_printf(FILE *out_stream, pq_interactive_bin_t *bin) {
 /*
  * Print the interactive bin, in ascii format.
  */
-	fprintf(out_stream, "%"PRIu32",%.2"PRIf64",%.2"PRIf64",%"PRIu32"\n",
+	fprintf(out_stream, "%"PRIu32",%"PRId64",%.2"PRId64",%"PRIu32"\n",
 			bin->curve,
-			bin->bin_left*1e3,
-			bin->bin_right*1e3,
+			bin->bin_left,
+			bin->bin_right,
 			bin->counts);
 }
 

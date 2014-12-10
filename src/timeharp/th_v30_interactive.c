@@ -31,6 +31,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "../timeharp.h"
 #include "th_v30.h"
@@ -210,8 +211,8 @@ void th_v30_interactive_data_print(FILE *stream_out,
 	for ( i = 0; i < th_header->NumberOfCurves; i++ ) {
 		bin.curve = i;
 		
-		origin = (float64_t)(*interactive)[i].Offset;
-		time_step = (*interactive)[i].Resolution;
+		origin = (*interactive)[i].Offset*1e3;
+		time_step = (*interactive)[i].Resolution*1e3;
 		for ( j = 0; j < th_header->NumberOfChannels; j++ ) { 
 			bin.bin_left = origin + j*time_step;
 			bin.bin_right = bin.bin_left + time_step;

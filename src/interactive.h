@@ -38,8 +38,8 @@
 
 typedef struct {
 	uint32_t curve;
-	float64_t bin_left;
-	float64_t bin_right;
+	int64_t bin_left;
+	int64_t bin_right;
 	uint32_t counts;
 } pq_interactive_bin_t;
 

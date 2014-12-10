@@ -30,6 +30,7 @@
  */
 
 #include <stdlib.h>
+#include <math.h>
 
 #include "ph_v20.h"
 
@@ -320,8 +321,8 @@ void ph_v20_interactive_data_print(FILE *stream_out,
 		options_t *options) {
 	unsigned int i;
 	int j;
-	float64_t origin;	
-	float64_t time_step;
+	int64_t origin;	
+	int64_t time_step;
 	pq_interactive_bin_t bin;
 	pq_interactive_bin_print_t print;
 
@@ -333,8 +334,8 @@ void ph_v20_interactive_data_print(FILE *stream_out,
 
 	for ( i = 0; i < ph_header->NumberOfCurves; i++ ) {
 		bin.curve = i;
-		origin = (float64_t)interactive->Curve[i].Offset;
-		time_step = interactive->Curve[i].Resolution;
+		origin = (int64_t)interactive->Curve[i].Offset;
+		time_step = (int64_t)round(interactive->Curve[i].Resolution*1e3);
 		for ( j = 0; j < interactive->Curve[i].Channels; j++ ) { 
 			bin.bin_left = origin + time_step*j;
 			bin.bin_right = bin.bin_left + time_step;
