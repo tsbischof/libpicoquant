@@ -1,9 +1,6 @@
 import subprocess
 import re
-try:
-    import ConfigParser as configparser
-except:
-    import configparser
+import configparser
 import math
 import io
 import csv
@@ -31,7 +28,8 @@ class HHD(G1):
                                           "--file-in", self.filename],
                                          stdout=subprocess.PIPE)
             
-            self.from_stream(csv.reader(stream_in.stdout))
+            self.from_stream(csv.reader(map(lambda x: x.decode(),
+                                            stream_in.stdout)))
         else:
             raise(ValueError("Must specify a valid filename: {} does not exist"
                              "".format(self.filename)))
