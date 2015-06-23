@@ -8,14 +8,10 @@ import os
 
 from photon_correlation import *
 
-fake_section = "blargh"
+from picoquant import fake_ini_section
 
-def fake_ini_section(text, section=fake_section):
-    """
-    Add the fake section "blargh" to an ini-like file.
-    """
-    return(bytes("[{}]".format(section) + text))
-    
+fake_section = "section"
+
 class HHD(G1):
     def __init__(self, filename):
         super(HHD, self).__init__()
@@ -24,11 +20,12 @@ class HHD(G1):
         self.filename = filename
 
         if os.path.exists(self.filename):
-            stream_in = subprocess.Popen(["picoquant",
-                                          "--file-in", self.filename],
-                                         stdout=subprocess.PIPE)
+            stream_in = subprocess.Popen(
+                ["picoquant",
+                 "--file-in", self.filename],
+                stdout=subprocess.PIPE)
             
-            self.from_stream(csv.reader(map(lambda x: x.decode(),
+            self.from_stream(csv.reader(map(lambda _: _.decode(),
                                             stream_in.stdout)))
         else:
             raise(ValueError("Must specify a valid filename: {} does not exist"
@@ -80,16 +77,15 @@ class HHD(G1):
         Read the header from the file, for parsing purposes.
         """
         if not self._header:
-            picoquant = subprocess.Popen(["picoquant",
-                                          "--file-in", self.filename,
-                                          "--header-only"],
-                                         stdout=subprocess.PIPE)
-
-            raw_header = picoquant.stdout.read().decode()
+            raw_header = subprocess.Popen(
+                ["picoquant",
+                 "--file-in", self.filename,
+                 "--header-only"],
+                stdout=subprocess.PIPE).communicate()[0].decode()
 
             self._header = configparser.ConfigParser()
-##            self._header.read_string(fake_ini_section(raw_header))
-            self._header.readfp(io.BytesIO(fake_ini_section(raw_header)))
+            self._header.readfp(io.StringIO(fake_ini_section(raw_header,
+                                                             fake_section)))
             
         return(self._header)
 

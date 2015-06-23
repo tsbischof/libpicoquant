@@ -8,23 +8,7 @@ except:
 import subprocess
 import csv
 
-##from picoquant import files
-
-class FakeIniSection(object):
-    """
-    Wrapper to enable configparser to parse a file without sections.
-    """
-    def __init__(self, fp):
-        self.fp = fp
-        self.sechead = '[asection]\n'
-    def readline(self):
-        if self.sechead:
-            try:
-                return(self.sechead)
-            finally:
-                self.sechead = None
-        else:
-            return(self.fp.readline())
+from picoquant import FakeIniSection
 
 class Picoquant(object):
     """
@@ -50,7 +34,7 @@ class Picoquant(object):
                 ["picoquant",
                  "--file-in", self._filename,
                  "--header-only"],
-                stdout=subprocess.PIPE).communicate()[0]
+                stdout=subprocess.PIPE).communicate()[0].decode()
 
             self._header = configparser.ConfigParser()
             self._header.readfp(FakeIniSection(io.StringIO(header_raw)))
