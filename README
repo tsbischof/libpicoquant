@@ -1,4 +1,0 @@
-A configure script is provided to ease installation:
-./configure
-make
-sudo make install
