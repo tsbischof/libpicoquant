@@ -21,9 +21,5 @@ def fake_ini_section(text, section="header"):
     """.format(section)
     return("[{}]".format(section) + text)
 
-from .TCSPC import TCSPC
-from .Picoquant import Picoquant
 from .PHD import PHD
 from .HHD import HHD
-
-##__all__ = ["FakeIniSection"]
