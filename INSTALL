@@ -1,0 +1,5 @@
+This package is built using the GNU Autotools toolchain. Invoke the following:
+
+> autoreconf -i
+> ./configure
+> sudo make install
