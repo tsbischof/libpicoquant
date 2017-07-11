@@ -49,6 +49,16 @@ void hh_v20_t2_init(hh_v20_header_t *hh_header,
 	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
+void ptu_hh_v20_t2_init(ptu_header_t *header,tttr_t *tttr) {
+	tttr->sync_channel = header->HW_InpChannels;
+	tttr->origin = 0;
+	tttr->overflows = 0;
+	tttr->overflow_increment = HH_T2_OVERFLOW;
+	tttr->sync_rate = header->TTResult_SyncRate;
+	tttr->resolution_float = header->MeasDesc_GlobalResolution;//was *1e-12 but I think that's wrong because it's built in
+	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
+}
+
 int hh_v20_t2_decode(FILE *stream_in, tttr_t *tttr, t2_t *t2) {
 	size_t n_read;
 	hh_v20_t2_record_t record;
@@ -112,6 +122,16 @@ void hh_v20_t3_init(hh_v20_header_t *hh_header,
 	tttr->overflow_increment = HH_T3_OVERFLOW;
 	tttr->sync_rate = tttr_header->SyncRate;
 	tttr->resolution_float = hh_header->Resolution*1e-12;
+	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
+}
+
+void ptu_hh_v20_t3_init(ptu_header_t *header,tttr_t *tttr) {
+	tttr->sync_channel = header->HW_InpChannels;
+	tttr->origin = 0;
+	tttr->overflows = 0;
+	tttr->overflow_increment = HH_T3_OVERFLOW;
+	tttr->sync_rate = header->TTResult_SyncRate;
+	tttr->resolution_float = header->MeasDesc_GlobalResolution;//was *1e-12 but I think that's wrong because it's built in
 	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
@@ -230,6 +250,38 @@ int hh_v20_t3_stream(FILE *stream_in, FILE *stream_out,
 	} else {
 		return(pq_t3_stream(stream_in, stream_out,
 				hh_v20_t3_decode, &tttr, options));
+	}
+}
+
+int ptu_hh_v20_t2_stream(FILE *stream_in, FILE *stream_out,
+		ptu_header_t *ptu_header, options_t *options){
+	tttr_t tttr;
+	
+	ptu_hh_v20_t2_init(ptu_header, &tttr);//write
+
+	if ( options->print_resolution ) {
+		pq_resolution_print(stream_out, -1,
+				tttr.resolution_float*1e12, options);
+		return(PQ_SUCCESS);
+	} else {
+		return(pq_t2_stream(stream_in, stream_out,
+				hh_v20_t2_decode, &tttr, options));//is this the right decode?
+	}
+}
+
+int ptu_hh_v20_t3_stream(FILE *stream_in, FILE *stream_out,
+		ptu_header_t *ptu_header, options_t *options){
+	tttr_t tttr;
+	
+	ptu_hh_v20_t3_init(ptu_header, &tttr);//write
+	
+	if ( options->print_resolution ) {
+		pq_resolution_print(stream_out, -1,
+				tttr.resolution_float*1e12, options);
+		return(PQ_SUCCESS);
+	} else {
+		return(pq_t3_stream(stream_in, stream_out,
+				hh_v20_t3_decode, &tttr, options));//is this the right decode?
 	}
 }
 

@@ -53,14 +53,17 @@ int pq_dispatch(FILE *stream_in, FILE *stream_out, options_t *options) {
 	pq_dispatch_t dispatch;
 
 	/* Do the actual work, if we have no errors. */
-	result = pq_header_read(stream_in, &pq_header);
+	result = pq_header_read(stream_in, &pq_header);//replace this to return dispatch 
+	// make it handle ptu --> decided to leave this, let it recognize ptu magic
 
 	if ( result ) {
 		error("Could not read string header.\n");
 	} else {
 		dispatch = pq_dispatch_get(options, &pq_header);
 		if ( dispatch == NULL ) {
-			error("Could not identify board %s.\n", pq_header.Ident);
+			error("Could not identify board %s.\n", pq_header.Ident, pq_header.FormatVersion, ftell);//changed
+			//trying to find out if after original bit we're in the right place to start using the ptu
+			//header read 
 		} else {
 			result = dispatch(stream_in, stream_out, 
 					&pq_header, options);
@@ -72,7 +75,9 @@ int pq_dispatch(FILE *stream_in, FILE *stream_out, options_t *options) {
 
 
 pq_dispatch_t pq_dispatch_get(options_t *options, pq_header_t *pq_header) {
-	if ( ! strcmp(pq_header->Ident, "PicoHarp 300") ) {
+	if ( ! strcmp(pq_header->Ident, "PQTTTR")){
+		return(ptu_dispatch);//changed
+	} else if ( ! strcmp(pq_header->Ident, "PicoHarp 300") ) {
 		return(ph_dispatch);
 	} else if ( ! strcmp(pq_header->Ident, "TimeHarp 200") ) {
 		return(th_dispatch);
