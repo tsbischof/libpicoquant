@@ -246,4 +246,10 @@ void hh_v20_tttr_header_printf(FILE *stream_out,
 void hh_v20_tttr_header_fwrite(FILE *stream_out, 
 		hh_v20_tttr_header_t *tttr_header);
 
+int ptu_hh_v20_t2_stream(FILE *stream_in, FILE *stream_out,
+		ptu_header_t *ptu_header, options_t *options);
+
+int ptu_hh_v20_t3_stream(FILE *stream_in, FILE *stream_out,
+		ptu_header_t *ptu_header, options_t *options);
+
 #endif

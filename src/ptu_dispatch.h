@@ -29,34 +29,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PICOQUANT_H_
-#define PICOQUANT_H_
+#ifndef PTU_DISPATCH_H_
+#define PTU_DISPATCH_H_
 
 #include <stdio.h>
-
-#include "types.h"
-#include "options.h"
-
-#include "header.h"
-#include "ptu_dispatch.h"
+#include "picoquant.h"
+#include "tttr.h"
 
 
 
 
-#include "interactive.h"
-#include "t2.h"
-#include "t3.h"
+int ptu_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header, options_t *options);
 
 
-// General board and mode dispatch
-typedef int (*pq_dispatch_t)(FILE *, FILE *, pq_header_t *, options_t *);
 
-int pq_dispatch(FILE *in_stream, FILE *out_stream, options_t *options);
+int get_recordtype(int32_t RecordType);
 
-pq_dispatch_t pq_dispatch_get(options_t *options, pq_header_t *pq_header);
-
-void pq_resolution_print(FILE *out_stream,
-		int curve, float64_t resolution, 
-		options_t *options);
-	
 #endif
