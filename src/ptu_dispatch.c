@@ -1,31 +1,31 @@
 /*
  * Copyright (c) 2011-2014, Thomas Bischof
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * 1. Redistributions of source code must retain the above copyright notice, 
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
- * 
- * 2. Redistributions in binary form must reproduce the above copyright notice, 
- *    this list of conditions and the following disclaimer in the documentation 
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
- * 3. Neither the name of the Massachusetts Institute of Technology nor the 
- *    names of its contributors may be used to endorse or promote products 
+ *
+ * 3. Neither the name of the Massachusetts Institute of Technology nor the
+ *    names of its contributors may be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -51,7 +51,6 @@
 
 
 //from ptu demo:
-#include  <windows.h>
 #include  <ncurses.h>
 #include  <stdio.h>
 
@@ -82,7 +81,7 @@ uint32_t cnt_0=0, cnt_1=0;
     tttr->resolution_float = ptu_header.Resolution*1e-12;
   }//NOW THIS ONLY WORKS FOR HH
 	tttr->sync_rate = tttr_header->SyncRate;
-	
+
 	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }*/
 
@@ -92,7 +91,7 @@ uint32_t cnt_0=0, cnt_1=0;
 
 
 
-int ptu_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header, 
+int ptu_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header,
 		options_t *options) {
 	  int result;
     //reparse header as a ptu file
@@ -105,17 +104,18 @@ int ptu_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header,
     }
     //find hardware
     uint32_t isT2 = get_recordtype(ptu_header.TTResultFormat_TTTRRecType);//need to define header, record type
-    
+
     sprintf(pq_header->FormatVersion, "%s", ptu_header.CreatorSW_ContentVersion);
-    
+
     //read it!
-    if ( isT2 == '\0' ) {
-		  error("Board is not supported in ptu format: %s.\n", pq_header->Ident, pq_header->FormatVersion, ftell);
-    } else if ( options->print_header ) {
+    //if ( isT2 == '\0' ) {
+		//  error("Board is not supported in ptu format: %s.\n", pq_header->Ident, pq_header->FormatVersion, ftell);
+    //} else
+    if ( options->print_header ) {
 			if ( options->binary_out ) {
 				ptu_header_fwrite(out_stream, &ptu_header);
 			} else {
-				pq_header_printf(out_stream, pq_header);
+				ptu_header_printf(out_stream, &ptu_header);
 			}
 	  } else if ( options->print_mode ) {
 			if ( ptu_header.Measurement_Mode == HH_MODE_INTERACTIVE ) {
@@ -129,11 +129,11 @@ int ptu_dispatch(FILE *in_stream, FILE *out_stream, pq_header_t *pq_header,
 						ptu_header.Measurement_Mode);
 				return(PQ_ERROR_MODE);
 			}
-	  } else if ( isT2) { 
+	  } else if ( isT2) {
 		  result = ptu_hh_v20_t2_stream(in_stream, out_stream, &ptu_header, options);
 	  } else {
       result = ptu_hh_v20_t3_stream(in_stream, out_stream, &ptu_header, options);
-    }                                     
+    }
 
 	return(result);
 }
@@ -146,7 +146,7 @@ int get_recordtype(int32_t RecordType){ //only hydraharp gives correct version
     case rtHydraHarp2T2:
       return true;//DOES THIS WORK?
       //return ptu_hh_v20_t2_stream(FILE *stream_in, FILE *stream_out,
-      // ptu_header_t *ptu_header, options_t *options) 
+      // ptu_header_t *ptu_header, options_t *options)
       //fprintf(fpout, "HydraHarp V2 T2 data\n");
       //fprintf(fpout,"\nrecord# chan   nsync truetime/ps\n");
       break;
@@ -157,11 +157,11 @@ int get_recordtype(int32_t RecordType){ //only hydraharp gives correct version
       //fprintf(fpout, "HydraHarp V2 T3 data\n");
       //fprintf(fpout,"\nrecord# chan   nsync truetime/ns dtime\n");
       break;
-    
+
     //need to add errors
 
     /*
-    
+
     //none of the rest of these are set up, only hydraharp
     case rtPicoHarpT2:
       fprintf(fpout, "PicoHarp T2 data\n");
@@ -207,5 +207,5 @@ int get_recordtype(int32_t RecordType){ //only hydraharp gives correct version
     error("Unknown record type: 0x%X\n 0x%X\n ", RecordType);
     return '\0';
   }
-  
+
 }

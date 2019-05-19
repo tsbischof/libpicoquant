@@ -4,6 +4,8 @@ AM_CFLAGS += -D _FILE_OFFSET_BITS=64
 
 AM_LDFLAGS =
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 bin_PROGRAMS = picoquant
 
 include_HEADERS = picoquant.h \
@@ -12,7 +14,8 @@ include_HEADERS = picoquant.h \
 		picoharp.h picoharp/ph_v20.h\
 		hydraharp.h hydraharp/hh_v10.h hydraharp/hh_v20.h \
 		timeharp.h timeharp/th_v20.h timeharp/th_v30.h \
-		timeharp/th_v50.h timeharp/th_v60.h 
+		timeharp/th_v50.h timeharp/th_v60.h \
+		ptu_dispatch.h
 picoquant_SOURCES = picoquant_main.c picoquant.c \
 		error.c types.c options.c files.c \
 		header.c continuous.c interactive.c tttr.c t2.c t3.c \
@@ -31,4 +34,5 @@ picoquant_SOURCES = picoquant_main.c picoquant.c \
 		timeharp/th_v50.c timeharp/th_v50_tttr.c \
 		timeharp/th_v50_interactive.c timeharp/th_v50_continuous.c \
 		timeharp/th_v60.c timeharp/th_v60_tttr.c \
-		timeharp/th_v60_interactive.c timeharp/th_v60_continuous.c 
+		timeharp/th_v60_interactive.c timeharp/th_v60_continuous.c \
+		ptu_dispatch.c

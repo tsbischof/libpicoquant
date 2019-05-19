@@ -1,31 +1,31 @@
 /*
  * Copyright (c) 2011-2014, Thomas Bischof
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * 1. Redistributions of source code must retain the above copyright notice, 
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
- * 
- * 2. Redistributions in binary form must reproduce the above copyright notice, 
- *    this list of conditions and the following disclaimer in the documentation 
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
- * 3. Neither the name of the Massachusetts Institute of Technology nor the 
- *    names of its contributors may be used to endorse or promote products 
+ *
+ * 3. Neither the name of the Massachusetts Institute of Technology nor the
+ *    names of its contributors may be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -36,7 +36,6 @@
 #include "picoquant.h"
 
 
-#include  <windows.h>
 #include  <ncurses.h>
 
 #include  <stddef.h>
@@ -77,12 +76,12 @@
 #define name_MeasDesc_GlobalResolution     "MeasDesc_GlobalResolution" // Global Resolution of TimeTag(T2) /NSync (T3)
 #define name_Header_End         "Header_End"                // Always appended as last tag (BLOCKEND)
 
-// The rest of the Tag Idents: We do this so that if the name in the header given changes, you only 
+// The rest of the Tag Idents: We do this so that if the name in the header given changes, you only
 // need to change it up here, not in the rest of the code
 #define name_File_GUID "File_GUID" //tyAnsiString
 #define name_File_AssuredContent "File_AssuredContent" //tyAnsiString
 #define name_CreatorSW_ContentVersion "CreatorSW_ContentVersion" //tyAnsiString
-#define name_CreatorSW_Name "CreatorSW_Name" //tyAnsiString 
+#define name_CreatorSW_Name "CreatorSW_Name" //tyAnsiString
 #define name_CreatorSW_Version "CreatorSW_Version" //tyAnsiString
 #define name_File_CreatingTime "File_CreatingTime" //tyTDateTime
 #define name_File_Comment "File_Comment" //tyAnsiString
@@ -199,19 +198,19 @@ typedef struct {
 
 
 
-	/* Note that Records is the only difference between interactive and 
+	/* Note that Records is the only difference between interactive and
 	 * tttr main headers. Interactive calls this BitsPerHistogBin.
 	 */
 
 	 //booleans
 	 uint32_t MeasDesc_StopOnOvfl;
-	 uint32_t MeasDesc_Restart; 
+	 uint32_t MeasDesc_Restart;
 	 uint32_t CurSWSetting_DispLog;
 	 uint32_t CurSWSetting_DispCurve_Show0;
 	 uint32_t CurSWSetting_DispCurve_Show1;
-	 uint32_t CurSWSetting_DispCurve_Show2; 
-	 uint32_t CurSWSetting_DispCurve_Show3; 
-	 uint32_t CurSWSetting_DispCurve_Show4; 
+	 uint32_t CurSWSetting_DispCurve_Show2;
+	 uint32_t CurSWSetting_DispCurve_Show3;
+	 uint32_t CurSWSetting_DispCurve_Show4;
 	 uint32_t CurSWSetting_DispCurve_Show5;
 	 uint32_t CurSWSetting_DispCurve_Show6;
 	 uint32_t CurSWSetting_DispCurve_Show7;
@@ -283,7 +282,7 @@ typedef struct {
 	 //Float8
 	 float64_t HW_BaseResolution;
 	 float64_t MeasDesc_Resolution;
-	 float64_t MeasDesc_GlobalResolution; 
+	 float64_t MeasDesc_GlobalResolution;
 
 	 //AnsiStrings not in general part
 	 char File_GUID[40];
@@ -356,5 +355,6 @@ int ptu_header_parse(FILE *in_stream, ptu_header_t *ptu_header);
 void pq_header_printf(FILE *out_stream, pq_header_t *pq_header);
 void pq_header_fwrite(FILE *out_stream, pq_header_t *pq_header);
 void ptu_header_fwrite(FILE *stream_out, ptu_header_t *ptu_header);
+void ptu_header_printf(FILE *out_stream, ptu_header_t *ptu_header);
 
-#endif 
+#endif

@@ -355,3 +355,210 @@ void pq_header_fwrite(FILE *stream_out, pq_header_t *pq_header) {
 void ptu_header_fwrite(FILE *stream_out, ptu_header_t *ptu_header){
 	fwrite(ptu_header, sizeof(ptu_header_t), 1, stream_out);
 }
+
+void ptu_header_printf(FILE *stream_out, ptu_header_t *ptu_header) {
+	fprintf(stream_out, "CreatorName = %.*s\n", 
+			(int)sizeof(ptu_header->CreatorName), ptu_header->CreatorName);
+	fprintf(stream_out, "CreatorVersion = %.*s\n", 
+			(int)sizeof(ptu_header->CreatorVersion), ptu_header->CreatorVersion);  
+	fprintf(stream_out, "FileTime = %.*s\n", 
+			(int)sizeof(ptu_header->FileTime), ptu_header->FileTime);
+
+  fprintf(stream_out, "Comment = %.*s\n", 
+			(int)sizeof(ptu_header->Comment), ptu_header->Comment);
+  fprintf(stream_out, "NumberOfCurves = %.*d\n", 
+			(int)sizeof(ptu_header->NumberOfCurves), ptu_header->NumberOfCurves);
+
+  fprintf(stream_out, "MeasDesc_StopOnOvfl = %.*u\n", 
+			(int)sizeof(ptu_header->MeasDesc_StopOnOvfl), ptu_header->MeasDesc_StopOnOvfl);
+	fprintf(stream_out, "MeasDesc_Restart = %.*u\n", 
+			(int)sizeof(ptu_header->MeasDesc_Restart), ptu_header->MeasDesc_Restart);  
+	fprintf(stream_out, "CurSWSetting_DispLog = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispLog), ptu_header->CurSWSetting_DispLog);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show0 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show0), ptu_header->CurSWSetting_DispCurve_Show0);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show1 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show1), ptu_header->CurSWSetting_DispCurve_Show1);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show2 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show2), ptu_header->CurSWSetting_DispCurve_Show2);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show3 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show3), ptu_header->CurSWSetting_DispCurve_Show3);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show4 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show4), ptu_header->CurSWSetting_DispCurve_Show4);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show5 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show5), ptu_header->CurSWSetting_DispCurve_Show5);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show6 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show6), ptu_header->CurSWSetting_DispCurve_Show6);
+  fprintf(stream_out, "CurSWSetting_DispCurve_Show7 = %.*u\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_Show7), ptu_header->CurSWSetting_DispCurve_Show7);
+  fprintf(stream_out, "HW_ExternalRefClock = %.*u\n", 
+			(int)sizeof(ptu_header->HW_ExternalRefClock), ptu_header->HW_ExternalRefClock);
+  fprintf(stream_out, "HWInpChan_Enabled0 = %.*u\n", 
+			(int)sizeof(ptu_header->HWInpChan_Enabled0), ptu_header->HWInpChan_Enabled0);
+  fprintf(stream_out, "HWInpChan_Enabled1 = %.*u\n", 
+			(int)sizeof(ptu_header->HWInpChan_Enabled1), ptu_header->HWInpChan_Enabled1);
+  fprintf(stream_out, "HWMarkers_RisingEdge0 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_RisingEdge0), ptu_header->HWMarkers_RisingEdge0);
+  fprintf(stream_out, "HWMarkers_RisingEdge1 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_RisingEdge1), ptu_header->HWMarkers_RisingEdge1);
+  fprintf(stream_out, "HWMarkers_RisingEdge2 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_RisingEdge2), ptu_header->HWMarkers_RisingEdge2);
+  fprintf(stream_out, "HWMarkers_RisingEdge3 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_RisingEdge3), ptu_header->HWMarkers_RisingEdge3);
+  fprintf(stream_out, "HWMarkers_Enabled0 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_Enabled0), ptu_header->HWMarkers_Enabled0);
+  fprintf(stream_out, "HWMarkers_Enabled1 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_Enabled1), ptu_header->HWMarkers_Enabled1);
+  fprintf(stream_out, "HWMarkers_Enabled2 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_Enabled2), ptu_header->HWMarkers_Enabled2);
+  fprintf(stream_out, "HWMarkers_Enabled3 = %.*u\n", 
+			(int)sizeof(ptu_header->HWMarkers_Enabled3), ptu_header->HWMarkers_Enabled3);
+
+  fprintf(stream_out, "Fast_Load_End = %.*d\n", 
+			(int)sizeof(ptu_header->Fast_Load_End), ptu_header->Fast_Load_End);
+  fprintf(stream_out, "Measurement_Mode = %.*d\n", 
+			(int)sizeof(ptu_header->Measurement_Mode), ptu_header->Measurement_Mode);
+  fprintf(stream_out, "Measurement_SubMode = %.*d\n", 
+			(int)sizeof(ptu_header->Measurement_SubMode), ptu_header->Measurement_SubMode);
+  fprintf(stream_out, "TTResult_StopReason = %.*d\n", 
+			(int)sizeof(ptu_header->TTResult_StopReason), ptu_header->TTResult_StopReason);
+  fprintf(stream_out, "TTResultFormat_TTTRRecType = %.*d\n", 
+			(int)sizeof(ptu_header->TTResultFormat_TTTRRecType), ptu_header->TTResultFormat_TTTRRecType);
+  fprintf(stream_out, "TTResultFormat_BitsPerRecord = %.*d\n", 
+			(int)sizeof(ptu_header->TTResultFormat_BitsPerRecord), ptu_header->TTResultFormat_BitsPerRecord);
+  fprintf(stream_out, "MeasDesc_BinningFactor = %.*d\n", 
+			(int)sizeof(ptu_header->MeasDesc_BinningFactor), ptu_header->MeasDesc_BinningFactor);
+  fprintf(stream_out, "MeasDesc_Offset = %.*d\n", 
+			(int)sizeof(ptu_header->MeasDesc_Offset), ptu_header->MeasDesc_Offset);
+  fprintf(stream_out, "MeasDesc_AcquisitionTime = %.*d\n", 
+			(int)sizeof(ptu_header->MeasDesc_AcquisitionTime), ptu_header->MeasDesc_AcquisitionTime);
+  fprintf(stream_out, "MeasDesc_StopAt = %.*d\n", 
+			(int)sizeof(ptu_header->MeasDesc_StopAt), ptu_header->MeasDesc_StopAt);
+  fprintf(stream_out, "CurSWSetting_DispAxisTimeFrom = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispAxisTimeFrom), ptu_header->CurSWSetting_DispAxisTimeFrom);
+  fprintf(stream_out, "CurSWSetting_DispAxisTimeTo = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispAxisTimeTo), ptu_header->CurSWSetting_DispAxisTimeTo);
+  fprintf(stream_out, "CurSWSetting_DispAxisCountFrom = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispAxisCountFrom), ptu_header->CurSWSetting_DispAxisCountFrom);
+  fprintf(stream_out, "CurSWSetting_DispAxisCountTo = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispAxisCountTo), ptu_header->CurSWSetting_DispAxisCountTo);
+  fprintf(stream_out, "CurSWSetting_DispCurves = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurves), ptu_header->CurSWSetting_DispCurves);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo0 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo0), ptu_header->CurSWSetting_DispCurve_MapTo0);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo1 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo1), ptu_header->CurSWSetting_DispCurve_MapTo1);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo2 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo2), ptu_header->CurSWSetting_DispCurve_MapTo2);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo3 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo3), ptu_header->CurSWSetting_DispCurve_MapTo3);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo4 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo4), ptu_header->CurSWSetting_DispCurve_MapTo4);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo5 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo5), ptu_header->CurSWSetting_DispCurve_MapTo5);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo6 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo6), ptu_header->CurSWSetting_DispCurve_MapTo6);
+  fprintf(stream_out, "CurSWSetting_DispCurve_MapTo7 = %.*d\n", 
+			(int)sizeof(ptu_header->CurSWSetting_DispCurve_MapTo7), ptu_header->CurSWSetting_DispCurve_MapTo7);
+  fprintf(stream_out, "HW_Modules = %.*d\n", 
+			(int)sizeof(ptu_header->HW_Modules), ptu_header->HW_Modules);
+  fprintf(stream_out, "HWModule_TypeCode0 = %.*d\n", 
+			(int)sizeof(ptu_header->HWModule_TypeCode0), ptu_header->HWModule_TypeCode0);
+  fprintf(stream_out, "HWModule_TypeCode1 = %.*d\n", 
+			(int)sizeof(ptu_header->HWModule_TypeCode1), ptu_header->HWModule_TypeCode1);
+  fprintf(stream_out, "HWModule_TypeCode2 = %.*d\n", 
+			(int)sizeof(ptu_header->HWModule_TypeCode2), ptu_header->HWModule_TypeCode2);
+  fprintf(stream_out, "HWModule_VersCode0 = %.*d\n", 
+			(int)sizeof(ptu_header->HWModule_VersCode0), ptu_header->HWModule_VersCode0);
+  fprintf(stream_out, "HWModule_VersCode1 = %.*d\n", 
+			(int)sizeof(ptu_header->HWModule_VersCode1), ptu_header->HWModule_VersCode1);
+  fprintf(stream_out, "HWModule_VersCode2 = %.*d\n", 
+			(int)sizeof(ptu_header->HWModule_VersCode2), ptu_header->HWModule_VersCode2);
+  fprintf(stream_out, "HW_InpChannels = %.*d\n", 
+			(int)sizeof(ptu_header->HW_InpChannels), ptu_header->HW_InpChannels);
+  fprintf(stream_out, "HW_ExternalDevices = %.*d\n", 
+			(int)sizeof(ptu_header->HW_ExternalDevices), ptu_header->HW_ExternalDevices);
+  fprintf(stream_out, "HWSync_Divider = %.*d\n", 
+			(int)sizeof(ptu_header->HWSync_Divider), ptu_header->HWSync_Divider);
+  fprintf(stream_out, "HWSync_CFDLevel = %.*d\n", 
+			(int)sizeof(ptu_header->HWSync_CFDLevel), ptu_header->HWSync_CFDLevel);
+  fprintf(stream_out, "HWSync_CFDZeroCross = %.*d\n", 
+			(int)sizeof(ptu_header->HWSync_CFDZeroCross), ptu_header->HWSync_CFDZeroCross);
+  fprintf(stream_out, "HWSync_Offset = %.*d\n", 
+			(int)sizeof(ptu_header->HWSync_Offset), ptu_header->HWSync_Offset);
+  fprintf(stream_out, "HWInpChan_ModuleIdx0 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_ModuleIdx0), ptu_header->HWInpChan_ModuleIdx0);
+  fprintf(stream_out, "HWInpChan_ModuleIdx1 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_ModuleIdx1), ptu_header->HWInpChan_ModuleIdx1);
+  fprintf(stream_out, "HWInpChan_CFDLevel0 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_CFDLevel0), ptu_header->HWInpChan_CFDLevel0);
+  fprintf(stream_out, "HWInpChan_CFDLevel1 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_CFDLevel1), ptu_header->HWInpChan_CFDLevel1);
+  fprintf(stream_out, "HWInpChan_CFDZeroCross0 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_CFDZeroCross0), ptu_header->HWInpChan_CFDZeroCross0);
+  fprintf(stream_out, "HWInpChan_CFDZeroCross1 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_CFDZeroCross1), ptu_header->HWInpChan_CFDZeroCross1);
+  fprintf(stream_out, "HWInpChan_Offset0 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_Offset0), ptu_header->HWInpChan_Offset0);
+    fprintf(stream_out, "HWInpChan_Offset1 = %.*d\n", 
+			(int)sizeof(ptu_header->HWInpChan_Offset1), ptu_header->HWInpChan_Offset1);
+  fprintf(stream_out, "HW_Markers = %.*d\n", 
+			(int)sizeof(ptu_header->HW_Markers), ptu_header->HW_Markers);
+  fprintf(stream_out, "HWMarkers_HoldOff = %.*d\n", 
+			(int)sizeof(ptu_header->HWMarkers_HoldOff), ptu_header->HWMarkers_HoldOff);
+  fprintf(stream_out, "TTResult_SyncRate = %.*d\n", 
+			(int)sizeof(ptu_header->TTResult_SyncRate), ptu_header->TTResult_SyncRate);
+  fprintf(stream_out, "TTResult_InputRate0 = %.*d\n", 
+			(int)sizeof(ptu_header->TTResult_InputRate0), ptu_header->TTResult_InputRate0);
+  fprintf(stream_out, "TTResult_InputRate1 = %.*d\n", 
+			(int)sizeof(ptu_header->TTResult_InputRate1), ptu_header->TTResult_InputRate1);
+  fprintf(stream_out, "TTResult_StopAfter = %.*d\n", 
+			(int)sizeof(ptu_header->TTResult_StopAfter), ptu_header->TTResult_StopAfter);
+  fprintf(stream_out, "TTResult_NumberOfRecords = %.*d\n", 
+			(int)sizeof(ptu_header->TTResult_NumberOfRecords), ptu_header->TTResult_NumberOfRecords);
+
+  fprintf(stream_out, "HW_BaseResolution = %.*f\n", 
+			(int)sizeof(ptu_header->HW_BaseResolution), ptu_header->HW_BaseResolution);
+  fprintf(stream_out, "MeasDesc_Resolution = %.*f\n", 
+			(int)sizeof(ptu_header->MeasDesc_Resolution), ptu_header->MeasDesc_Resolution);
+  fprintf(stream_out, "MeasDesc_GlobalResolution = %.*f\n", 
+			(int)sizeof(ptu_header->MeasDesc_GlobalResolution), ptu_header->MeasDesc_GlobalResolution);
+
+  fprintf(stream_out, "File_GUID = %.*s\n", 
+			(int)sizeof(ptu_header->File_GUID), ptu_header->File_GUID);
+  fprintf(stream_out, "File_AssuredContent = %.*s\n", 
+			(int)sizeof(ptu_header->File_AssuredContent), ptu_header->File_AssuredContent);
+  fprintf(stream_out, "CreatorSW_ContentVersion = %.*s\n", 
+			(int)sizeof(ptu_header->CreatorSW_ContentVersion), ptu_header->CreatorSW_ContentVersion);
+  fprintf(stream_out, "HW_Type = %.*s\n", 
+			(int)sizeof(ptu_header->HW_Type), ptu_header->HW_Type);
+  fprintf(stream_out, "HW_PartNo = %.*s\n", 
+			(int)sizeof(ptu_header->HW_PartNo), ptu_header->HW_PartNo);
+  fprintf(stream_out, "HW_Version = %.*s\n", 
+			(int)sizeof(ptu_header->HW_Version), ptu_header->HW_Version);
+  fprintf(stream_out, "HW_SerialNo = %.*s\n", 
+			(int)sizeof(ptu_header->HW_SerialNo), ptu_header->HW_SerialNo);
+/*  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);
+  fprintf(stream_out, " = %.*s\n", 
+			(int)sizeof(ptu_header->), ptu_header->);*/
+
+
+      
+}

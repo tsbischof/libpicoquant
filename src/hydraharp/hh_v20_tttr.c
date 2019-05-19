@@ -131,7 +131,7 @@ void ptu_hh_v20_t3_init(ptu_header_t *header,tttr_t *tttr) {
 	tttr->overflows = 0;
 	tttr->overflow_increment = HH_T3_OVERFLOW;
 	tttr->sync_rate = header->TTResult_SyncRate;
-	tttr->resolution_float = header->MeasDesc_GlobalResolution;//was *1e-12 but I think that's wrong because it's built in
+	tttr->resolution_float = header->MeasDesc_BinningFactor*1e-12;//was *1e-12 but I think that's wrong because it's built in
 	tttr->resolution_int = floor(fabs(tttr->resolution_float*1e12));
 }
 
