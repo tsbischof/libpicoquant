@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = subdir-objects
+
 AM_CFLAGS = -Wall 
 # when dealing with large files, we need 64-bit file offsets
 AM_CFLAGS += -D _FILE_OFFSET_BITS=64
