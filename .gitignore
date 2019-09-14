@@ -11,8 +11,6 @@ __pycache__
 *.dll
 *.pyd
 
-sample_data
-
 aclocal.m4
 autom4te.cache
 autoscan.log
@@ -20,6 +18,7 @@ configure
 depcomp
 install-sh
 missing
+compile
 
 GNUmakefile.in
 
