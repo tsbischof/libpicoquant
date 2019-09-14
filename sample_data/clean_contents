@@ -1,0 +1,3 @@
+#!/bin/sh
+
+find -name "*.data" -or -name "*.header" -or -name "*.resolution" | xargs rm

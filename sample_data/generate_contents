@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import subprocess
+
+def _process(cmd, src, suffix, force):
+    dst = src + suffix
+    if force or not os.path.exists(dst):
+        full_cmd = ["picoquant", "--file-in", src, "--file-out", dst] + cmd
+        print(" ".join(full_cmd))
+        subprocess.Popen(full_cmd).wait()
+
+def get_data(filename, force=False):
+    _process([], filename, ".data", force)
+
+def get_header(filename, force=False):
+    _process(["--header-only"], filename, ".header", force)
+
+def get_resolution(filename, force=False):
+    _process(["--resolution-only"], filename, ".resolution", force)
+
+is_picoquant_file = re.compile(".+\.(p[ht]u|[hp]t[d23]|thd|t3r)$")
+force = False
+for root, dirs, files in os.walk(os.getcwd()):
+    for filename in filter(lambda f: is_picoquant_file.match(f) and \
+                                     os.path.isfile(os.path.join(root, f)),
+                           files):
+        filename = os.path.join(root, filename)
+        get_data(filename, force=force)
+        get_header(filename, force=force)
+        get_resolution(filename, force=force)
