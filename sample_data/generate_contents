@@ -1,18 +1,30 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import re
 import subprocess
 
-def _process(cmd, src, suffix, force):
+is_picoquant_file = re.compile(".+\.(p[ht]u|[hp]t[d23]|thd|t3r)$")
+
+def _process(cmd, src, suffix, force, n_lines=None):
     dst = src + suffix
     if force or not os.path.exists(dst):
-        full_cmd = ["picoquant", "--file-in", src, "--file-out", dst] + cmd
-        print(" ".join(full_cmd))
-        subprocess.Popen(full_cmd).wait()
+        if n_lines is None:
+            full_cmd = ["picoquant", "--file-in", src, "--file-out", dst] + cmd
+            print(" ".join(full_cmd))
+            subprocess.Popen(full_cmd).wait()
+        else:
+            full_cmd = ["picoquant", "--file-in", src] + cmd
+            records = subprocess.Popen(full_cmd, stdout=subprocess.PIPE)
+            truncated = subprocess.Popen(["head", "--lines={}".format(n_lines)],
+                                         stdin=records.stdout,
+                                         stdout=subprocess.PIPE)
+            with open(dst, "wb") as stream_out:
+                stream_out.write(truncated.stdout.read())
 
-def get_data(filename, force=False):
-    _process([], filename, ".data", force)
+def get_data(filename, force=False, n_lines=None):
+    _process([], filename, ".data", force, n_lines=n_lines)
 
 def get_header(filename, force=False):
     _process(["--header-only"], filename, ".header", force)
@@ -20,13 +32,42 @@ def get_header(filename, force=False):
 def get_resolution(filename, force=False):
     _process(["--resolution-only"], filename, ".resolution", force)
 
-is_picoquant_file = re.compile(".+\.(p[ht]u|[hp]t[d23]|thd|t3r)$")
-force = False
-for root, dirs, files in os.walk(os.getcwd()):
-    for filename in filter(lambda f: is_picoquant_file.match(f) and \
-                                     os.path.isfile(os.path.join(root, f)),
-                           files):
-        filename = os.path.join(root, filename)
-        get_data(filename, force=force)
-        get_header(filename, force=force)
-        get_resolution(filename, force=force)
+def process_files(root_dir, n_data_lines=None, force=False):
+    for root, dirs, files in os.walk(root_dir):
+        for filename in filter(lambda f: is_picoquant_file.match(f) and \
+                                         os.path.isfile(os.path.join(root, f)),
+                               files):
+            filename = os.path.join(root, filename)
+            get_data(filename, force=force, n_lines=n_data_lines)
+            get_header(filename, force=force)
+            get_resolution(filename, force=force)
+
+def clean_output(root_dir):
+    for root, dirs, files in os.walk(root_dir):
+        for filename in filter(
+              lambda _: re.search("\.(data|header|resolution)$", _), 
+              files):
+            os.remove(os.path.join(root, filename))
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--clean", dest="clean", action="store_true", 
+                        default=False, 
+                        help="Remove output files like *.data, *.header, and *.resolution")
+    parser.add_argument("--force", dest="force", action="store_true", 
+                        default=False,
+                        help="If output files exist, overwrite them. Otherwise, the file will not be regenerated.")
+    parser.add_argument("--lines", dest="lines", type=int, default=None, 
+                        help="Number of lines of data to include. By default, all are included.")
+    parser.add_argument("--dir", dest="root_dir", type=str, default=os.getcwd(),
+                        help="Process files in the specified location. By default, the current directory is used.")
+
+    args = parser.parse_args()
+
+    if args.clean:
+        clean_output(args.root_dir)
+    else:
+        process_files(args.root_dir, n_data_lines=args.lines, force=args.force)
+
+if __name__ == "__main__":
+    main()
