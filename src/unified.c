@@ -35,12 +35,63 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 
+#include "hydraharp.h"
+#include "picoharp.h"
+#include "timeharp.h"
+
+#define TAG_PRINT(x) if ( options->print_header ) { x; }
+#define NOT_IMPLEMENTED error("Mode 0x%08lx not implemented\n", pu_options.record_type); break;
+
 int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options) {
-	pu_tags_read(stream_in, stream_out, pu_header, options);
-	return(PQ_SUCCESS);
+	int result;
+	pu_options_t pu_options;
+
+	result = pu_tags_read(stream_in, stream_out, pu_header, options, &pu_options);
+
+	if ( result == PQ_SUCCESS ) {
+		if ( options->print_header ) {
+			; // this was handled implicitly in pu_tags_read
+			// TODO: implement a dictionary type to read in the tags, then print separately.
+		} else if ( options->print_resolution ) { 
+			error("Unified resolution print not yet implemented.\n");
+			result = PQ_ERROR_OPTIONS;
+		} else {
+			// actually stream data
+			debug("Record type: 0x%08lx\n", pu_options.record_type);
+			debug("Resolution (ps): %lld\n", (uint64_t)(1e12*pu_options.resolution_seconds));
+
+			switch ( pu_options.record_type ) {
+				case PU_RECORD_PH_T3:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_PH_T2:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_HH_V1_T3:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_HH_V1_T2:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_HH_V2_T3:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_HH_V2_T2:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_TH_260_NT3:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_TH_260_NT2:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_TH_260_PT3:
+					NOT_IMPLEMENTED;
+				case PU_RECORD_TH_260_PT2:
+					NOT_IMPLEMENTED;
+				default:
+					error("Unknown record type:  0x%08lx\n", pu_options.record_type);
+					result = PQ_ERROR_MODE;
+			}
+		}
+	} 
+
+	return(result);
 }
 
-int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options) {
+int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options, pu_options_t *pu_options) {
 	int result;
 	size_t index;
 	pu_tag_t tag;
@@ -59,31 +110,40 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 		}
 
 		if ( tag.index > 0 ) {
-			fprintf(stream_out, "%s[%d] = ", tag.ident, tag.index);
+			TAG_PRINT(fprintf(stream_out, "%s[%d] = ", tag.ident, tag.index))
 		} else {
-			fprintf(stream_out, "%s = ", tag.ident);
+			TAG_PRINT(fprintf(stream_out, "%s = ", tag.ident))
 		}
 		
 		switch ( tag.type ) {
 			case PU_TAG_Empty8:
-				fprintf(stream_out, "null");
+				TAG_PRINT(fprintf(stream_out, "null"))
 				break;
 			case PU_TAG_Bool8:
-				fprintf(stream_out, "%s", tag.value ? "true" : "false");
+				TAG_PRINT(fprintf(stream_out, "%s", tag.value ? "true" : "false"))
 				break;
 			case PU_TAG_Int8:
-				fprintf(stream_out, "%ld", (uint64_t)tag.value);
+				if ( ! strcmp(tag.ident, "TTResultFormat_TTTRRecType") ) {
+					pu_options->record_type = tag.value;
+				}
+
+				TAG_PRINT(fprintf(stream_out, "%ld", (uint64_t)tag.value))
 				break;
 			case PU_TAG_BitSet64:
 			case PU_TAG_Color8:  // just print both BitSet64 and Color8 for now
-				fprintf(stream_out, "0x%lx", (uint64_t)tag.value);
+				TAG_PRINT(fprintf(stream_out, "0x%lx", (uint64_t)tag.value))
 				break;
 			case PU_TAG_Float8:
 				memcpy((char *)&value_float, (char *)(&tag.value), sizeof(float64_t));
-				fprintf(stream_out, "%E", value_float);
+
+				if ( ! strcmp(tag.ident, "MeasDesc_Resolution") ) { 
+					pu_options->resolution_seconds = value_float;
+				}
+
+				TAG_PRINT(fprintf(stream_out, "%E", value_float))
 				break;
 			case PU_TAG_TDateTime:
-				fprintf(stream_out, "0x%016lx", tag.value);
+				TAG_PRINT(fprintf(stream_out, "0x%016lx", tag.value))
 				break;
 			case PU_TAG_Float8Array:
 				buffer_float64 = (float64_t *)malloc(tag.value*sizeof(float64_t));
@@ -95,10 +155,12 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 					result = PQ_SUCCESS;
 					for ( index = 0; index < tag.value; index++ ) {
 						memcpy((char *)&value_float, (char *)(&tag.value), sizeof(float64_t));
-						fprintf(stream_out, "%lf", value_float);
-						if ( index + 1 != tag.value ) {
-							fprintf(stream_out, ", ");
-						}
+						TAG_PRINT(
+							fprintf(stream_out, "%lf", value_float);
+							if ( index + 1 != tag.value ) {
+								fprintf(stream_out, ", ");
+							} 
+						)
 					}
 				}
 
@@ -112,7 +174,7 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 					result = PQ_ERROR_IO;
 				} else { 
 					result = PQ_SUCCESS;
-					fprintf(stream_out, "%.*s", (int32_t)tag.value, buffer_char);
+					TAG_PRINT(fprintf(stream_out, "%.*s", (int32_t)tag.value, buffer_char))
 				}
 
 				free(buffer_char);
@@ -125,12 +187,28 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 					result = PQ_ERROR_IO;
 				} else { 
 					result = PQ_SUCCESS;
-					fprintf(stream_out, "%.*ls", (int32_t)tag.value, buffer_wchar);
+					TAG_PRINT(fprintf(stream_out, "%.*ls", (int32_t)tag.value, buffer_wchar))
 				}
 
 				free(buffer_wchar);
 				break;
 			case PU_TAG_BinaryBlob:
+				buffer_char = malloc(tag.value*sizeof(char));
+				result = fread(buffer_char, sizeof(char), tag.value, stream_in);
+				
+				if ( result != tag.value ) { 
+					error("Could not read binary blob.\n");
+					result = PQ_ERROR_IO;
+				} else {
+					result = PQ_SUCCESS;
+					TAG_PRINT(
+						for ( index = 0; index < tag.value; index++ ) {
+							fprintf(stream_out, "%02x", buffer_char[index] & 0xff);
+						}
+					)
+				}
+
+				free(buffer_char);
 				break;
 			default:
 				error("Unknown tag type: 0x%016x.\n", tag.type);
@@ -138,7 +216,7 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 				break;
 		}
 
-		fprintf(stream_out, "\n");
+		TAG_PRINT(fprintf(stream_out, "\n"))
 	} while ( ! result && strcmp(tag.ident, "Header_End") );
 
 	return(result);
