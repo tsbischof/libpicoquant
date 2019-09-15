@@ -35,20 +35,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 
-// windows floats come out in the opposite endian to linux...
-float64_t reverse_float64_endianness(const char *src) {
-	int i;
-	float64_t result;
-	char *dst = (char *)&result;
-
-	for ( i = 0; i < sizeof(float64_t); i += 2 ) {
-		dst[i] = src[i];
-		dst[i+1] = src[i+1];
-	}
-
-	return(result);
-}
-
 int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options) {
 	pu_tags_read(stream_in, stream_out, pu_header, options);
 	return(PQ_SUCCESS);
@@ -93,7 +79,7 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 				fprintf(stream_out, "0x%lx", (uint64_t)tag.value);
 				break;
 			case PU_TAG_Float8:
-				value_float = reverse_float64_endianness((char *)&tag.value);
+				memcpy((char *)&value_float, (char *)(&tag.value), sizeof(float64_t));
 				fprintf(stream_out, "%E", value_float);
 				break;
 			case PU_TAG_TDateTime:
@@ -108,7 +94,7 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 				} else { 
 					result = PQ_SUCCESS;
 					for ( index = 0; index < tag.value; index++ ) {
-						value_float = reverse_float64_endianness((char *)(&buffer_float64[index]));
+						memcpy((char *)&value_float, (char *)(&tag.value), sizeof(float64_t));
 						fprintf(stream_out, "%lf", value_float);
 						if ( index + 1 != tag.value ) {
 							fprintf(stream_out, ", ");
