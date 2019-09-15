@@ -80,7 +80,6 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 				case PU_RECORD_HH_V1_T2:
 					NOT_IMPLEMENTED;
 				case PU_RECORD_HH_V2_T3:
-					NOT_IMPLEMENTED;
 				case PU_RECORD_HH_V2_T2:
 					hh_v20_header.Resolution = pu_options.resolution_seconds;
 					hh_v20_header.InputChannelsPresent = pu_options.input_channels_present;
@@ -91,7 +90,12 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 					hh_v20_tttr.ImgHdrSize = 0;
 					hh_v20_tttr.NumRecords = pu_options.number_of_records;
 
-					hh_v20_t2_stream(stream_in, stream_out, &hh_v20_header, &hh_v20_tttr, options);
+					if ( pu_options.record_type == PU_RECORD_HH_V2_T3 ) {
+						hh_v20_t3_stream(stream_in, stream_out, &hh_v20_header, &hh_v20_tttr, options);
+					} else {
+						hh_v20_t2_stream(stream_in, stream_out, &hh_v20_header, &hh_v20_tttr, options);
+					}
+						
 					break;
 				case PU_RECORD_TH_260_NT3:
 					NOT_IMPLEMENTED;

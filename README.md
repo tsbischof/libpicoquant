@@ -16,7 +16,7 @@
 
 ### Unified formats
 * ptu
-  * v3: hh v2 t2
+  * v3: hh v2 (t2, t3)
 
 # Overview
 The `picoquant` command uses the binary header for the data file to determine the hardware identity, version, measurement mode, and any other relevant metadata. Using these metadata, it outputs the photon arrival or other data in a common format. Measurement modes currently supported:
