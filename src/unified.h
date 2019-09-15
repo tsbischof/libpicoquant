@@ -38,6 +38,10 @@ typedef struct pu_tag_t {
 typedef struct pu_options_t {
 	int64_t record_type;
 	float64_t resolution_seconds;
+	int64_t input_channels_present;
+	int64_t sync_rate;
+	int64_t stop_after;
+	int64_t number_of_records;
 } pu_options_t;
 
 int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options);

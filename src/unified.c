@@ -36,8 +36,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 
 #include "hydraharp.h"
+#include "hydraharp/hh_v10.h"
+#include "hydraharp/hh_v20.h"
 #include "picoharp.h"
+#include "picoharp/ph_v20.h"
 #include "timeharp.h"
+#include "timeharp/th_v20.h"
+#include "timeharp/th_v30.h"
+#include "timeharp/th_v50.h"
+#include "timeharp/th_v60.h"
 
 #define TAG_PRINT(x) if ( options->print_header ) { x; }
 #define NOT_IMPLEMENTED error("Mode 0x%08lx not implemented\n", pu_options.record_type); break;
@@ -45,6 +52,9 @@ POSSIBILITY OF SUCH DAMAGE.
 int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options) {
 	int result;
 	pu_options_t pu_options;
+
+	hh_v20_header_t hh_v20_header;
+	hh_v20_tttr_header_t hh_v20_tttr;
 
 	result = pu_tags_read(stream_in, stream_out, pu_header, options, &pu_options);
 
@@ -72,7 +82,17 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 				case PU_RECORD_HH_V2_T3:
 					NOT_IMPLEMENTED;
 				case PU_RECORD_HH_V2_T2:
-					NOT_IMPLEMENTED;
+					hh_v20_header.Resolution = pu_options.resolution_seconds;
+					hh_v20_header.InputChannelsPresent = pu_options.input_channels_present;
+
+					hh_v20_tttr.SyncRate = pu_options.sync_rate;
+					hh_v20_tttr.StopAfter = pu_options.stop_after;
+					hh_v20_tttr.StopReason = 0;
+					hh_v20_tttr.ImgHdrSize = 0;
+					hh_v20_tttr.NumRecords = pu_options.number_of_records;
+
+					hh_v20_t2_stream(stream_in, stream_out, &hh_v20_header, &hh_v20_tttr, options);
+					break;
 				case PU_RECORD_TH_260_NT3:
 					NOT_IMPLEMENTED;
 				case PU_RECORD_TH_260_NT2:
@@ -125,6 +145,14 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 			case PU_TAG_Int8:
 				if ( ! strcmp(tag.ident, "TTResultFormat_TTTRRecType") ) {
 					pu_options->record_type = tag.value;
+				} else if ( ! strcmp(tag.ident, "HW_InpChannels") ) {
+					pu_options->input_channels_present = tag.value;
+				} else if ( ! strcmp(tag.ident, "TTResult_SyncRate") ) {
+					pu_options->sync_rate = tag.value;
+				} else if ( ! strcmp(tag.ident, "TTResult_StopAfter") ) {
+					pu_options->stop_after = tag.value;
+				} else if ( ! strcmp(tag.ident, "TTResult_NumberOfRecords") ) {
+					pu_options->number_of_records = tag.value;
 				}
 
 				TAG_PRINT(fprintf(stream_out, "%ld", (uint64_t)tag.value))
