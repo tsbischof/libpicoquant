@@ -83,7 +83,7 @@ int hh_v20_dispatch(FILE *stream_in, FILE *stream_out, pq_header_t *pq_header,
  * Routines for the header common to all files.
  *
  */
-hh_v20_header_t *hh_v20_header_alloc(int input_channels) {
+hh_v20_header_t *hh_v20_header_alloc(int input_channels) {//it seems no one ever calls this???????????
 	hh_v20_header_t *hh_header = NULL;
 
 	hh_header = (hh_v20_header_t *)malloc(sizeof(hh_v20_header_t));

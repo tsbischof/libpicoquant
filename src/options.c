@@ -61,7 +61,7 @@ void description() {
 "          v6.0 (thd, t3r)\n"
 "Picoharp: v2.0 (phd, pt2, pt3)\n"
 "Hydraharp: v1.0 (hhd, ht2, ht3)\n"
-"           v2.0 (hhd, ht2, ht3)\n"
+"           v2.0 (hhd, ht2, ht3, ptu)\n"
 "\n"
 "Data formats (csv):\n"
 "(times are integers in picoseconds, bin edges are floats in nanoseconds)\n"
