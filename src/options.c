@@ -78,6 +78,7 @@ void description() {
 
 
 void usage() {
+	version();
 	fprintf(stderr,
 "              -h, --help: Prints this usage message.\n"
 "           -V, --version: Print version information.\n"
