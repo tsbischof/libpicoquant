@@ -33,6 +33,49 @@
 
 #include "error.h"
 
+#include <string.h>
+
+int pq_unified_header_read(FILE *stream_in, pq_header_t *pq_header, 
+						   pu_header_t *pu_header) {
+	int result;
+	char magic[16];
+
+    /* Prior to the introduction of ptu/phu files, the magic bytes were a
+     * a 16-char ident and 6-char version. This turned into an 8-char ident
+     * and 8-char version. So we will read the first 16 char and branch based
+     * on whether those remaining 6 char need to be read.
+     */
+	result = fread(&magic[0], sizeof(char), sizeof(magic), stream_in);
+
+	if ( result != sizeof(magic) ) {
+		error("Could not read magic bytes\n");
+	} else {
+		if ( ! strncmp(magic, "PQTTTR", 6) || ! strncmp(magic, "PQHIST", 6) ) {
+			strncpy(&(pu_header->Ident[0]), magic, 8);
+			strncpy(&(pu_header->Version[0]), &(magic[8]), 8);
+			debug("Ident: %.*s\n", 8, pu_header->Ident);
+			debug("Version: %.*s\n", 8, pu_header->Version);
+
+			result = PQ_FORMAT_UNIFIED;
+		} else {
+			strncpy(&(pq_header->Ident[0]), magic, 16);
+
+			result = fread(&(pq_header->FormatVersion[0]), sizeof(char), sizeof(pq_header->FormatVersion), stream_in);
+			if ( result != sizeof(pq_header->FormatVersion) ) {
+				error("Could not read version string.\n");
+				result = PQ_ERROR_IO;
+			} else {
+				result = PQ_FORMAT_CLASSIC;
+			}
+
+			debug("Ident: %.*s\n", sizeof(pq_header->Ident), pq_header->Ident);
+			debug("FormatVersion: %.*s\n", sizeof(pq_header->FormatVersion), pq_header->FormatVersion);
+		}
+	}
+
+	return(result);
+}
+
 int pq_header_read(FILE *stream_in, pq_header_t *pq_header) {
 	size_t n_read;
 

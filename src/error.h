@@ -49,6 +49,8 @@
 #define PQ_RECORD_T3                    9
 #define PQ_RECORD_MARKER               10
 #define PQ_RECORD_OVERFLOW             11
+#define PQ_FORMAT_UNIFIED			   12
+#define PQ_FORMAT_CLASSIC			   13
 
 
 // Error codes

@@ -62,6 +62,7 @@ void description() {
 "Picoharp: v2.0 (phd, pt2, pt3)\n"
 "Hydraharp: v1.0 (hhd, ht2, ht3)\n"
 "           v2.0 (hhd, ht2, ht3)\n"
+"           v3.0 (ptu)\n"
 "\n"
 "Data formats (csv):\n"
 "(times are integers in picoseconds, bin edges are floats in nanoseconds)\n"
@@ -77,6 +78,7 @@ void description() {
 
 
 void usage() {
+	version();
 	fprintf(stderr,
 "              -h, --help: Prints this usage message.\n"
 "           -V, --version: Print version information.\n"

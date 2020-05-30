@@ -41,6 +41,7 @@
 #include "picoharp.h"
 #include "hydraharp.h"
 #include "timeharp.h"
+#include "unified.h"
 
 #include "interactive.h"
 #include "continuous.h"
@@ -49,15 +50,15 @@
 
 int pq_dispatch(FILE *stream_in, FILE *stream_out, options_t *options) {
 	int result;
+	pu_header_t pu_header;
 	pq_header_t pq_header;
 	pq_dispatch_t dispatch;
 
-	/* Do the actual work, if we have no errors. */
-	result = pq_header_read(stream_in, &pq_header);
+	result = pq_unified_header_read(stream_in, &pq_header, &pu_header);
 
-	if ( result ) {
+	if ( result < 0 ) {
 		error("Could not read string header.\n");
-	} else {
+	} else if ( result == PQ_FORMAT_CLASSIC ) {
 		dispatch = pq_dispatch_get(options, &pq_header);
 		if ( dispatch == NULL ) {
 			error("Could not identify board %s.\n", pq_header.Ident);
@@ -65,6 +66,10 @@ int pq_dispatch(FILE *stream_in, FILE *stream_out, options_t *options) {
 			result = dispatch(stream_in, stream_out, 
 					&pq_header, options);
 		}
+	} else if ( result == PQ_FORMAT_UNIFIED ) {
+		result = pu_dispatch(stream_in, stream_out, &pu_header, options);
+	} else {
+		error("Unknown result for header (code %d)\n", result);
 	}
 
 	return(result);

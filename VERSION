@@ -1,3 +1,9 @@
+0.4 (2020-05-30)
+
+* implement decoder for HydraHarp ptu files (v3.0)
+
+--------------------------------------------------------------------------------
+
 0.3 (2014-07-14)
 
 Changed from a home-written Makefile to autotools.
