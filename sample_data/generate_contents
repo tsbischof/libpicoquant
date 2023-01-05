@@ -5,7 +5,7 @@ import os
 import re
 import subprocess
 
-is_picoquant_file = re.compile(".+\.(p[ht]u|[hp]t[d23]|thd|t3r)$")
+is_picoquant_file = re.compile(".+\.(p[ht]u|[hp]t[d23]|[hpt]hd|t3r)$")
 
 def _process(cmd, src, suffix, force, n_lines=None):
     dst = src + suffix
