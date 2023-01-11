@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011-2019, Thomas Bischof
+Copyright (c) 2011-2019, 2023 Thomas Bischof
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
@@ -56,6 +56,9 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 	hh_v20_header_t hh_v20_header;
 	hh_v20_tttr_header_t hh_v20_tttr;
 
+	ph_v20_header_t ph_v20_header;
+	ph_v20_tttr_header_t ph_v20_tttr;
+
 	result = pu_tags_read(stream_in, stream_out, pu_header, options, &pu_options);
 
 	if ( result == PQ_SUCCESS ) {
@@ -72,11 +75,21 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 
 			switch ( pu_options.record_type ) {
 				case PU_RECORD_PH_T3:
-					NOT_IMPLEMENTED;
 				case PU_RECORD_PH_T2:
-					NOT_IMPLEMENTED;
+					ph_v20_tttr.InpRate0 = pu_options.sync_rate;
+					ph_v20_tttr.StopAfter = pu_options.stop_after;
+					ph_v20_tttr.StopReason = 0;
+					ph_v20_tttr.ImgHdrSize = 0;
+					ph_v20_tttr.NumRecords = pu_options.number_of_records;
+
+					if ( pu_options.record_type == PU_RECORD_PH_T3 ) {
+						ph_v20_t3_stream(stream_in, stream_out, &ph_v20_header, &ph_v20_tttr, options);
+					} else {
+						ph_v20_t2_stream(stream_in, stream_out, &ph_v20_header, &ph_v20_tttr, options);
+					}
+						
+					break;
 				case PU_RECORD_HH_V1_T3:
-					NOT_IMPLEMENTED;
 				case PU_RECORD_HH_V1_T2:
 					NOT_IMPLEMENTED;
 				case PU_RECORD_HH_V2_T3:
