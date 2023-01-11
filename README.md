@@ -71,18 +71,16 @@ For any supported file format, simply change "data.phd" to your own file.
 ### HydraHarp
 * v1: hhd, ht2, ht3
 * v2: hhd, ht2, ht3
+* v3: ptu (t2, t3)
 
 ### PicoHarp
 * v2: phd, pt2, pt3
+* v3: ptu (t2, t3)
 
 ### TimeHarp
 * v3: thd, t3r
 * v5: thd
 * v6: thd, t3r
-
-### Unified formats
-* ptu
-  * v3: hh v2 (t2, t3)
 
 ## Overview of how the program works
 The `picoquant` command uses the binary header for the data file to determine the hardware identity, version, measurement mode, and any other relevant metadata. 
