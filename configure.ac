@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT(libpicoquant, 0.4, tsbischof@gmail.com)
+AC_INIT(libpicoquant, 0.5, tsbischof@gmail.com)
 AC_CONFIG_SRCDIR([src])
 AM_INIT_AUTOMAKE
 

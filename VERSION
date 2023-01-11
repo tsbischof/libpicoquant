@@ -1,3 +1,9 @@
+0.5 (2023-01-10)
+
+* implement decoder for PicoHarp ptu files (v3.0)
+
+--------------------------------------------------------------------------------
+
 0.4 (2020-05-30)
 
 * implement decoder for HydraHarp ptu files (v3.0)
