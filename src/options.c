@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Thomas Bischof
+ * Copyright (c) 2011-2014, 2019, 2023 Thomas Bischof
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without 
@@ -60,6 +60,7 @@ void description() {
 "          v5.0 (thd)\n"
 "          v6.0 (thd, t3r)\n"
 "Picoharp: v2.0 (phd, pt2, pt3)\n"
+"          v3.0 (ptu)\n"
 "Hydraharp: v1.0 (hhd, ht2, ht3)\n"
 "           v2.0 (hhd, ht2, ht3)\n"
 "           v3.0 (ptu)\n"
