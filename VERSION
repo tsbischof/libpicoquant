@@ -1,3 +1,9 @@
+0.6 (2023-03-08)
+
+* implement decoder for HydraHarp v1 t2, t3 ptu files
+* fix bug in ptu header decoding which could have dropped characters
+
+--------------------------------------------------------------------------------
 0.5 (2023-01-10)
 
 * implement decoder for PicoHarp ptu files (v3.0)
