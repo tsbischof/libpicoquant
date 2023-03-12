@@ -1,3 +1,8 @@
+0.6.1 (2023-03-12)
+
+* bugfix: ptu hh v1 t3 decoder used incorrect units for time, resulting in all tagged times being 0
+
+--------------------------------------------------------------------------------
 0.6 (2023-03-08)
 
 * implement decoder for HydraHarp v1 t2, t3 ptu files
