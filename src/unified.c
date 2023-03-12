@@ -32,6 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "unified.h"
 #include "error.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -93,7 +94,7 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 					break;
 				case PU_RECORD_HH_V1_T3:
 				case PU_RECORD_HH_V1_T2:
-					hh_v10_header.Resolution = pu_options.resolution_seconds;
+					hh_v10_header.Resolution = round(pu_options.resolution_seconds*1e12);
 					hh_v10_header.InputChannelsPresent = pu_options.input_channels_present;
 
 					hh_v10_tttr.SyncRate = pu_options.sync_rate;
