@@ -108,9 +108,10 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 					} else {
 						hh_v10_t2_stream(stream_in, stream_out, &hh_v10_header, &hh_v10_tttr, options);
 					}
+					break;
 				case PU_RECORD_HH_V2_T3:
 				case PU_RECORD_HH_V2_T2:
-					hh_v20_header.Resolution = pu_options.resolution_seconds;
+					hh_v20_header.Resolution = round(pu_options.resolution_seconds*1e12);
 					hh_v20_header.InputChannelsPresent = pu_options.input_channels_present;
 
 					hh_v20_tttr.SyncRate = pu_options.sync_rate;
@@ -127,12 +128,10 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 						
 					break;
 				case PU_RECORD_TH_260_NT3:
-					NOT_IMPLEMENTED;
 				case PU_RECORD_TH_260_NT2:
-					NOT_IMPLEMENTED;
 				case PU_RECORD_TH_260_PT3:
-					NOT_IMPLEMENTED;
 				case PU_RECORD_TH_260_PT2:
+					error("This mode is not implemented due to a lack of test data. Please open a pull request at https://github.com/tsbischof/picoquant-sample-data and we will get to work on the decoder.\n")
 					NOT_IMPLEMENTED;
 				default:
 					error("Unknown record type:  0x%08lx\n", pu_options.record_type);
