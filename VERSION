@@ -1,3 +1,9 @@
+0.6.2 (2023-03-29)
+
+* bugfix: ptu hh v2 t3 decoder had the same bug as the v1, thank you to Adam Olejniczak for the bug report and sample data!
+
+--------------------------------------------------------------------------------
+
 0.6.1 (2023-03-12)
 
 * bugfix: ptu hh v1 t3 decoder used incorrect units for time, resulting in all tagged times being 0
