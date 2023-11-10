@@ -38,7 +38,7 @@ This warning will be removed once all existing data has a verified decoded value
             with self.subTest(binary_file_path=binary_file_path):
                 data_path = binary_file_path + ".data"
                 if not os.path.exists(data_path):
-                    continue
+                    self.skipTest(r"decoded .data file not available for {binary_file_path=}")
 
                 content = run(binary_file_path).strip().split("\n")
                 with open(binary_file_path + ".data") as f:
