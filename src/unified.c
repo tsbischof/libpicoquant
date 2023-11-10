@@ -131,7 +131,7 @@ int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, optio
 				case PU_RECORD_TH_260_NT2:
 				case PU_RECORD_TH_260_PT3:
 				case PU_RECORD_TH_260_PT2:
-					error("This mode is not implemented due to a lack of test data. Please open a pull request at https://github.com/tsbischof/picoquant-sample-data and we will get to work on the decoder.\n")
+					error("This mode is not implemented due to a lack of test data. Please open a pull request at https://github.com/tsbischof/picoquant-sample-data and we will get to work on the decoder.\n");
 					NOT_IMPLEMENTED;
 				default:
 					error("Unknown record type:  0x%08lx\n", pu_options.record_type);
