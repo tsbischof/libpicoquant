@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT(libpicoquant, 0.6.2, tsbischof@gmail.com)
+AC_INIT(libpicoquant, 0.6.3, tsbischof@gmail.com)
 AC_CONFIG_SRCDIR([src])
 AM_INIT_AUTOMAKE
 
@@ -26,4 +26,5 @@ AC_FUNC_MALLOC
 AC_CHECK_FUNCS([floor memmove memset strdup strstr strtol])
 
 AC_CONFIG_FILES([GNUmakefile man/GNUmakefile src/GNUmakefile])
+
 AC_OUTPUT

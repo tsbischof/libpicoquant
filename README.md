@@ -3,13 +3,14 @@
 It is intended to provide a generic interface to these formats which is compatible with other analysis code (e.g. [photon_correlation](github.com/tsbischof/photon_correlation.git)). 
 
 ## Building
-This program is tested primarily on Linux, both 32-bit and 64-bit.
-It has no external dependencies apart from a C compiler (tested with clang and gcc).
+This program is tested primarily on Linux (64-bit).
+It has no external dependencies apart from a C compiler for build (tested mostly with gcc) and python3 for test.
 To build:
 ```
 ./bootstrap
 ./configure
-make
+make check
+make install
 ```
 
 ## Usage

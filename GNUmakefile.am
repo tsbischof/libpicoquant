@@ -1,2 +1,3 @@
 AUTOMAKE_OPTIONS = foreign subdir-objects
 SUBDIRS = src man
+TESTS = ./test.py
