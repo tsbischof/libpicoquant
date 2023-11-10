@@ -32,6 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "unified.h"
 #include "error.h"
 
+#include <inttypes.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -187,11 +188,11 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 					pu_options->number_of_records = tag.value;
 				}
 
-				TAG_PRINT(fprintf(stream_out, "%ld", (uint64_t)tag.value))
+				TAG_PRINT(fprintf(stream_out, "%" PRId64, (int64_t)tag.value))
 				break;
 			case PU_TAG_BitSet64:
 			case PU_TAG_Color8:  // just print both BitSet64 and Color8 for now
-				TAG_PRINT(fprintf(stream_out, "0x%lx", (uint64_t)tag.value))
+				TAG_PRINT(fprintf(stream_out, "0x%" PRIu64 "x", (uint64_t)tag.value))
 				break;
 			case PU_TAG_Float8:
 				memcpy((char *)&value_float, (char *)(&tag.value), sizeof(float64_t));
@@ -203,7 +204,7 @@ int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, opti
 				TAG_PRINT(fprintf(stream_out, "%E", value_float))
 				break;
 			case PU_TAG_TDateTime:
-				TAG_PRINT(fprintf(stream_out, "0x%016lx", tag.value))
+				TAG_PRINT(fprintf(stream_out, "0x%016" PRIx64, tag.value))
 				break;
 			case PU_TAG_Float8Array:
 				buffer_float64 = (float64_t *)malloc(tag.value*sizeof(float64_t));
