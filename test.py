@@ -26,8 +26,9 @@ def run(file_in, *args):
         err = stderr.decode()
     return raw
 
+
 warnings.warn(
-            """The current decoded test data were generated with an unknown version of picoquant. 
+    """The current decoded test data were generated with an unknown version of picoquant. 
 If you observe a failure for one of these data files, check whether your current version 
 of picoquant appear to be generating reasonable data -- it might be the case that there was
 a bug in an old version.
@@ -35,7 +36,8 @@ If you run into an issue, contact the maintainer, who can work with you to verif
 the output is correct.
 
 This warning will be removed once all existing data has a verified decoded value"""
-        )
+)
+
 
 class PicoquantTestCase(unittest.TestCase):
     def test_data(self):
@@ -59,18 +61,31 @@ class PicoquantTestCase(unittest.TestCase):
             with self.subTest(binary_file_path=binary_file_path):
                 header_path = binary_file_path + ".header"
                 if not os.path.exists(header_path):
-                    self.skipTest("decoded .header file not available for {binary_file_path=}")
+                    self.skipTest(
+                        f"decoded .header file not available for {binary_file_path=}"
+                    )
 
                 content = run(binary_file_path, "--header-only")
                 with open(header_path, "rb") as f:
                     reference = f.read().decode()
 
-                if content != reference:
-                    print(len(content), len(reference))
-                    print(content.encode())
-                    print(reference.encode())
+                self.assertTrue(content == reference)
+
+    def test_resolution(self):
+        for binary_file_path in binary_file_paths():
+            with self.subTest(binary_file_path=binary_file_path):
+                resolution_path = binary_file_path + ".resolution"
+                if not os.path.exists(resolution_path):
+                    self.skipTest(
+                        "decoded .resolution file not available for {binary_file_path=}"
+                    )
+
+                content = run(binary_file_path, "--resolution-only")
+                with open(resolution_path, "rb") as f:
+                    reference = f.read().decode()
 
                 self.assertTrue(content == reference)
+
 
 if __name__ == "__main__":
     unittest.main()
