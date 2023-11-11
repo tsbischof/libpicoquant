@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import difflib
 import os
 import re
 import subprocess
@@ -23,19 +22,22 @@ def run(file_in, *args):
     with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         stdout, stderr = p.communicate()
         raw = stdout.decode()
-        err = stderr.decode()
+        stderr.decode()
     return raw
 
 
 warnings.warn(
-    """The current decoded test data were generated with an unknown version of picoquant. 
-If you observe a failure for one of these data files, check whether your current version 
-of picoquant appear to be generating reasonable data -- it might be the case that there was
-a bug in an old version.
-If you run into an issue, contact the maintainer, who can work with you to verify whether 
-the output is correct.
+    """The current decoded test data were generated with an unknown version
+    of picoquant. If you observe a failure for one of these data files, 
+    check whether your current version of picoquant appears to be 
+    generating reasonable data -- it might be the case that there was a bug
+    in an old version. 
 
-This warning will be removed once all existing data has a verified decoded value"""
+    If you run into an issue, contact the maintainer, who can work with 
+    you to verify whether the output is correct.
+
+    This warning will be removed once all existing data has a verified 
+    decoded value"""
 )
 
 
