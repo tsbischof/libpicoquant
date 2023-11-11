@@ -1,3 +1,11 @@
+0.6.3 (2023-11-11)
+
+* add unit tests
+* rework #pragma pack calls to suppress warnings on clang version>=6
+* add missing semicolon which was breaking the build
+
+--------------------------------------------------------------------------------
+
 0.6.2 (2023-03-29)
 
 * bugfix: ptu hh v2 t3 decoder had the same bug as the v1, thank you to Adam Olejniczak for the bug report and sample data!
