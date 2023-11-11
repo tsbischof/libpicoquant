@@ -32,10 +32,11 @@
 #ifndef HH_V20_H_
 #define HH_V20_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 #include "../picoquant.h"
 
-#pragma pack(2)
 typedef struct {
 	int32_t MapTo;
 	int32_t Show;
@@ -245,5 +246,7 @@ void hh_v20_tttr_header_printf(FILE *stream_out,
 		hh_v20_tttr_header_t *tttr_header);
 void hh_v20_tttr_header_fwrite(FILE *stream_out, 
 		hh_v20_tttr_header_t *tttr_header);
+
+#pragma pack(pop)
 
 #endif

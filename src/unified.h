@@ -1,6 +1,8 @@
 #ifndef UNIFIED_H_
 #define UNIFIED_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 #include "header.h"
 #include "options.h"
@@ -46,5 +48,7 @@ typedef struct pu_options_t {
 
 int pu_dispatch(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options);
 int pu_tags_read(FILE *stream_in, FILE *stream_out, pu_header_t *pu_header, options_t *options, pu_options_t *pu_options);
+
+#pragma pack(pop)
 
 #endif
