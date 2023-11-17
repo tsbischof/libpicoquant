@@ -32,6 +32,8 @@
 #ifndef T2_H_
 #define T2_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 
 #include "types.h"
@@ -51,5 +53,7 @@ int pq_t2_stream(FILE *stream_in, FILE *stream_out, pq_t2_decode_t decode,
 int pq_t2_next(FILE *stream_in, pq_t2_decode_t decode, tttr_t *tttr, t2_t *t2);
 int pq_t2_fprintf(FILE *stream_out, t2_t *record);
 int pq_t2_fwrite(FILE *stream_out, t2_t *record);
+
+#pragma pack(pop)
 
 #endif

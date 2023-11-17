@@ -32,10 +32,9 @@
 #ifndef HEADER_H_
 #define HEADER_H_
 
-#include <stdio.h>
+#pragma pack(push, 2)
 
-// Enforce byte alignment to ensure cross-platform compatibility.
-//#pragma pack(4)
+#include <stdio.h>
 
 typedef struct {
 	char Ident[8];
@@ -51,5 +50,7 @@ int pq_unified_header_read(FILE *in_stream, pq_header_t *pq_header, pu_header_t 
 int pq_header_read(FILE *in_stream, pq_header_t *pq_header);
 void pq_header_printf(FILE *out_stream, pq_header_t *pq_header);
 void pq_header_fwrite(FILE *out_stream, pq_header_t *pq_header);
+
+#pragma pack(pop)
 
 #endif 

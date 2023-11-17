@@ -32,6 +32,8 @@
 #ifndef TTTR_H_
 #define TTTR_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 
 #include "types.h"
@@ -47,5 +49,7 @@ typedef struct {
 } tttr_t;
 
 void tttr_marker_print(FILE *stream_out, uint64_t marker);
+
+#pragma pack(pop)
 
 #endif

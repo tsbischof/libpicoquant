@@ -32,6 +32,8 @@
 #ifndef PH_V20_H_
 #define PH_V20_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 
 #include "../picoquant.h"
@@ -39,7 +41,6 @@
 
 #define PH_V20_BASE_RESOLUTION 4e-12
 
-#pragma pack(2)
 typedef struct {
 	int32_t MapTo;
 	int32_t Show;
@@ -247,5 +248,7 @@ void ph_v20_tttr_header_printf(FILE *stream_out,
 		ph_v20_tttr_header_t *tttr_header);
 void ph_v20_tttr_header_fwrite(FILE *stream_out,
 		ph_v20_tttr_header_t *tttr_header);
+
+#pragma pack(pop)
 
 #endif

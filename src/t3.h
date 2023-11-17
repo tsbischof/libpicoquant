@@ -32,6 +32,8 @@
 #ifndef T3_H_
 #define T3_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 
 #include "types.h"
@@ -55,5 +57,7 @@ int pq_t3_fprintf(FILE *stream_out, t3_t *record);
 int pq_t3_fwrite(FILE *stream_out, t3_t *record);
 
 void pq_t3_to_t2(t3_t *record_in, t2_t *record_out, tttr_t *tttr);
+
+#pragma pack(pop)
 
 #endif

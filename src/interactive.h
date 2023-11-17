@@ -32,6 +32,8 @@
 #ifndef INTERACTIVE_H_
 #define INTERACTIVE_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 
 #include "types.h"
@@ -47,5 +49,7 @@ typedef void (*pq_interactive_bin_print_t)(FILE *, pq_interactive_bin_t *);
 
 void pq_interactive_bin_printf(FILE *out_stream, pq_interactive_bin_t *bin);
 void pq_interactive_bin_fwrite(FILE *out_stream, pq_interactive_bin_t *bin);
+
+#pragma pack(pop)
 
 #endif 

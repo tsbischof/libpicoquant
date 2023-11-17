@@ -32,6 +32,8 @@
 #ifndef PICOQUANT_H_
 #define PICOQUANT_H_
 
+#pragma pack(push, 2)
+
 #include <stdio.h>
 
 #include "types.h"
@@ -52,5 +54,7 @@ pq_dispatch_t pq_dispatch_get(options_t *options, pq_header_t *pq_header);
 void pq_resolution_print(FILE *out_stream,
 		int curve, float64_t resolution, 
 		options_t *options);
-	
+
+#pragma pack(pop)
+
 #endif
