@@ -50,7 +50,7 @@ int pq_unified_header_read(FILE *stream_in, pq_header_t *pq_header,
 	if ( result != sizeof(magic) ) {
 		error("Could not read magic bytes\n");
 	} else {
-		if ( ! strncmp(magic, "PQTTTR", 6) || ! strncmp(magic, "PQHIST", 6) ) {
+		if ( ! strncmp(magic, "PQTTTR", 6) && ! strncmp(magic, "PQHIST", 6) ) {
 			memcpy(&(pu_header->Ident[0]), magic, 8*sizeof(char));
 			memcpy(&(pu_header->Version[0]), &(magic[8]), 8*sizeof(char));
 			debug("Ident: %.*s\n", 8, pu_header->Ident);
