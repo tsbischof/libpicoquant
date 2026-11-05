@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Thomas Bischof
+ * Copyright (c) 2011-2026, Thomas Bischof
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without 
@@ -174,12 +174,19 @@ void ph_v20_interactive_header_printf(FILE *stream_out,
 		ph_v20_header_t *ph_header, 
 		ph_v20_interactive_t *interactive) {
 	int i;
+	const size_t BUF_SIZE = 32;
+	char buf[BUF_SIZE];
 
 	for ( i = 0; i < ph_header->NumberOfCurves; i++ ) {
 		fprintf(stream_out, "Crv[%d].CurveIndex = %"PRId32"\n",
 			i, interactive->Curve[i].CurveIndex);
-		fprintf(stream_out, "Crv[%d].TimeOfRecording = %s",
-			i, ctime32(&interactive->Curve[i].TimeOfRecording));
+
+		if ( ! iso8601_utc32(interactive->Curve[i].TimeOfRecording, buf, BUF_SIZE) ) {
+			fprintf(stream_out, "Crv[%d].TimeOfRecording = %s\n", i, buf);
+		} else {
+			fprintf(stderr, "Invalid timestamp for curve %d found: %d\n", i, interactive->Curve[i].TimeOfRecording);
+		}
+
 		fprintf(stream_out, "Crv[%d].HardwareIdent = %s\n",
 			i, interactive->Curve[i].HardwareIdent);
 		fprintf(stream_out, "Crv[%d].HardwareVersion = %s\n",

@@ -31,14 +31,15 @@
 
 #include "types.h"
 
-char* ctime32(time32_t *mytime) {
-#ifdef __i386__
-	return(ctime(mytime));
-#else
-	time_t mytime64;
-	mytime64 = (int64_t)*mytime;
-	return(ctime(&mytime64));
-#endif
+int iso8601_utc32(const time32_t t32, char *buf, const size_t len) {
+	time_t t = (time_t)t32;
+	struct tm tm;
+
+	if (!gmtime_r(&t, &tm)) {
+		return -1;
+	}
+
+	return strftime(buf, len, "%Y-%m-%dT%H:%M:%SZ", &tm) ? 0 : -1;
 }
 
 int64_t i64abs(int64_t val) { 

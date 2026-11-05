@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Thomas Bischof
+ * Copyright (c) 2011-2026, Thomas Bischof
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without 
@@ -36,15 +36,9 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#ifdef __i386__ 
-// 32-bit
-typedef time_t time32_t;
-#else
-// 64-bit
 typedef int32_t time32_t;
-#endif 
 
-char* ctime32(time32_t *mytime);
+int iso8601_utc32(const time32_t mytime, char *buf, const size_t len);
 
 typedef float float32_t;
 typedef double float64_t;

@@ -94,7 +94,7 @@ void usage() {
 "                          double-precision float in ps.\n"
 "       -r, --header-only: Print the file header in text format.\n"
 "         -m, --mode-only: Print the mode of the data.\n"
-"             -t, --to-t2: For t3 data, use the sync rate todetermine the\n"
+"             -t, --to-t2: For t3 data, use the sync rate to determine the\n"
 "                          time represented by the sync count and output the\n"
 "                          data in t2 mode. Note that this will only be\n"
 "                          accurate if the sync source is perfectly regular.\n"
