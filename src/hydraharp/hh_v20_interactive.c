@@ -146,12 +146,19 @@ void hh_v20_interactive_header_printf(FILE *stream_out,
 		hh_v20_interactive_t *interactive) {
 	int i;
 	int j;
+	const size_t BUF_SIZE = 32;
+	char buf[BUF_SIZE];
 
 	for ( i = 0; i < hh_header->NumberOfCurves; i++ ) {
 		fprintf(stream_out, "Curve[%d].CurveIndex = %"PRId32"\n",
 			i, interactive->Curve[i].CurveIndex);
-		fprintf(stream_out, "Curve[%d].TimeOfRecording = %s",
-			i, ctime32(&interactive->Curve[i].TimeOfRecording));
+
+		if ( ! iso8601_utc32(interactive->Curve[i].TimeOfRecording, buf, BUF_SIZE) ) {
+			fprintf(stream_out, "Curve[%d].TimeOfRecording = %s\n", i, buf);
+		} else {
+			fprintf(stderr, "Invalid timestamp for curve %d found: %d", i, interactive->Curve[i].TimeOfRecording);
+		}
+
 		fprintf(stream_out, "Curve[%d].HardwareIdent = %.*s\n",
 			i, 
 			(int)sizeof(interactive->Curve[i].HardwareIdent),
